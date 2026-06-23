@@ -201,6 +201,24 @@
   
     /* all-caps titles (restored from Bebas) */
     #nav-name, #page-title, #footer-left { text-transform: uppercase; }
+
+    /* ── phones: stack the photo above the text (single column) ── */
+    @media (max-width: 700px) {
+      #about-body {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 1.5rem var(--gutter) 3rem;
+      }
+      #about-photo { width: 100%; }
+      #about-photo img { height: auto; object-fit: contain; }
+      #about-extra {
+        grid-template-columns: 1fr;
+        padding: 0 var(--gutter) 4rem;
+      }
+      #about-extra-inner { grid-column: 1; }
+    }
+      /* phones: keep header on one line */
+    @media (max-width: 600px) { #nav-name { font-size: 0.9rem; letter-spacing: 0.12em; text-indent: 0.12em; } #nav-links { gap: 0.5rem; } #nav-links a { font-size: 0.88rem; letter-spacing: 0.05em; } }
   </style>
 </head>
 <body>

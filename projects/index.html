@@ -182,6 +182,11 @@
       from { opacity: 0; transform: translateY(10px) scale(0.98); }
       to   { opacity: 1; transform: none; }
     }
+      /* phones: keep header on one line */
+    @media (max-width: 600px) { #nav-name { font-size: 0.9rem; letter-spacing: 0.12em; text-indent: 0.12em; } #nav-links { gap: 0.5rem; } #nav-links a { font-size: 0.88rem; letter-spacing: 0.05em; } }
+    /* mobile: match nav inset to other pages */
+    @media (max-width: 600px) { :root { --edge: 4vw; } }
+  
   </style>
 </head>
 <body>

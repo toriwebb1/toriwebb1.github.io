@@ -228,6 +228,22 @@
   
     /* all-caps titles (restored from Bebas) */
     #nav-name, #page-title, #footer-left { text-transform: uppercase; }
+
+    /* ── phones: stack contact info above the form (single column) ── */
+    @media (max-width: 700px) {
+      #page {
+        grid-template-columns: 1fr;
+        gap: 2.75rem;
+        padding: 7rem var(--gutter) 4rem;
+        min-height: 0;
+      }
+      #page-title { margin-bottom: 2rem; }
+      #contact-form { padding-top: 0; }
+      .form-row { grid-template-columns: 1fr; }
+      #social-icons { margin-top: 1.5rem; padding-top: 0; }
+    }
+      /* phones: keep header on one line */
+    @media (max-width: 600px) { #nav-name { font-size: 0.9rem; letter-spacing: 0.12em; text-indent: 0.12em; } #nav-links { gap: 0.5rem; } #nav-links a { font-size: 0.88rem; letter-spacing: 0.05em; } }
   </style>
 </head>
 <body>
