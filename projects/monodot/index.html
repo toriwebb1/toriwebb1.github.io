@@ -1,0 +1,471 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>monodot + monodule — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @font-face {
+      font-family: 'Monodot';
+      src: url('monodot.otf') format('opentype');
+    }
+    @font-face {
+      font-family: 'Monodule';
+      src: url('monodule-Regular.otf') format('opentype');
+    }
+
+    :root {
+      --bg: #000000;
+      --fg: #f0ece4;
+      --green: #00ff41;
+      --accent: #f472b6;
+      --muted: #c8c3b8;
+      --dim: #6b6660;
+      --gutter: 4vw;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--fg); font-family: 'Hanken Grotesk', sans-serif; overflow-x: hidden; }
+    img { display: block; image-rendering: high-quality; }
+
+    /* ── nav ── */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem var(--gutter); background: transparent; transition: background 0.4s;
+    }
+    #site-nav.scrolled { background: rgba(13,13,13,0.96); }
+    #nav-name { font-family: 'Hanken Grotesk', sans-serif; font-size: 1rem; letter-spacing: 0.35em; text-indent: 0.35em; color: #fff; text-decoration: none; }
+    #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    #nav-links a { font-size: 0.7rem; font-weight: 300; letter-spacing: 0.16em; text-transform: lowercase; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    #nav-links a:hover { color: #fff; }
+
+    /* ── INTRO ANIMATION STAGE ── */
+    #intro-stage {
+      width: 100%; height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: var(--bg);
+      position: relative; overflow: hidden;
+    }
+
+    #typeface-display {
+      font-size: clamp(3rem, 9vw, 8rem);
+      letter-spacing: 0.12em;
+      color: var(--green);
+      text-align: center;
+      line-height: 1.1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+
+    #word-1 { font-family: 'Monodot', monospace; display: block; min-height: 1.1em; }
+    #word-2 { font-family: 'Monodule', monospace; display: block; min-height: 1.1em; }
+
+    /* cursor stays inline with active line */
+    .active-line { display: inline; }
+    .active-line::after {
+      content: '';
+      display: inline-block;
+      width: 0.08em; height: 0.85em;
+      background: var(--green);
+      margin-left: 0.05em;
+      vertical-align: middle;
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── HERO TEXT ── */
+    #hero { padding: 3.2rem var(--gutter) 2rem; }
+
+    #hero-title {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: clamp(2.7rem, 5.6vw, 4.5rem);
+      letter-spacing: 0.04em; margin-left: -0.04em;
+      color: #fff; line-height: 1.0; display: block;
+    }
+
+    #hero-subtitle {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(0.78rem, 1.35vw, 0.95rem);
+      font-weight: 300; letter-spacing: 0.34em; text-transform: uppercase;
+      color: var(--green); margin-bottom: 0.7rem; display: block;
+    }
+
+    #hero-lead {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 400;
+      font-size: clamp(1.45rem, 2.7vw, 2.25rem);
+      line-height: 1.4; letter-spacing: 0.01em;
+      color: rgba(240, 236, 228, 0.72); text-wrap: balance;
+      max-width: min(1220px, 94vw); margin-top: 1.9rem;
+    }
+
+    #hero-desc {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 300; font-size: clamp(1.18rem, 1.7vw, 1.45rem);
+      line-height: 1.7; color: rgba(240, 236, 228, 0.42); letter-spacing: 0.02em;
+      max-width: min(1220px, 94vw); text-wrap: balance; margin-top: 1.2rem;
+    }
+
+    .spacer-lg { height: 120px; background: #000; }
+
+    /* ── VIDEO — overlapping description ── */
+    #video-section { padding: 1rem 0 4rem; margin-top: -1rem; }
+    #video-section video { width: 100%; height: auto; display: block; cursor: pointer; }
+    #video-caption { font-size: 0.68rem; font-weight: 300; letter-spacing: 0.32em; text-transform: uppercase; color: var(--dim); margin-top: 0.9rem; }
+
+    /* ── POSTERS ── */
+    #posters-section { padding: 4rem var(--gutter); }
+    #posters-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    #posters-grid img { width: 100%; height: auto; cursor: zoom-in; transition: opacity 0.3s; }
+    #posters-grid img:hover { opacity: 0.85; }
+
+    /* ── CODE ANIMATION STAGE ── */
+    #code-stage {
+      width: 100%; height: 86vh;
+      background: var(--bg);
+      padding: 2rem var(--gutter) 6rem;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+
+    #code-field {
+      width: 100%; max-width: 1100px;
+      font-size: clamp(0.7rem, 1.4vw, 1.1rem);
+      line-height: 1.8;
+      color: var(--green);
+      word-break: break-all;
+      white-space: pre-wrap;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    #code-field.visible { opacity: 1; }
+
+    /* ── footer ── */
+    #footer { text-align: center; padding: 5rem 2rem; border-top: 1px solid #1e1e1e; }
+    #footer-mark { font-size: 1.3rem; margin-bottom: 1.4rem; opacity: 0.2; color: var(--accent); }
+    #footer a { font-size: 0.72rem; letter-spacing: 0.32em; text-transform: lowercase; color: var(--dim); text-decoration: none; transition: color 0.3s; }
+    #footer a:hover { color: var(--accent); }
+
+    /* ── scroll reveal ── */
+    .reveal { opacity: 0; transform: translateY(12px); transition: opacity 1s ease, transform 1s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── lightbox ── */
+    #lightbox { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.97); align-items: center; justify-content: center; cursor: zoom-out; }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+    #lightbox-close { position: absolute; top: 1.8rem; right: 2rem; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); cursor: pointer; }
+    #lightbox-close:hover { color: #fff; }
+  
+    /* enlarged header + footer */
+    #nav-name { font-size: 1.2rem; }
+    #nav-links a { font-size: 0.86rem; }
+    #footer-left { font-size: 1.2rem; }
+    #footer a { font-size: 0.86rem; }
+  
+    /* all-caps titles (restored from Bebas) */
+    #nav-name, #hero-title { text-transform: uppercase; }
+      /* role credit (bottom of page) */
+    #page-role { padding: 4.5rem var(--gutter) 1rem; text-align: right; }
+    #page-role .role-list { display: flex; flex-direction: column; align-items: flex-end; gap: 0.18rem; margin-top: 0.9rem; list-style: none; }
+    .role-label { font-family: 'Hanken Grotesk', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.34em; text-transform: uppercase; color: var(--green); display: block; margin-bottom: 1rem; }
+    .role-list li { font-family: 'Hanken Grotesk', sans-serif; font-weight: 300; font-size: 0.86rem; letter-spacing: 0.16em; text-transform: lowercase; color: rgba(240,236,228,0.5); line-height: 1.75; }
+  
+    /* footer redesign: back | smiley | next */
+    #footer { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 5rem var(--gutter); text-align: initial; }
+    #footer a { flex: 1; min-width: 0; font-size: 0.86rem; font-weight: 300; letter-spacing: 0.16em; text-transform: lowercase; }
+    #footer a.footer-back { text-align: left; }
+    #footer a.footer-next { text-align: right; }
+    .footer-smiley { width: 32px; height: 32px; flex-shrink: 0; line-height: 0; }
+    .footer-smiley svg { width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+
+  <div id="lightbox">
+    <span id="lightbox-close">close</span>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+        <nav id="site-nav">
+    <a href="../../index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../../projects/index.html">projects</a></li>
+      <li><a href="../../about/index.html">about</a></li>
+      <li><a href="../../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- INTRO TYPEFACE ANIMATION -->
+  <div id="intro-stage">
+    <div id="typeface-display">
+      <span id="word-1"></span>
+      <span id="word-2"></span>
+    </div>
+  </div>
+
+  <!-- HERO TEXT -->
+  <section id="hero">
+    <span id="hero-subtitle">Type Design · Animation</span>
+    <span id="hero-title">monodot + monodule</span>
+    <p id="hero-lead">A pair of experimental modular typefaces built from a single repeating dot or square — and brought to life in motion.</p>
+    <p id="hero-desc">I wanted to see how far one small unit could be pushed, so I designed monodot and monodule around a grid of dots and squares that snap into letterforms. Animating them taught me that even the strictest systems create space for personality.</p>
+  </section>
+
+  <div class="spacer-lg" style="height: 40px;"></div>
+
+  <!-- VIDEO -->
+  <div id="video-section" class="reveal">
+    <video id="main-video" autoplay muted loop playsinline>
+      <source src="1-video.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- CODE ANIMATION -->
+  <div id="code-stage">
+    <div id="code-field"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <!-- ROLE (bottom of page) -->
+  <section id="page-role">
+    <span class="role-label">Role</span>
+    <ul class="role-list">
+      <li>Type Design</li>
+      <li>Animation</li>
+    </ul>
+  </section>
+
+
+  <footer id="footer">
+    <a href="../../projects/index.html" id="back-link" class="footer-back">← back to projects</a>
+    <a href="../Mindful Spending/index.html" class="footer-next">Mindful Spending →</a>
+  </footer>
+
+  <script>
+    // nav
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+    // ── INTRO TYPEWRITER ANIMATION ──
+    const word1El  = document.getElementById('word-1');
+    const word2El  = document.getElementById('word-2');
+
+    const MONODOT_TEXT  = 'monodot';
+    const MONODULE_TEXT = 'monodule';
+    const DELAY_TYPE    = 65;
+    const DELAY_PAUSE   = 1000;
+    const DELAY_DELETE  = 40;
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    // cursor always sits at end of whichever element is active
+    function setActive(el) {
+      word1El.classList.remove('active-line');
+      word2El.classList.remove('active-line');
+      el.classList.add('active-line');
+    }
+    function clearActive() {
+      word1El.classList.remove('active-line');
+      word2El.classList.remove('active-line');
+    }
+
+    async function typeWord(el, text, delay) {
+      setActive(el);
+      for (let i = 0; i <= text.length; i++) {
+        el.textContent = text.slice(0, i);
+        await sleep(delay);
+      }
+    }
+
+    async function deleteWord(el, delay) {
+      setActive(el);
+      const text = el.textContent;
+      for (let i = text.length; i >= 0; i--) {
+        el.textContent = text.slice(0, i);
+        await sleep(delay);
+      }
+    }
+
+    async function runIntroAnim() {
+      await sleep(400);
+      await typeWord(word1El, MONODOT_TEXT, DELAY_TYPE);
+      await sleep(DELAY_PAUSE);
+      await deleteWord(word1El, DELAY_DELETE);
+      await sleep(300);
+      await typeWord(word2El, MONODULE_TEXT, DELAY_TYPE);
+      await sleep(DELAY_PAUSE);
+      // both together
+      await typeWord(word1El, MONODOT_TEXT, DELAY_TYPE);
+      setActive(word2El); // cursor back to word2 while word1 is frozen
+      await sleep(DELAY_PAUSE * 1.5);
+      await deleteWord(word2El, DELAY_DELETE);
+      await deleteWord(word1El, DELAY_DELETE);
+      clearActive();
+      await sleep(600);
+      runIntroAnim();
+    }
+
+    runIntroAnim();
+
+    // ── VIDEO click to pause ──
+    const vid = document.getElementById('main-video');
+    vid.addEventListener('click', () => { if (vid.paused) vid.play(); else vid.pause(); });
+
+    // ── CODE FIELD ANIMATION ──
+    const codeField = document.getElementById('code-field');
+    const codeStage = document.getElementById('code-stage');
+
+    const words = [
+      'monodot','monodule','construct','dot','grid','repeat',
+      'form','rhythm','digital','geometry','organic','type',
+      'modular','system','minimal','voice','identity','loop',
+      'distinct','expressive','transform','personality','movement',
+      'create','cohesive','language','visual','pattern','unit',
+      'signal','noise','pixel','glyph','kern','stem','serif',
+      'counter','ascender','descender','baseline','weight','stroke',
+      'ligature','spacing','tracking','leading','anchor','node',
+      'vector','render','encode','decode','syntax','compile',
+      'output','input','cursor','blink','flash','pulse','echo',
+      'fragment','glitch','static','stack','layer','depth','shift',
+      'oscillate','iterate','recursive','modulate','sequence',
+      'frequency','amplitude','waveform','binary','hex','matrix',
+      'lattice','scaffold','skeleton','structure','build','wire',
+      'frame','scaffold','blueprint','draft','iterate','refine',
+      'craft','make','shape','form','mold','carve','etch','draw',
+      'think','feel','breathe','flow','drift','spark','ignite',
+    ];
+
+    const FONTS = ['Monodot', 'Monodule'];
+    let codeRunning = false;
+    let codeInterval = null;
+
+    function randomWord() { return words[Math.floor(Math.random() * words.length)]; }
+    function randomFont() { return FONTS[Math.floor(Math.random() * 2)]; }
+    function randomGreen() {
+      const greens = ['#00ff41','#00cc33','#00ff99','#33ff66','#00ff41'];
+      return greens[Math.floor(Math.random() * greens.length)];
+    }
+
+    function buildCodeLine() {
+      const line = document.createElement('div');
+      line.style.display = 'flex';
+      line.style.gap = '1.2ch';
+      line.style.flexWrap = 'wrap';
+      line.style.marginBottom = '0.4em';
+
+      const count = Math.floor(Math.random() * 6) + 3;
+      for (let i = 0; i < count; i++) {
+        const span = document.createElement('span');
+        span.textContent = randomWord();
+        span.style.fontFamily = `'${randomFont()}', monospace`;
+        span.style.color = randomGreen();
+        span.style.opacity = (0.4 + Math.random() * 0.6).toFixed(2);
+        line.appendChild(span);
+      }
+      return line;
+    }
+
+    function startCodeAnim() {
+      if (codeRunning) return;
+      codeRunning = true;
+      codeField.classList.add('visible');
+      codeField.innerHTML = '';
+
+      // build full text pool and type it out character by character
+      const allWords = [];
+      for (let i = 0; i < 200; i++) {
+        allWords.push({ word: randomWord(), font: randomFont(), color: randomGreen(), opacity: (0.4 + Math.random() * 0.6).toFixed(2) });
+      }
+
+      let wordIdx = 0;
+      let charIdx = 0;
+      let currentSpan = null;
+      let currentLine = null;
+      let wordsOnLine = 0;
+      const MAX_WORDS_PER_LINE = Math.floor(Math.random() * 4) + 3;
+      const MAX_LINES = 16;
+      let lineCount = 0;
+
+      function newLine() {
+        if (lineCount >= MAX_LINES && codeField.firstChild) {
+          codeField.removeChild(codeField.firstChild);
+        } else {
+          lineCount++;
+        }
+        currentLine = document.createElement('div');
+        currentLine.style.cssText = 'display:flex; gap:1.2ch; flex-wrap:wrap; margin-bottom:0.4em;';
+        codeField.appendChild(currentLine);
+        wordsOnLine = 0;
+      }
+
+      function nextWord() {
+        if (wordIdx >= allWords.length) { wordIdx = 0; }
+        const w = allWords[wordIdx++];
+        if (!currentLine || wordsOnLine >= Math.floor(Math.random() * 4) + 3) newLine();
+        currentSpan = document.createElement('span');
+        currentSpan.style.fontFamily = `'${w.font}', monospace`;
+        currentSpan.style.color = w.color;
+        currentSpan.style.opacity = w.opacity;
+        currentLine.appendChild(currentSpan);
+        wordsOnLine++;
+        charIdx = 0;
+        return w.word;
+      }
+
+      let currentWord = nextWord();
+
+      codeInterval = setInterval(() => {
+        if (charIdx < currentWord.length) {
+          currentSpan.textContent = currentWord.slice(0, charIdx + 1);
+          charIdx++;
+        } else {
+          // add space then move to next word
+          currentSpan.textContent = currentWord;
+          currentWord = nextWord();
+        }
+      }, 18);
+    }
+
+    // start code anim when code-stage scrolls into view
+    const codeObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { startCodeAnim(); codeObs.disconnect(); }
+      });
+    }, { threshold: 0.2 });
+    codeObs.observe(codeStage);
+
+    // lightbox
+    const lightbox    = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    document.getElementById('lightbox-close').addEventListener('click', () => {
+      lightbox.classList.remove('open'); document.body.style.overflow = '';
+    });
+    lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+    });
+    document.querySelectorAll('#posters-grid img').forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+    });
+
+    // scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const revObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
+    }, { threshold: 0.04 });
+    reveals.forEach(el => revObs.observe(el));
+  </script>
+</body>
+</html>

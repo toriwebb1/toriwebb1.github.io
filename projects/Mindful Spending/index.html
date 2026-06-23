@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mindful Spending — Tori Webb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="casestudy.css" />
+<style>
+  /* ── site theme overrides: black background, Hanken, light text ── */
+  :root { --fg: #f0ece4; --accent: #e0533c; --dim: #6b6660; --gutter: 4vw; }
+  html { background: #000; }
+  body, body.is-case { background: #000; color: var(--fg); font-family: 'Hanken Grotesk', sans-serif; }
+
+  /* ── nav (matches the rest of the site) ── */
+  #site-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.6rem var(--gutter); background: transparent; transition: background 0.4s;
+  }
+  #site-nav.scrolled { background: rgba(0,0,0,0.94); }
+  #nav-name {
+    font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+    font-size: 1.2rem; letter-spacing: 0.35em; text-indent: 0.35em; color: #fff; text-decoration: none;
+  }
+  #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+  #nav-links a {
+    font-size: 0.86rem; font-weight: 300; letter-spacing: 0.16em;
+    text-transform: lowercase; color: #c8c3b8; text-decoration: none; transition: color 0.3s;
+  }
+  #nav-links a:hover { color: #fff; }
+
+  /* ── re-theme the case-study sections to dark ── */
+  .view--case { color: var(--fg); }
+
+  /* hero: three-screen cluster centered on top, title + description below */
+  .cs-hero__inner { display: flex; flex-direction: column-reverse; align-items: center; text-align: center; gap: 72px; }
+  .cs-hero__art { width: min(960px, 96vw); height: 640px; margin: -16px auto 0; }
+  .cs-hero__art .ap { width: 268px; }
+  /* first three screens — a bit taller */
+  .cs-hero__art .ap__screen { height: 568px; }
+  /* level the right screen with the left-most screen */
+  .cs-hero__art .ap:nth-child(3) { top: 30px; }
+  /* center screen grows in; the two back screens spread out to the sides */
+  /* center screen becomes fully opaque first (covers the others), then the back screens spread far out */
+  .cs-hero__art .ap:nth-child(2) { animation: heroPop 0.5s ease-out 0s both; }
+  .cs-hero__art .ap:nth-child(1) { animation: heroSpreadL 1.7s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both; }
+  .cs-hero__art .ap:nth-child(3) { animation: heroSpreadR 1.7s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both; }
+  @keyframes heroPop {
+    from { opacity: 0; transform: scale(0.85); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes heroSpreadL {
+    from { opacity: 0; transform: translateX(270px) rotate(-7deg) scale(0.95); }
+    to   { opacity: 1; transform: translateX(0) rotate(-7deg) scale(1); }
+  }
+  @keyframes heroSpreadR {
+    from { opacity: 0; transform: translateX(-270px) rotate(7deg) scale(0.95); }
+    to   { opacity: 1; transform: translateX(0) rotate(7deg) scale(1); }
+  }
+  /* hero text — same styles as the other project pages */
+  .ms-titlerow { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+  .ms-logo { width: clamp(42px, 5vw, 66px); height: auto; display: block; }
+  .ms-title {
+    font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+    font-size: clamp(2.7rem, 5.6vw, 4.5rem); letter-spacing: 0.04em;
+    color: #fff; line-height: 1.0;
+  }
+  .ms-subtitle {
+    display: block; margin-bottom: 0.8rem;
+    font-size: clamp(0.78rem, 1.35vw, 0.95rem); font-weight: 300;
+    letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent);
+  }
+  .ms-lead {
+    font-weight: 400; font-size: clamp(1.6rem, 3vw, 2.5rem);
+    line-height: 1.4; letter-spacing: 0.01em;
+    color: rgba(240, 236, 228, 0.8); text-wrap: balance;
+    max-width: min(900px, 92vw); margin: 1.9rem auto 0;
+  }
+  /* gray separator line — centered, most of the width (not full bleed) */
+  .cs-section { position: relative; border-top: none; }
+  .cs-section::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: min(1120px, 90vw); height: 2px; background: rgba(255,255,255,0.14);
+  }
+  /* no line between the hero and the first section — the background already separates them */
+  .cs-hero + .cs-section::before { display: none; }
+  .cs-section--tint { background: #000; border-top: none; border-bottom: none; }
+  /* extra room for the key features section */
+  .cs-features-section { padding-top: 104px; padding-bottom: 104px; }
+
+  /* phone screens are white — keep their text dark/readable (e.g. "was this a want or a need?") */
+  .ap__screen { color: #1b1b1b; }
+  .ap--dark .ap__screen { color: #fff; }
+  /* functional category dropdown */
+  .proto-select { background: #fff; color: #333; -webkit-appearance: menulist; appearance: menulist; cursor: pointer; }
+  /* more room above the prototype phone */
+  #proto { margin-top: 2.6rem; }
+
+  /* hero: more room around the title + description */
+  .cs-hero { padding: 112px 0 150px; }
+  .cs-hero__inner { gap: 116px; }
+  /* second section (challenge / approach): more room */
+  .cs-hero + .cs-section { padding-top: 104px; padding-bottom: 104px; }
+  /* features (third section): more space */
+  .cs-features-section { padding-top: 134px; padding-bottom: 134px; }
+  .cs-features { gap: 26px 22px; margin-top: 46px; }
+  /* prototype label: off-white, bolder, nudged down */
+  .cs-proto-wrap .cs-eyebrow {
+    color: var(--fg); -webkit-text-fill-color: var(--fg);
+    font-weight: 600; margin-top: 1.6rem;
+  }
+  /* key screens: drag/scroll reel of iPhone mockups, spaced out, hover-enlarge */
+  .screen-reel {
+    display: flex; gap: 52px; overflow-x: auto; overflow-y: hidden;
+    padding: 44px var(--gutter); cursor: grab; scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  }
+  .screen-reel::-webkit-scrollbar { display: none; }
+  .screen-reel:active { cursor: grabbing; }
+  /* scroll affordance — animated arrow under the reel */
+  .reel-hint { display: flex; justify-content: center; margin-top: 10px; color: var(--accent); transition: opacity 0.4s ease; }
+  .reel-hint svg { animation: reelNudge 1.5s ease-in-out infinite; }
+  .reel-hint.hide { opacity: 0; }
+  @keyframes reelNudge {
+    0%, 100% { transform: translateX(-7px); opacity: 0.45; }
+    50%      { transform: translateX(7px); opacity: 1; }
+  }
+  .phone-mock {
+    flex: 0 0 auto; scroll-snap-align: center;
+    background: linear-gradient(155deg, #2b2b30, #0f0f12);
+    border-radius: 42px; padding: 10px;
+    box-shadow: 0 30px 60px -18px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s;
+  }
+  .phone-mock img {
+    display: block; height: 54vh; width: auto; border-radius: 32px;
+    -webkit-user-drag: none; user-select: none;
+  }
+  /* tall/full-length screens — framed to phone shape, showing the top */
+  .phone-mock--tall img { aspect-ratio: 786 / 1704; height: 54vh; width: auto; object-fit: cover; object-position: top; }
+  .phone-mock:hover { transform: scale(1.06); box-shadow: 0 46px 84px -20px rgba(0,0,0,0.62); }
+
+  /* design system */
+  #systemPhone .ap { width: 300px; }
+  #systemPhone .ap__screen { height: 624px; }
+  .cs-palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 430px; }
+  .swatch { width: auto; }
+  .swatch__chip { transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s; }
+  .swatch:hover .swatch__chip { transform: translateY(-10px) scale(1.08); box-shadow: 0 16px 28px rgba(0,0,0,0.45); }
+
+  /* outro — clean brand reveal that loops */
+  #outro-section { padding: 74px 0; }
+  .outro-anim {
+    position: relative; border-radius: 16px; overflow: hidden;
+    min-height: clamp(360px, 52vh, 620px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    background:
+      radial-gradient(58% 50% at 82% 6%, rgba(62,158,126,0.34), transparent 60%),
+      radial-gradient(52% 46% at 6% 0%, rgba(224,83,60,0.30), transparent 60%),
+      radial-gradient(60% 65% at 55% 108%, rgba(61,127,194,0.32), transparent 60%),
+      #0d0e11;
+  }
+  .outro-logo { width: clamp(72px, 9vw, 120px); height: auto; opacity: 0; animation: outroLogo 7s ease-in-out infinite; }
+  .outro-name {
+    margin-top: 1.3rem; font-family: 'Hanken Grotesk', sans-serif; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em; font-size: clamp(1.6rem, 4vw, 3rem);
+    color: #fff; opacity: 0; animation: outroName 7s ease-in-out infinite;
+  }
+  .outro-tag {
+    position: absolute; padding: 0 1rem;
+    font-family: 'Hanken Grotesk', sans-serif; font-weight: 700; line-height: 1.12;
+    font-size: clamp(1.7rem, 4.6vw, 3.4rem); opacity: 0;
+    background: linear-gradient(100deg, #E0533C, #3E9E7E, #3D7FC2);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    animation: outroTag 7s ease-in-out infinite;
+  }
+  @keyframes outroLogo {
+    0%  { opacity: 0; transform: scale(0.6) translateY(12px); }
+    8%  { opacity: 1; transform: scale(1) translateY(0); }
+    45% { opacity: 1; transform: scale(1); }
+    54% { opacity: 0; transform: scale(0.92); }
+    100%{ opacity: 0; }
+  }
+  @keyframes outroName {
+    0%, 8% { opacity: 0; transform: translateY(16px); }
+    20%    { opacity: 1; transform: translateY(0); }
+    45%    { opacity: 1; }
+    54%    { opacity: 0; transform: translateY(-8px); }
+    100%   { opacity: 0; }
+  }
+  @keyframes outroTag {
+    0%, 58% { opacity: 0; transform: scale(0.96); }
+    70%     { opacity: 1; transform: scale(1); }
+    92%     { opacity: 1; transform: scale(1); }
+    100%    { opacity: 0; }
+  }
+  .cs-section h2 {
+    font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+    font-weight: 600; letter-spacing: 0.04em; font-size: clamp(1.6rem, 3vw, 2.4rem);
+    background: none; -webkit-text-fill-color: var(--fg); color: var(--fg);
+  }
+  .cs-lead { color: rgba(240, 236, 228, 0.62); }
+  .cs-two h3 {
+    font-size: clamp(0.78rem, 1.35vw, 0.95rem); font-weight: 300;
+    letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 0.9rem;
+  }
+  .cs-two p {
+    font-weight: 300; font-size: clamp(1.02rem, 1.5vw, 1.28rem);
+    line-height: 1.7; letter-spacing: 0.02em;
+    color: rgba(240, 236, 228, 0.42);
+  }
+  .cs-two p em, .cs-two p strong { color: #fff; }
+  /* beat the inline color:#444 on the design-system paragraph */
+  .cs-section--dark .cs-two p { color: rgba(255,255,255,0.7) !important; }
+  .ap-figure figcaption { color: rgba(240, 236, 228, 0.5); }
+  .ap-figure figcaption b { color: var(--fg); }
+  .cs-proto-hint { color: rgba(240, 236, 228, 0.55); }
+  .cs-proto-hint b { color: #fff; }
+
+  /* section labels → site subtitle style; dark sections → solid black */
+  .cs-eyebrow {
+    background: none; -webkit-text-fill-color: var(--accent); color: var(--accent);
+    font-size: clamp(0.78rem, 1.35vw, 0.95rem); font-weight: 300;
+    letter-spacing: 0.34em; text-transform: uppercase; margin-bottom: 1.4rem;
+  }
+  .cs-section--dark { background: #000; }
+
+  /* ── footer (matches the rest of the site) ── */
+  #footer { text-align: center; padding: 6rem 2rem; margin-top: 2rem; border-top: 1px solid #1a1a1a; }
+  #footer-mark { font-size: 1.4rem; margin-bottom: 1.5rem; opacity: 0.25; color: var(--accent); }
+  #footer a {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 0.86rem; letter-spacing: 0.32em;
+    text-transform: lowercase; color: var(--dim); text-decoration: none; transition: color 0.3s;
+  }
+  #footer a:hover { color: var(--accent); }
+    /* role credit (bottom of page) */
+    #page-role { padding: 4.5rem var(--gutter) 1rem; text-align: right; }
+    #page-role .role-list { display: flex; flex-direction: column; align-items: flex-end; gap: 0.18rem; margin-top: 0.9rem; list-style: none; }
+    .role-label { font-family: 'Hanken Grotesk', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 1rem; }
+    .role-list li { font-family: 'Hanken Grotesk', sans-serif; font-weight: 300; font-size: 0.86rem; letter-spacing: 0.16em; text-transform: lowercase; color: rgba(240,236,228,0.5); line-height: 1.75; }
+  
+    /* footer redesign: back | smiley | next */
+    #footer { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 5rem var(--gutter); text-align: initial; }
+    #footer a { flex: 1; min-width: 0; font-size: 0.86rem; font-weight: 300; letter-spacing: 0.16em; text-transform: lowercase; }
+    #footer a.footer-back { text-align: left; }
+    #footer a.footer-next { text-align: right; }
+    .footer-smiley { width: 32px; height: 32px; flex-shrink: 0; line-height: 0; }
+    .footer-smiley svg { width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body class="is-case">
+
+  <!-- NAV (site standard) -->
+  <nav id="site-nav">
+    <a href="../../index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../../projects/index.html">projects</a></li>
+      <li><a href="../../about/index.html">about</a></li>
+      <li><a href="../../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="stage">
+
+    <!-- ===== Case Study ===== -->
+    <section class="view view--case is-active" data-view="case">
+
+      <!-- Hero -->
+      <div class="cs-hero">
+        <div class="cs cs-hero__inner">
+          <div>
+            <span class="ms-subtitle">Spend like you mean it</span>
+            <div class="ms-titlerow">
+              <span class="ms-title">Mindful Spending</span>
+              <img class="ms-logo" src="logo.png" alt="Mindful Spending logo" />
+            </div>
+            <p class="ms-lead">A budgeting app that turns every purchase into a quick gut-check: was this a <strong>want</strong>, or a <strong>need</strong>? Mindful Spending makes budgeting feel less like punishment and more like a habit.</p>
+          </div>
+          <div class="cs-hero__art" id="heroPhones"></div>
+        </div>
+      </div>
+
+      <!-- Challenge / Approach -->
+      <div class="cs-section">
+        <div class="cs cs-two">
+          <div>
+            <h3>The Challenge</h3>
+            <p>Most budgeting apps only show what you <em>spent</em> — after it's gone. The moment that matters, right before you buy, gets no attention.</p>
+          </div>
+          <div>
+            <h3>The Approach</h3>
+            <p>Move the reflection to the point of purchase: log it, label it <em>want</em> or <em>need</em>, and note how it felt — building awareness in seconds.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="cs-section cs-section--dark cs-features-section">
+        <div class="cs">
+          <span class="cs-eyebrow">Key features</span>
+          <div class="cs-features">
+            <div class="cs-card">
+              <div class="cs-card__dot" style="background:var(--coral)">✎</div>
+              <h4>Log a purchase</h4>
+              <p>Record your purchase including pricing, items, category, and location.</p>
+            </div>
+            <div class="cs-card">
+              <div class="cs-card__dot" style="background:var(--green)">⇄</div>
+              <h4>Want or need?</h4>
+              <p>Reflect on the necessity of this item — how do you feel, was it necessary?</p>
+            </div>
+            <div class="cs-card">
+              <div class="cs-card__dot" style="background:var(--blue)">◷</div>
+              <h4>See the patterns</h4>
+              <p>History and category breakdowns show where money really goes.</p>
+            </div>
+            <div class="cs-card">
+              <div class="cs-card__dot" style="background:var(--yellow);color:#222">◎</div>
+              <h4>Plan &amp; price-match</h4>
+              <p>Set budgets, save wants for later, and check for a better price.</p>
+            </div>
+            <div class="cs-card">
+              <div class="cs-card__dot" style="background:var(--pink)">♡</div>
+              <h4>Save-for-later list</h4>
+              <p>Park impulse buys — most wants quietly fade within a week.</p>
+            </div>
+            <div class="cs-card">
+              <div class="cs-card__dot" style="background:var(--teal)">▤</div>
+              <h4>Budget tracker</h4>
+              <p>A live budget tracker that keeps your monthly targets always visible.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live prototype -->
+      <div class="cs-section">
+        <div class="cs cs-proto-wrap">
+          <span class="cs-eyebrow" style="margin-bottom:0;">Try logging a purchase</span>
+          <div id="proto"></div>
+          <div class="proto-dots" id="pdots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+
+      <!-- Screen gallery -->
+      <div class="cs-section cs-section--tint">
+        <div class="cs">
+          <h2>Key screens</h2>
+          <p class="cs-lead">A look through the redesigned app.</p>
+        </div>
+        <div class="screen-reel">
+          <div class="phone-mock"><img src="screens/home.png" alt="" /></div>
+          <div class="phone-mock"><img src="screens/menu.png" alt="" /></div>
+          <div class="phone-mock"><img src="screens/add-purchase.png" alt="" /></div>
+          <div class="phone-mock"><img src="screens/add-confirm.png" alt="" /></div>
+          <div class="phone-mock"><img src="screens/want-need.png" alt="" /></div>
+          <div class="phone-mock"><img src="screens/reflection.png" alt="" /></div>
+          <div class="phone-mock"><img src="screens/add-done.png" alt="" /></div>
+          <div class="phone-mock"><img src="screens/spend.png" alt="" /></div>
+          <div class="phone-mock"><img src="screens/spend-detail.png" alt="" /></div>
+          <div class="phone-mock phone-mock--tall"><img src="screens/tall/spend-categories.png" alt="" /></div>
+          <div class="phone-mock"><img src="screens/budget-overview.png" alt="" /></div>
+          <div class="phone-mock"><img src="screens/mylist.png" alt="" /></div>
+          <div class="phone-mock"><img src="screens/price-match.png" alt="" /></div>
+          <div class="phone-mock"><img src="screens/account.png" alt="" /></div>
+        </div>
+        <div class="reel-hint" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+
+      <!-- Design system -->
+      <div class="cs-section cs-section--dark">
+        <div class="cs cs-two" style="align-items:center">
+          <div>
+            <span class="cs-eyebrow">Design system</span>
+            <h2 style="margin-bottom:24px">A calm, confident palette.</h2>
+            <div class="cs-palette">
+              <div class="swatch"><div class="swatch__chip" style="background:#E0533C"></div><small><b>Coral</b>#E0533C</small></div>
+              <div class="swatch"><div class="swatch__chip" style="background:#3E9E7E"></div><small><b>Green</b>#3E9E7E</small></div>
+              <div class="swatch"><div class="swatch__chip" style="background:#3D7FC2"></div><small><b>Blue</b>#3D7FC2</small></div>
+              <div class="swatch"><div class="swatch__chip" style="background:#E9D15B"></div><small><b>Yellow</b>#E9D15B</small></div>
+              <div class="swatch"><div class="swatch__chip" style="background:#E78A9C"></div><small><b>Pink</b>#E78A9C</small></div>
+              <div class="swatch"><div class="swatch__chip" style="background:#A6AEDB"></div><small><b>Periwinkle</b>#A6AEDB</small></div>
+              <div class="swatch"><div class="swatch__chip" style="background:#2C2C2C"></div><small><b>Dark</b>#2C2C2C</small></div>
+            </div>
+          </div>
+          <div id="systemPhone" style="display:flex;justify-content:center"></div>
+        </div>
+      </div>
+
+      <!-- Outro — clean brand animation (loops) -->
+      <div class="cs-section" id="outro-section">
+        <div class="cs">
+          <div class="outro-anim">
+            <img class="outro-logo" src="logo.png" alt="" />
+            <span class="outro-name">Mindful Spending</span>
+            <span class="outro-tag">A budgeting app,<br>made for your needs</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER (site standard) -->
+  <!-- ROLE (bottom of page) -->
+  <section id="page-role">
+    <span class="role-label">Role</span>
+    <ul class="role-list">
+      <li>Product Design</li>
+      <li>UI Design</li>
+      <li>UX Design</li>
+    </ul>
+  </section>
+
+
+  <footer id="footer">
+    <a href="../../projects/index.html" id="back-link" class="footer-back">← back to projects</a>
+    <a href="../Rogers Park/index.html" class="footer-next">It's Cold Here in Rogers Park →</a>
+  </footer>
+
+  <script src="app-case.js"></script>
+  <script>
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+    // drag-to-scroll the key-screens reel
+    const reel = document.querySelector('.screen-reel');
+    if (reel) {
+      let down = false, sx = 0, sl = 0;
+      reel.addEventListener('pointerdown', e => { down = true; sx = e.clientX; sl = reel.scrollLeft; });
+      reel.addEventListener('pointermove', e => { if (down) { reel.scrollLeft = sl - (e.clientX - sx); } });
+      const up = () => { down = false; };
+      reel.addEventListener('pointerup', up);
+      reel.addEventListener('pointerleave', up);
+      const hint = document.querySelector('.reel-hint');
+      reel.addEventListener('scroll', () => { if (hint && reel.scrollLeft > 12) hint.classList.add('hide'); }, { passive: true });
+    }
+
+  </script>
+</body>
+</html>

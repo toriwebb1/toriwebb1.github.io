@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mindful Spending — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000000;
+      --fg: #f0ece4;
+      --accent: #e0533c;       /* the app's coral */
+      --muted: #c8c3b8;
+      --dim: #6b6660;
+      --gutter: 4vw;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--fg); font-family: 'Hanken Grotesk', sans-serif; overflow-x: hidden; }
+    img { image-rendering: high-quality; display: block; }
+
+    /* ── nav ── */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem var(--gutter); background: transparent; transition: background 0.4s;
+    }
+    #site-nav.scrolled { background: rgba(0,0,0,0.94); }
+    #nav-name {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: 1.2rem; letter-spacing: 0.35em; text-indent: 0.35em; color: #fff; text-decoration: none;
+    }
+    #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    #nav-links a {
+      font-size: 0.86rem; font-weight: 300; letter-spacing: 0.32em;
+      text-transform: lowercase; color: var(--muted); text-decoration: none; transition: color 0.3s;
+    }
+    #nav-links a:hover { color: #fff; }
+
+    /* ── hero media (first, full screen) ── */
+    #hero-media {
+      width: 100%; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 3.25rem 0 0; background: #000;
+    }
+    #hero-media img, #hero-media video {
+      width: 100%; max-height: calc(100vh - 3.25rem); height: auto;
+      object-fit: contain; display: block; margin: 0 auto;
+    }
+
+    /* ── intro ── */
+    #intro { padding: 5rem var(--gutter) 5rem; }
+    #intro-title {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: clamp(2.7rem, 5.6vw, 4.5rem);
+      letter-spacing: 0.04em; color: #fff; line-height: 1.0; display: block;
+    }
+    #intro-subtitle {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(0.78rem, 1.35vw, 0.95rem);
+      font-weight: 300; letter-spacing: 0.34em; text-transform: uppercase;
+      color: var(--accent); margin-top: 0.7rem; display: block;
+    }
+    #intro-lead {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 400; font-size: clamp(1.6rem, 3vw, 2.5rem);
+      line-height: 1.4; letter-spacing: 0.01em;
+      color: rgba(240, 236, 228, 0.8); text-wrap: balance;
+      max-width: min(1100px, 94vw); margin-top: 1.9rem;
+    }
+    #intro-body {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 300; font-size: clamp(1.02rem, 1.5vw, 1.28rem);
+      line-height: 1.7; color: rgba(240, 236, 228, 0.42); letter-spacing: 0.02em;
+      max-width: min(900px, 92vw); text-wrap: balance; margin-top: 1.2rem;
+    }
+
+    /* ── section eyebrow ── */
+    .eyebrow {
+      font-size: 0.68rem; font-weight: 300; letter-spacing: 0.4em;
+      text-transform: uppercase; color: var(--accent);
+      padding: 0 var(--gutter); margin-bottom: 1.6rem; display: block;
+    }
+
+    /* ── spacers ── */
+    .spacer { height: 36px; }
+    .spacer-lg { height: 110px; }
+
+    /* ── phone-screen grid (tall portrait screenshots) ── */
+    .screens-3 {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px; padding: 0 var(--gutter); align-items: start;
+    }
+    .screens-3 img { width: 100%; height: auto; cursor: zoom-in; transition: opacity 0.3s; }
+    .screens-3 img:hover { opacity: 0.85; }
+    @media (max-width: 700px) { .screens-3 { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; } }
+
+    /* ── video section ── */
+    #video-section { padding: 0 var(--gutter); }
+    #video-section video { width: 100%; height: auto; display: block; cursor: pointer; }
+
+    /* ── footer ── */
+    #footer { text-align: center; padding: 6rem 2rem; margin-top: 4rem; border-top: 1px solid #1a1a1a; }
+    #footer-mark { font-size: 1.4rem; margin-bottom: 1.5rem; opacity: 0.25; color: var(--accent); }
+    #footer a {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.86rem; letter-spacing: 0.32em; text-transform: lowercase;
+      color: var(--dim); text-decoration: none; transition: color 0.3s;
+    }
+    #footer a:hover { color: var(--accent); }
+
+    /* ── scroll reveal ── */
+    .reveal {
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 1.6s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── lightbox ── */
+    #lightbox { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.96); align-items: center; justify-content: center; cursor: zoom-out; }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; display: block; }
+    #lightbox-close { position: absolute; top: 2rem; right: 2.4rem; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: #c8c3b8; cursor: pointer; transition: color 0.3s; }
+    #lightbox-close:hover { color: #fff; }
+  </style>
+</head>
+<body>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <span id="lightbox-close">close</span>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <!-- NAV -->
+  <nav id="site-nav">
+    <a href="../../index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../../projects/index.html">projects</a></li>
+      <li><a href="../../about/index.html">about</a></li>
+      <li><a href="../../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO MEDIA -->
+  <section id="hero-media" class="reveal">
+    <img src="2.png" alt="Mindful Spending app shown across three phones" />
+  </section>
+
+  <!-- INTRO -->
+  <header id="intro" class="reveal">
+    <span id="intro-title">Mindful Spending</span>
+    <span id="intro-subtitle">App Design · UX/UI</span>
+    <p id="intro-lead">A budgeting app that turns every purchase into a quick gut-check — was this a want, or a need?</p>
+    <p id="intro-body">Most apps only show what you spent once it's gone. Mindful Spending moves the reflection to the moment before you buy, turning everyday choices into a calmer, more intentional habit.</p>
+  </header>
+
+  <!-- CORE LOOP SCREENS -->
+  <section class="reveal">
+    <span class="eyebrow">The core loop</span>
+    <div class="screens-3">
+      <img src="screens/home.png" alt="" />
+      <img src="screens/add-purchase.png" alt="" />
+      <img src="screens/want-need.png" alt="" />
+    </div>
+  </section>
+
+  <div class="spacer-lg"></div>
+
+  <!-- PROTOTYPE VIDEO -->
+  <section id="video-section" class="reveal">
+    <span class="eyebrow" style="padding:0;">Live prototype</span>
+    <video autoplay muted loop playsinline>
+      <source src="1.mp4" type="video/mp4" />
+    </video>
+  </section>
+
+  <div class="spacer-lg"></div>
+
+  <!-- KEY SCREENS -->
+  <section class="reveal">
+    <span class="eyebrow">Key screens</span>
+    <div class="screens-3">
+      <img src="screens/reflection.png" alt="" />
+      <img src="screens/spend.png" alt="" />
+      <img src="screens/budget.png" alt="" />
+    </div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <section class="reveal">
+    <div class="screens-3">
+      <img src="screens/price-match.png" alt="" />
+      <img src="screens/mylist.png" alt="" />
+      <img src="screens/budget-overview.png" alt="" />
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div id="footer-mark">:)</div>
+    <a href="../../projects/index.html" id="back-link">← back to projects</a>
+  </footer>
+
+  <script>
+    // nav on scroll
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+    // lightbox (images only, not the looping video)
+    const lightbox    = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn    = document.getElementById('lightbox-close');
+
+    document.querySelectorAll('.screens-3 img').forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+    function closeLightbox() { lightbox.classList.remove('open'); lightboxImg.src = ''; document.body.style.overflow = ''; }
+    closeBtn.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    // pause/play the prototype video on click
+    const vid = document.querySelector('#video-section video');
+    if (vid) vid.addEventListener('click', () => { vid.paused ? vid.play() : vid.pause(); });
+
+    // scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.06, rootMargin: '0px 0px -15% 0px' });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

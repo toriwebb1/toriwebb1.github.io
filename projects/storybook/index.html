@@ -1,0 +1,478 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Papa and Piper Play Pinball — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000000;
+      --purple-light: #a855f7;
+      --fg: #f0ece4;
+      --muted: #9d8faa;
+      --gutter: 4vw;
+    }
+
+    html, body {
+      width: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Hanken Grotesk', sans-serif;
+      overflow-x: hidden;
+    }
+    html { scroll-behavior: smooth; }
+
+    img { image-rendering: high-quality; }
+
+    #site-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.6rem var(--gutter);
+      background: transparent;
+      transition: background 0.4s ease;
+    }
+    #site-nav.scrolled { background: rgba(0,0,0,0.94); }
+    #nav-name {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.35em;
+      text-indent: 0.35em;
+      color: #ffffff;
+      text-decoration: none;
+    }
+    #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    #nav-links a {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.7rem; font-weight: 300;
+      letter-spacing: 0.16em; text-transform: lowercase;
+      color: var(--muted); text-decoration: none; transition: color 0.3s;
+    }
+    #nav-links a:hover { color: #ffffff; }
+
+    #hero { padding: 6.5rem var(--gutter) 6.5rem; }
+    #hero-title {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: clamp(2.7rem, 5.6vw, 4.5rem);
+      letter-spacing: 0.04em; margin-left: -0.04em;
+      color: #fff; line-height: 1.0; display: block;
+    }
+    #hero-subtitle {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(0.78rem, 1.35vw, 0.95rem);
+      font-weight: 300; letter-spacing: 0.34em; text-transform: uppercase;
+      color: var(--purple-light); margin-bottom: 0.7rem; display: block;
+    }
+    #hero-lead {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 400;
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      line-height: 1.4; letter-spacing: 0.01em;
+      color: rgba(240, 236, 228, 0.8); text-wrap: balance;
+      max-width: min(900px, 92vw); margin-top: 1.9rem;
+    }
+    #hero-body {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 300; font-size: clamp(1.02rem, 1.5vw, 1.28rem);
+      line-height: 1.7; color: rgba(240, 236, 228, 0.42); letter-spacing: 0.02em;
+      max-width: min(900px, 92vw); text-wrap: balance; margin-top: 1.2rem;
+    }
+    .hero-spacer-lg { height: 70px; }
+
+    /* ── flipbook (real-image render, auto-advance forward, manual takeover) ── */
+    #flipbook-section { padding: 9.5rem var(--gutter) 6rem; }
+    #flipbook-head {
+      display: flex; align-items: flex-end; justify-content: flex-end;
+      margin-bottom: 1.8rem; flex-wrap: wrap; gap: 14px;
+    }
+    #flipbook-controls { display: flex; align-items: center; gap: 12px; }
+    #flipCounter {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.22em; color: #c8c3b8;
+      min-width: 7ch; text-align: center; font-variant-numeric: tabular-nums;
+    }
+    .flip-btn {
+      background: none; border: 1px solid #4a3a5e; color: #c8c3b8;
+      width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: border-color 0.2s, color 0.2s, opacity 0.2s, background 0.2s;
+    }
+    .flip-btn svg { width: 14px; height: 14px; fill: currentColor; }
+    .flip-btn:hover { border-color: #fff; color: #fff; }
+    .flip-btn:disabled { opacity: 0.25; cursor: default; }
+    #flipPlay { border-color: var(--purple-light); color: #e9d5ff; }
+    #flipPlay.playing { background: var(--purple-light); color: #1a0a2e; border-color: var(--purple-light); }
+
+    /* stage gives the book real depth */
+    #flipbook-stage {
+      display: flex; justify-content: center;
+      perspective: 2600px; padding: 1.4rem 0 1rem;
+    }
+    #book3d { position: relative; width: min(1340px, 96vw); }
+    /* soft floor shadow under the book */
+    #book-floor {
+      position: absolute; left: 7%; right: 7%; bottom: -20px; height: 28px; z-index: -1;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.34), transparent 72%); filter: blur(8px);
+    }
+    #flipbook { width: 100%; margin: 0 auto; position: relative; z-index: 1; cursor: pointer; }
+    #flipbook .stf__parent { margin: 0 auto; }
+    /* clean, soft cast shadow */
+    #flipbook canvas, #flipbook .stf__item, #flipbook .stf__block {
+      box-shadow: 0 10px 28px rgba(0,0,0,0.3), 0 2px 6px rgba(0,0,0,0.16);
+    }
+    /* the outgoing page — cross-fades into the next on each change (a soft dissolve) */
+    #book-snap {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      width: 100%; height: 100%; opacity: 0;
+    }
+    /* faint paper sheen only — no hard spine shadow */
+    #book-gutter {
+      position: absolute; inset: 0; z-index: 3; pointer-events: none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), transparent 16%);
+    }
+    /* real-image pages — stay sharp at any size (no canvas pixelation) */
+    #flipbook .page { background: #fff; overflow: hidden; }
+    #flipbook .page img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ── scroll section below flipbook ── */
+    #scroll-section {
+      padding: 4rem var(--gutter) 6rem;
+      width: 100%;
+    }
+
+
+    /* single big photo below everything */
+    /* four small illustrations that drift back and forth */
+    #mini-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      justify-items: center; align-items: center;
+      gap: 4vw 5vw;
+      max-width: 1340px; margin: 0 auto;
+      padding: 1rem var(--gutter) 4.5rem;
+    }
+    .mini {
+      width: clamp(280px, 38vw, 560px); height: auto; display: block;
+      cursor: grab; user-select: none; -webkit-user-drag: none; touch-action: none;
+      position: relative; will-change: transform;
+    }
+    .mini.tall { width: clamp(210px, 28vw, 420px); }
+    .mini.dragging { cursor: grabbing; }
+    .m1 { animation: drift-a 3.4s ease-in-out infinite; }
+    .m2 { animation: drift-b 4.0s ease-in-out infinite; }
+    .m3 { animation: drift-c 3.6s ease-in-out infinite; }
+    .m4 { animation: drift-d 4.3s ease-in-out infinite; }
+    .mini:hover { animation-play-state: paused; }
+    @keyframes drift-a { 0%,100% { transform: translateX(-7px) rotate(-2deg); } 50% { transform: translateX(7px) rotate(2deg); } }
+    @keyframes drift-b { 0%,100% { transform: translateX(6px) rotate(2deg); }  50% { transform: translateX(-6px) rotate(-2deg); } }
+    @keyframes drift-c { 0%,100% { transform: translateX(-5px) rotate(1.5deg); } 50% { transform: translateX(5px) rotate(-1.5deg); } }
+    @keyframes drift-d { 0%,100% { transform: translateX(7px) rotate(-1.5deg); } 50% { transform: translateX(-7px) rotate(1.5deg); } }
+
+    #big-photo { width: 100%; text-align: center; }
+    #big-photo img {
+      width: 70%; height: auto; margin: 0 auto;
+      display: block; cursor: zoom-in; vertical-align: top;
+    }
+
+    /* reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* lightbox */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.94);
+      align-items: center; justify-content: center; cursor: zoom-out;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; display: block; }
+    #lightbox-close {
+      position: absolute; top: 2rem; right: 2.4rem;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: #c8c3b8; cursor: pointer; transition: color 0.3s;
+    }
+    #lightbox-close:hover { color: #fff; }
+
+    /* ── footer ── */
+    #footer {
+      text-align: center; padding: 5rem 2rem;
+      border-top: 1px solid #1e1e1e;
+    }
+    #footer-mark { font-size: 1.4rem; margin-bottom: 1.5rem; opacity: 0.2; color: var(--purple-light); }
+    #footer a {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.32em; text-transform: lowercase;
+      color: var(--muted); text-decoration: none; transition: color 0.3s;
+    }
+    #footer a:hover { color: var(--purple-light); }
+  
+    /* enlarged header + footer */
+    #nav-name { font-size: 1.2rem; }
+    #nav-links a { font-size: 0.86rem; }
+    #footer-left { font-size: 1.2rem; }
+    #footer a { font-size: 0.86rem; }
+  
+    /* all-caps titles (restored from Bebas) */
+    #nav-name, #hero-title { text-transform: uppercase; }
+      /* role credit (bottom of page) */
+    #page-role { padding: 4.5rem var(--gutter) 1rem; text-align: right; }
+    #page-role .role-list { display: flex; flex-direction: column; align-items: flex-end; gap: 0.18rem; margin-top: 0.9rem; list-style: none; }
+    .role-label { font-family: 'Hanken Grotesk', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.34em; text-transform: uppercase; color: var(--purple-light); display: block; margin-bottom: 1rem; }
+    .role-list li { font-family: 'Hanken Grotesk', sans-serif; font-weight: 300; font-size: 0.86rem; letter-spacing: 0.16em; text-transform: lowercase; color: rgba(240,236,228,0.5); line-height: 1.75; }
+  
+    /* footer redesign: back | smiley | next */
+    #footer { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 5rem var(--gutter); text-align: initial; }
+    #footer a { flex: 1; min-width: 0; font-size: 0.86rem; font-weight: 300; letter-spacing: 0.16em; text-transform: lowercase; }
+    #footer a.footer-back { text-align: left; }
+    #footer a.footer-next { text-align: right; }
+    .footer-smiley { width: 32px; height: 32px; flex-shrink: 0; line-height: 0; }
+    .footer-smiley svg { width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+
+        <nav id="site-nav">
+    <a href="../../index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../../projects/index.html">projects</a></li>
+      <li><a href="../../about/index.html">about</a></li>
+      <li><a href="../../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- FLIPBOOK (hero media, first) -->
+  <section id="flipbook-section" class="reveal">
+    <div id="flipbook-head">
+      <div id="flipbook-controls">
+        <button class="flip-btn" id="flipPlay" aria-label="Pause"></button>
+        <button class="flip-btn" id="flipPrev" aria-label="Previous page"><svg viewBox="0 0 24 24"><path d="M15.5 4.5l-9 7.5 9 7.5z"/></svg></button>
+        <span id="flipCounter">— / —</span>
+        <button class="flip-btn" id="flipNext" aria-label="Next page"><svg viewBox="0 0 24 24"><path d="M8.5 4.5l9 7.5-9 7.5z"/></svg></button>
+      </div>
+    </div>
+    <div id="flipbook-stage">
+      <div id="book3d">
+        <div id="book-floor"></div>
+        <div id="flipbook"></div>
+        <canvas id="book-snap"></canvas>
+        <div id="book-gutter"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TITLE + DESCRIPTION (below the flipbook) -->
+  <section id="hero" class="reveal">
+    <span id="hero-subtitle">Children's Book · Illustration</span>
+    <span id="hero-title">Papa and Piper Play Pinball</span>
+    <p id="hero-lead">A children's book that follows a young bear named Piper as she discovers the world of pinball during a rainy-day outing with her dad.</p>
+    <p id="hero-body">Through playful illustrations and a lighthearted narrative, the story explores curiosity, perseverance, and the special bond that forms when we share the things we love with the people we care about.</p>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <span id="lightbox-close">close</span>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <!-- SMALL DRIFTING ILLUSTRATIONS + BIG PHOTO -->
+  <div id="scroll-section">
+    <div id="mini-gallery" class="reveal">
+      <img src="3.png" class="mini m1" alt="" />
+      <img src="4.png" class="mini m2" alt="" />
+      <img src="5.png" class="mini m3 tall" alt="" />
+      <img src="6.png" class="mini m4" alt="" />
+    </div>
+
+    <div id="big-photo" class="reveal">
+      <img src="7.jpg" alt="" />
+    </div>
+  </div>
+  <!-- ROLE (bottom of page) -->
+  <section id="page-role">
+    <span class="role-label">Role</span>
+    <ul class="role-list">
+      <li>Illustration</li>
+      <li>Writer</li>
+      <li>Children's Book</li>
+    </ul>
+  </section>
+
+
+
+  <footer id="footer">
+    <a href="../../projects/index.html" id="back-link" class="footer-back">← back to projects</a>
+    <a href="../Designer Brochure/index.html" class="footer-next">Designer Brochure →</a>
+  </footer>
+
+  <script src="vendor/page-flip.browser.js"></script>
+  <script>
+    // nav on scroll
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+    // lightbox
+    const lightbox    = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    document.getElementById('lightbox-close').addEventListener('click', () => {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+    lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+    });
+    document.querySelectorAll('#big-photo img').forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // ── draggable floating illustrations ──
+    (function () {
+      let topZ = 50;
+      document.querySelectorAll('.mini').forEach(mini => {
+        let dragging = false, sx = 0, sy = 0, tx = 0, ty = 0;
+        mini.addEventListener('pointerdown', e => {
+          dragging = true;
+          mini.style.animation = 'none';      // stop the drift while held
+          mini.style.transition = 'none';
+          mini.classList.add('dragging');
+          mini.style.zIndex = (++topZ);
+          sx = e.clientX - tx; sy = e.clientY - ty;
+          try { mini.setPointerCapture(e.pointerId); } catch (_) {}
+          e.preventDefault();
+        });
+        mini.addEventListener('pointermove', e => {
+          if (!dragging) return;
+          tx = e.clientX - sx; ty = e.clientY - sy;
+          mini.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
+        });
+        function end(e) {
+          if (!dragging) return;
+          dragging = false;
+          mini.classList.remove('dragging');
+          try { mini.releasePointerCapture(e.pointerId); } catch (_) {}
+        }
+        mini.addEventListener('pointerup', end);
+        mini.addEventListener('pointercancel', end);
+      });
+    })();
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+    });
+
+    // scroll reveal
+    const revEls = document.querySelectorAll('.reveal');
+    const revObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
+    }, { threshold: 0, rootMargin: '0px 0px -20px 0px' });
+    revEls.forEach(el => revObs.observe(el));
+
+    // ── flipbook: real-image pages (sharp), auto-advance forward + manual takeover ──
+    (function () {
+      // animation starts on Pinball4; pages pair into spreads
+      const PAGES = [];
+      for (let i = 4; i <= 43; i++) PAGES.push('flipbook/Pinball' + i + '.jpg');
+
+      const el      = document.getElementById('flipbook');
+      const counter = document.getElementById('flipCounter');
+      const prevBtn = document.getElementById('flipPrev');
+      const nextBtn = document.getElementById('flipNext');
+      const playBtn = document.getElementById('flipPlay');
+      const ICON_PLAY  = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+      const ICON_PAUSE = '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+
+      let pf = null, timer = null, wantPlay = true, inView = false;
+
+      function buildPages() {
+        PAGES.forEach(src => {
+          const page = document.createElement('div');
+          page.className = 'page';
+          const img = document.createElement('img');
+          img.src = src; img.alt = '';
+          page.appendChild(img);
+          el.appendChild(page);
+        });
+      }
+      function updateMeta() {
+        if (!pf) return;
+        const total = pf.getPageCount(), cur = pf.getCurrentPageIndex();
+        counter.textContent = (Math.floor(cur / 2) + 1) + ' / ' + Math.ceil(total / 2);
+        prevBtn.disabled = cur <= 0;
+        nextBtn.disabled = cur >= total - 2;
+      }
+      function updatePlayBtn() {
+        playBtn.classList.toggle('playing', wantPlay);
+        playBtn.innerHTML = wantPlay ? ICON_PAUSE : ICON_PLAY;
+        playBtn.setAttribute('aria-label', wantPlay ? 'Pause' : 'Play');
+      }
+      function step() {
+        if (!pf) return;
+        const total = pf.getPageCount(), cur = pf.getCurrentPageIndex();
+        // forward only — instant loop back to the start at the end, never reversing
+        if (cur >= total - 2) { pf.turnToPage(0); updateMeta(); }
+        else pf.flipNext('top');
+      }
+      function sync() {
+        const should = wantPlay && inView && !!pf;
+        if (should && !timer) timer = setInterval(step, 1700);
+        if (!should && timer) { clearInterval(timer); timer = null; }
+        updatePlayBtn();
+      }
+      function takeOver() { if (wantPlay) { wantPlay = false; sync(); } }
+
+      function init() {
+        if (pf || !window.St || !St.PageFlip) return;
+        buildPages();
+        pf = new St.PageFlip(el, {
+          width: 760, height: 626, size: 'stretch',
+          minWidth: 300, maxWidth: 1340, minHeight: 240, maxHeight: 1103,
+          drawShadow: false, showCover: false, usePortrait: false,
+          useMouseEvents: false, clickEventForward: false,
+          mobileScrollSupport: false, flippingTime: 800,
+        });
+        pf.loadFromHTML(el.querySelectorAll('.page'));
+        pf.on('flip', updateMeta);
+        pf.on('changeState', updateMeta);
+        updateMeta();
+        sync();
+      }
+
+      playBtn.addEventListener('click', () => { wantPlay = !wantPlay; sync(); });
+      prevBtn.addEventListener('click', () => { takeOver(); if (pf) pf.flipPrev('top'); });
+      nextBtn.addEventListener('click', () => { takeOver(); if (pf) pf.flipNext('top'); });
+      document.addEventListener('keydown', e => {
+        if (!pf) return;
+        if (e.key === 'ArrowLeft')  { takeOver(); pf.flipPrev('top'); }
+        if (e.key === 'ArrowRight') { takeOver(); pf.flipNext('top'); }
+      });
+      // click the left / right half of the book to page through manually
+      el.addEventListener('click', e => {
+        takeOver();
+        if (!pf) return;
+        const r = el.getBoundingClientRect();
+        (e.clientX - r.left) > r.width / 2 ? pf.flipNext('top') : pf.flipPrev('top');
+      });
+
+      // lazy-init in view; pause auto-play when scrolled away
+      const fio = new IntersectionObserver(entries => {
+        entries.forEach(e => { inView = e.isIntersecting; if (inView) requestAnimationFrame(init); sync(); });
+      }, { threshold: 0.12 });
+      fio.observe(document.getElementById('flipbook-section'));
+    })();
+  </script>
+</body>
+</html>

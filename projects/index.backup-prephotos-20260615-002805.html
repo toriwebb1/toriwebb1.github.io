@@ -1,0 +1,335 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000;
+      --fg: #f0ece4;
+      --pink: #f472b6;
+      --muted: #888078;
+      --gutter: 7vw;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Hanken Grotesk', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── smiley cursor ── */
+    #cursor-smiley {
+      position: fixed; z-index: 9999; pointer-events: none;
+      width: 26px; height: 26px;
+      transform: translate(-50%, -50%);
+      visibility: hidden;
+    }
+    #cursor-smiley svg { width: 100%; height: 100%; }
+    body.cursor-active { cursor: none; }
+
+    /* ── nav ── */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem var(--gutter);
+    }
+    #nav-name {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.9rem; letter-spacing: 0.35em; text-indent: 0.35em;
+      color: var(--fg); text-decoration: none;
+    }
+    #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    #nav-links a {
+      font-size: 0.68rem; font-weight: 300; letter-spacing: 0.32em;
+      text-transform: lowercase; color: var(--muted); text-decoration: none;
+      transition: color 0.3s;
+    }
+    #nav-links a:hover { color: var(--fg); }
+
+    /* ── page header ── */
+    #page-header {
+      max-width: 1380px; margin: 0 auto;
+      padding: 6.5rem clamp(16px, 3vw, 40px) 1.8rem;
+    }
+    #page-label {
+      font-size: 0.55rem; font-weight: 400;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--pink); margin-bottom: 0.4rem; display: block;
+    }
+    #page-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      letter-spacing: 0.04em;
+      color: var(--fg); line-height: 1; display: block;
+    }
+
+    /* ── project grid: uniform rectangles, projects side by side ── */
+    #project-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 5rem 4rem;
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 2.5rem clamp(16px, 3vw, 40px) 5rem;
+    }
+    @media (max-width: 980px) {
+      #project-grid { grid-template-columns: 1fr 1fr; gap: 4rem 3rem; }
+    }
+    @media (max-width: 600px) {
+      #project-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    .proj {
+      display: block; text-decoration: none; color: inherit;
+      opacity: 0; transform: translateY(16px);
+      animation: cardIn 0.6s ease forwards;
+    }
+    @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
+
+    /* strict rectangle — no rounded edges */
+    .proj-media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
+      background: #111;
+    }
+    .proj-media img, .proj-media video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: opacity 0.45s ease;
+    }
+    /* hover swaps to the second cover image */
+    .proj-media .cover-b { opacity: 0; }
+    .proj:hover .proj-media .cover-b { opacity: 1; }
+
+
+    .proj-info {
+      padding: 0.95rem 0 0;
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .proj-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(1.3rem, 1.9vw, 2rem);
+      letter-spacing: 0.04em; line-height: 1.05;
+      color: var(--fg); transition: color 0.3s;
+    }
+    .proj:hover .proj-title { color: var(--pink); }
+    .proj-cat {
+      font-size: 0.64rem; font-weight: 400;
+      letter-spacing: 0.24em; text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ── footer ── */
+    #footer {
+      max-width: 1320px; margin: 3rem auto 0;
+      padding: 3.5rem clamp(24px, 5vw, 64px);
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid #1a1a1a;
+    }
+    #footer-left {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: 0.9rem; letter-spacing: 0.35em; color: var(--muted);
+    }
+    #footer a {
+      font-size: 0.62rem; font-weight: 300; letter-spacing: 0.32em;
+      text-transform: lowercase; color: var(--muted);
+      text-decoration: none; transition: color 0.3s;
+    }
+    #footer a:hover { color: var(--pink); }
+  
+    /* enlarged header + footer */
+    #nav-name { font-size: 1.2rem; }
+    #nav-links a { font-size: 0.86rem; }
+    #footer-left { font-size: 1.2rem; }
+    #footer a { font-size: 0.86rem; }
+  
+    /* all-caps titles (restored from Bebas) */
+    #nav-name, #page-title, .proj-title, #footer-left { text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+  <div id="cursor-smiley">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" fill="#f472b6" stroke="#000" stroke-width="5"/>
+      <ellipse cx="36" cy="40" rx="7" ry="10" fill="#000"/>
+      <ellipse cx="64" cy="40" rx="7" ry="10" fill="#000"/>
+      <path d="M18 58 Q50 99 82 58" stroke="#000" stroke-width="4" stroke-linecap="round" fill="none"/>
+    </svg>
+  </div>
+
+  <nav id="site-nav">
+    <a href="../landing page/index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../projects/index.html">projects</a></li>
+      <li><a href="../about/index.html">about</a></li>
+      <li><a href="../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <header id="page-header">
+    <span id="page-label">Selected</span>
+    <span id="page-title">Projects</span>
+  </header>
+
+  <!-- each tile shows its cover, and crossfades to coverimage2.png on hover -->
+  <div id="project-grid">
+
+    <!-- Made with Love -->
+    <a class="proj" href="project_1_made_with_love/index.html" style="animation-delay:0.05s;">
+      <div class="proj-media" style="background:rgba(150,158,165,0.22);">
+        <img class="cover-a" src="project_1_made_with_love/coverphoto.png" alt="" />
+        <img class="cover-b" src="project_1_made_with_love/coverimage2.png" onerror="this.remove()" alt="" />
+      </div>
+      <div class="proj-info">
+        <span class="proj-title">Made with Love</span>
+        <span class="proj-cat">Publication · Exhibition</span>
+      </div>
+    </a>
+
+    <!-- Midwestern Mundane -->
+    <a class="proj" href="Midwestern Mundane/index.html" style="animation-delay:0.08s;">
+      <div class="proj-media">
+        <img class="cover-a" src="Midwestern Mundane/1.jpg" alt="" />
+        <img class="cover-b" src="Midwestern Mundane/coverimage2.png" onerror="this.remove()" alt="" />
+      </div>
+      <div class="proj-info">
+        <span class="proj-title">Midwestern Mundane</span>
+        <span class="proj-cat">Photography · Series</span>
+      </div>
+    </a>
+
+    <!-- Reviewed -->
+    <a class="proj" href="Reviewed/index.html" style="animation-delay:0.11s;">
+      <div class="proj-media">
+        <img class="cover-a" src="Reviewed/1-intro.GIF" alt="" />
+        <img class="cover-b" src="Reviewed/coverimage2.png" onerror="this.remove()" alt="" />
+      </div>
+      <div class="proj-info">
+        <span class="proj-title">Reviewed</span>
+        <span class="proj-cat">Event Design · CGDC</span>
+      </div>
+    </a>
+
+    <!-- monodot -->
+    <a class="proj" href="monodot/index.html" style="animation-delay:0.14s;">
+      <div class="proj-media">
+        <video class="cover-a" autoplay muted loop playsinline>
+          <source src="monodot/1-video.mp4" type="video/mp4" />
+        </video>
+        <video class="cover-b" autoplay muted loop playsinline>
+          <source src="monodot/coverimage2.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="proj-info">
+        <span class="proj-title">monodot + monodule</span>
+        <span class="proj-cat">Type Design · Animation</span>
+      </div>
+    </a>
+
+    <!-- Bold Marks -->
+    <a class="proj" href="Bold Marks/index.html" style="animation-delay:0.17s;">
+      <div class="proj-media" style="background:#060479;">
+        <img class="cover-a" src="Bold Marks/coverimage.png" style="object-fit:contain; padding:16%;" alt="" />
+        <video class="cover-b" autoplay muted loop playsinline>
+          <source src="Bold Marks/coverimage2.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="proj-info">
+        <span class="proj-title">Bold Marks</span>
+        <span class="proj-cat">Branding · Editorial</span>
+      </div>
+    </a>
+
+    <!-- Mindful Spending -->
+    <a class="proj" href="Mindful Spending/index.html" style="animation-delay:0.2s;">
+      <div class="proj-media">
+        <img class="cover-a" src="Mindful Spending/2.png" style="object-fit:contain; padding:1%;" alt="" />
+        <video class="cover-b" autoplay muted loop playsinline>
+          <source src="Mindful Spending/coverimage2.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="proj-info">
+        <span class="proj-title">Mindful Spending</span>
+        <span class="proj-cat">App Design · UX/UI</span>
+      </div>
+    </a>
+
+    <!-- Rogers Park -->
+    <a class="proj" href="Rogers Park/index.html" style="animation-delay:0.23s;">
+      <div class="proj-media" style="background:#000;">
+        <img class="cover-a" src="Rogers Park/images/3.png" style="object-fit:contain; padding:6%;" alt="" />
+        <img class="cover-b" src="Rogers Park/coverimage2.png" onerror="this.remove()" alt="" />
+      </div>
+      <div class="proj-info">
+        <span class="proj-title">It's Cold Here in Rogers Park</span>
+        <span class="proj-cat">Photography · Zine Design</span>
+      </div>
+    </a>
+
+    <!-- Rooted in Resilience -->
+    <a class="proj" href="Rooted in Resilience/index.html" style="animation-delay:0.26s;">
+      <div class="proj-media">
+        <img class="cover-a" src="Rooted in Resilience/1.jpeg" alt="" />
+        <img class="cover-b" src="Rooted in Resilience/coverimage2.png" onerror="this.remove()" alt="" />
+      </div>
+      <div class="proj-info">
+        <span class="proj-title">Rooted in Resilience</span>
+        <span class="proj-cat">Memoir · Photography</span>
+      </div>
+    </a>
+
+    <!-- Designer Brochure -->
+    <a class="proj" href="Designer Brochure/index.html" style="animation-delay:0.29s;">
+      <div class="proj-media">
+        <img class="cover-a" src="Designer Brochure/2.jpg" alt="" />
+        <img class="cover-b" src="Designer Brochure/coverimage2.png" onerror="this.remove()" alt="" />
+      </div>
+      <div class="proj-info">
+        <span class="proj-title">Designer Brochure</span>
+        <span class="proj-cat">Print · Stefan Sagmeister</span>
+      </div>
+    </a>
+
+    <!-- Papa and Piper -->
+    <a class="proj" href="storybook/index.html" style="animation-delay:0.32s;">
+      <div class="proj-media" style="background:#f4f0e8;">
+        <img class="cover-a" src="storybook/4.png" alt="" />
+        <img class="cover-b" src="storybook/coverimage2.png" onerror="this.remove()" alt="" />
+      </div>
+      <div class="proj-info">
+        <span class="proj-title">Papa and Piper Play Pinball</span>
+        <span class="proj-cat">Children's Book · Illustration</span>
+      </div>
+    </a>
+
+  </div>
+
+  <footer id="footer">
+    <span id="footer-left">Tori Webb</span>
+    <a href="../landing page/index.html">← back home</a>
+  </footer>
+
+  <script>
+    const smiley = document.getElementById('cursor-smiley');
+    let moved = false;
+    document.body.classList.add('cursor-active');
+    document.addEventListener('mousemove', e => {
+      smiley.style.left = e.clientX + 'px';
+      smiley.style.top  = e.clientY + 'px';
+      if (!moved) { moved = true; smiley.style.visibility = 'visible'; }
+    });
+  </script>
+</body>
+</html>

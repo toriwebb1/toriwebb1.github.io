@@ -1,0 +1,788 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>It's Cold Here in Rogers Park — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000000;
+      --fg: #f0ece4;
+      --muted: #c8c3b8;
+      --pink: #f472b6;
+      --gutter: 4vw;
+      --ink: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Hanken Grotesk', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── nav ── */
+    #site-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.6rem var(--gutter);
+      background: transparent;
+      transition: background 0.4s ease;
+    }
+
+    #site-nav.scrolled { background: rgba(0,0,0,0.94); }
+
+    #nav-name {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.35em;
+      text-indent: 0.35em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    #nav-links {
+      display: flex;
+      gap: 2.4rem;
+      list-style: none;
+    }
+
+    #nav-links a {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.16em;
+      text-transform: lowercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    #nav-links a:hover { color: var(--ink); }
+
+    img { image-rendering: high-quality; }
+
+    /* ── hero / intro ── */
+    #hero {
+      padding: 4rem var(--gutter) 2rem;
+      position: relative;
+    }
+    @keyframes heroFade { from { opacity: 0; } to { opacity: 1; } }
+
+    #hero-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(2.7rem, 5.6vw, 4.5rem);
+      letter-spacing: 0.04em; margin-left: -0.04em;
+      color: #fff;
+      line-height: 1.0;
+      display: block;
+    }
+
+    #hero-subtitle {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(0.78rem, 1.35vw, 0.95rem);
+      font-weight: 300;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: #60a5fa;
+      margin-bottom: 0.7rem;
+      display: block;
+    }
+
+    #intro-lead {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 400;
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      line-height: 1.4;
+      letter-spacing: 0.01em;
+      color: rgba(240, 236, 228, 0.8);
+      text-wrap: balance;
+      max-width: min(900px, 92vw);
+      margin-top: 1.9rem;
+    }
+    #intro-body { font-weight: 300; font-size: clamp(1.02rem, 1.5vw, 1.28rem); line-height: 1.7; color: rgba(240, 236, 228, 0.42); letter-spacing: 0.02em; max-width: min(900px, 92vw); text-wrap: balance; margin-top: 1.2rem; }
+
+    /* ── description ── */
+    #intro-split {
+      padding: 0 var(--gutter);
+      margin-top: 60px;
+    }
+
+    #intro-desc p {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 300;
+      font-size: clamp(1.18rem, 1.7vw, 1.45rem);
+      line-height: 1.7;
+      color: #c8c3b8;
+      letter-spacing: 0.02em;
+      max-width: min(580px, 90vw);
+      text-wrap: balance;
+      margin-top: 1.2rem;
+    }
+
+    #intro-photo { overflow: hidden; }
+    #intro-photo img { width: 100%; height: auto; display: block; cursor: zoom-in; }
+
+    /* ── skewed trio — continuous float animation ── */
+    #scatter-section {
+      position: relative;
+      padding: 0 var(--gutter);
+      height: 65vh;
+      margin-top: 9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .skewed-img {
+      position: absolute;
+      cursor: zoom-in;
+    }
+
+    .skewed-img img { width: 100%; height: auto; display: block; }
+
+    /* each photo floats independently on a looping keyframe */
+    .skewed-img:nth-child(1) {
+      width: 42vw; left: 2%; z-index: 1;
+      animation: shake1 5s ease-in-out infinite;
+    }
+
+    .skewed-img:nth-child(2) {
+      width: 28vw; left: 50%; z-index: 3;
+      transform: translateX(-50%);
+      animation: shake2 6s ease-in-out infinite;
+    }
+
+    .skewed-img:nth-child(3) {
+      width: 29vw; right: 2%; z-index: 2;
+      animation: shake3 4.5s ease-in-out infinite;
+    }
+
+    .skewed-img:hover { z-index: 10; animation-play-state: paused; }
+
+    @keyframes shake1 {
+      0%, 100% { transform: rotate(-2.5deg); }
+      50%       { transform: rotate(2.5deg); }
+    }
+
+    @keyframes shake2 {
+      0%, 100% { transform: translateX(-50%) rotate(2deg); }
+      50%       { transform: translateX(-50%) rotate(-2deg); }
+    }
+
+    @keyframes shake3 {
+      0%, 100% { transform: rotate(2deg); }
+      50%       { transform: rotate(-2deg); }
+    }
+
+    /* zero spacing — photos overlap */
+    .spacer { height: 0; }
+    .spacer-lg { height: 0; }
+
+    /* ── full bleed ── */
+    .full-bleed { padding: 0 var(--gutter); overflow: hidden; }
+
+    .full-bleed img {
+      width: 100%; height: 88vh;
+      object-fit: cover; object-position: center;
+      display: block; cursor: zoom-in;
+      transition: transform 0.8s ease;
+    }
+
+    .full-bleed:hover img { transform: scale(1.012); }
+
+    .full-natural { padding: 0 var(--gutter); }
+    .full-natural img { width: 100%; height: auto; display: block; cursor: zoom-in; }
+
+    /* ── two column ── */
+    .collage-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 0 var(--gutter);
+    }
+
+    .collage-two .img-wrap { overflow: hidden; height: 60vh; }
+
+    .collage-two .img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      display: block; cursor: zoom-in;
+      transition: transform 0.6s ease;
+    }
+
+    .collage-two .img-wrap:hover img { transform: scale(1.02); }
+
+    /* ── three column ── */
+    .collage-three {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      padding: 0 var(--gutter);
+    }
+
+    .collage-three .img-wrap { overflow: hidden; height: 52vh; }
+
+    .collage-three .img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      display: block; cursor: zoom-in;
+      transition: transform 0.6s ease;
+    }
+
+    .collage-three .img-wrap:hover img { transform: scale(1.02); }
+
+    /* ── footer ── */
+    #footer {
+      text-align: center;
+      padding: 3.5rem 2rem 4rem;
+      margin-top: 1.5rem;
+      border-top: 1px solid #1a1a1a;
+    }
+
+    #footer-mark {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.25;
+      color: var(--ink);
+    }
+
+    #footer a {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.32em;
+      text-transform: lowercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    #footer a:hover { color: var(--ink); }
+
+    /* ── lightbox ── */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.9);
+      align-items: center; justify-content: center; cursor: zoom-out;
+    }
+
+    #lightbox.open { display: flex; }
+
+    #lightbox img {
+      max-width: 90vw; max-height: 90vh;
+      object-fit: contain; display: block;
+    }
+
+    #lightbox-close {
+      position: absolute; top: 2rem; right: 2.4rem;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: #c8c3b8; cursor: pointer; transition: color 0.3s;
+    }
+
+    #lightbox-close:hover { color: #fff; }
+
+    /* ── carousel ── */
+    #carousel-section {
+      padding: 0 var(--gutter);
+    }
+
+    #carousel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    #carousel-label {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 300;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: #60a5fa;
+    }
+
+    #carousel-arrows {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .carousel-arrow {
+      background: none;
+      border: 1px solid #444;
+      color: #c8c3b8;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.75rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .carousel-arrow:hover { border-color: #fff; color: #fff; }
+
+    #carousel-wrap {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      cursor: grab;
+      user-select: none;
+      scrollbar-width: none;
+    }
+
+    #carousel-wrap:active { cursor: grabbing; }
+    #carousel-wrap::-webkit-scrollbar { display: none; }
+
+    #carousel-track {
+      display: flex;
+      gap: 3px;
+      align-items: flex-start;
+    }
+
+    .carousel-item {
+      flex: 0 0 auto;
+      cursor: zoom-in;
+    }
+
+    .carousel-item img {
+      height: 34vw;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
+  
+    .reveal {
+      opacity: 0;
+      transition: opacity 0.45s ease;
+    }
+
+    .reveal.visible { opacity: 1; }
+
+    /* ── flipbook ── */
+    #flipbook-section { padding: 7rem var(--gutter) 6rem; }
+    #flipbook-head {
+      display: flex; align-items: flex-end; justify-content: flex-end;
+      margin-bottom: 1.8rem; flex-wrap: wrap; gap: 14px;
+    }
+    #flipbook-eyebrow {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.68rem; font-weight: 300; letter-spacing: 0.4em;
+      text-transform: uppercase; color: #60a5fa; display: block; margin-bottom: 0.5rem;
+    }
+    #flipbook-title {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: clamp(1.8rem, 3.6vw, 3.2rem);
+      letter-spacing: 0.05em; color: var(--ink); line-height: 1; display: block;
+    }
+    #flipbook-controls { display: flex; align-items: center; gap: 12px; }
+    #flipCounter {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.22em; color: #c8c3b8;
+      min-width: 7ch; text-align: center; font-variant-numeric: tabular-nums;
+    }
+    .flip-btn {
+      background: none; border: 1px solid #444; color: #c8c3b8;
+      width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: border-color 0.2s, color 0.2s, opacity 0.2s, background 0.2s;
+    }
+    .flip-btn svg { width: 14px; height: 14px; fill: currentColor; }
+    .flip-btn:hover { border-color: #fff; color: #fff; }
+    .flip-btn:disabled { opacity: 0.25; cursor: default; }
+    #flipPlay { border-color: #60a5fa; color: #cfe0ff; }
+    #flipPlay.playing { background: #60a5fa; color: #06121f; border-color: #60a5fa; }
+
+    /* stage gives the book real depth */
+    #flipbook-stage {
+      display: flex; justify-content: center;
+      perspective: 2600px; padding: 1.4rem 0 2.4rem;
+    }
+    #book3d {
+      position: relative; width: min(1340px, 96vw);
+    }
+    /* soft floor shadow under the book */
+    #book-floor {
+      position: absolute; left: 7%; right: 7%; bottom: -22px; height: 30px; z-index: -1;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.09), transparent 72%); filter: blur(8px);
+    }
+    #flipbook { width: 100%; margin: 0 auto; position: relative; z-index: 1; cursor: pointer; }
+    #flipbook .stf__parent { margin: 0 auto; }
+    /* clean, soft cast shadow */
+    #flipbook canvas, #flipbook .stf__item, #flipbook .stf__block {
+      box-shadow: 0 8px 22px rgba(0,0,0,0.09), 0 2px 4px rgba(0,0,0,0.045);
+    }
+    /* the outgoing page — cross-fades into the next on each change (a soft dissolve) */
+    #book-snap {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      width: 100%; height: 100%; opacity: 0;
+    }
+    /* faint paper sheen only — no hard spine shadow down the middle */
+    #book-gutter {
+      position: absolute; inset: 0; z-index: 3; pointer-events: none;
+      background: linear-gradient(90deg, transparent 41%, rgba(255,255,255,0.6) 50%, transparent 59%); mix-blend-mode: screen;
+    }
+    #flipbook-hint {
+      text-align: center; margin-top: 2.2rem;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.8rem; font-weight: 300; letter-spacing: 0.04em; color: #6b6660;
+    }
+    @media (max-width: 640px) { #book3d { width: 96vw; } }
+    @media (prefers-reduced-motion: reduce) {
+      #book3d { animation: none; }
+      #book-snap { transition: none !important; }
+    }
+  
+    /* enlarged header + footer */
+    #nav-name { font-size: 1.2rem; }
+    #nav-links a { font-size: 0.86rem; }
+    #footer-left { font-size: 1.2rem; }
+    #footer a { font-size: 0.86rem; }
+  
+    /* all-caps titles (restored from Bebas) */
+    #nav-name, #hero-title, #flipbook-title { text-transform: uppercase; }
+      /* role credit (bottom of page) */
+    #page-role { padding: 4.5rem var(--gutter) 1rem; text-align: right; }
+    #page-role .role-list { display: flex; flex-direction: column; align-items: flex-end; gap: 0.18rem; margin-top: 0.9rem; list-style: none; }
+    .role-label { font-family: 'Hanken Grotesk', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.34em; text-transform: uppercase; color: #60a5fa; display: block; margin-bottom: 1rem; }
+    .role-list li { font-family: 'Hanken Grotesk', sans-serif; font-weight: 300; font-size: 0.86rem; letter-spacing: 0.16em; text-transform: lowercase; color: rgba(240,236,228,0.5); line-height: 1.75; }
+  
+    /* footer redesign: back | smiley | next */
+    #footer { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 5rem var(--gutter); text-align: initial; }
+    #footer a { flex: 1; min-width: 0; font-size: 0.86rem; font-weight: 300; letter-spacing: 0.16em; text-transform: lowercase; }
+    #footer a.footer-back { text-align: left; }
+    #footer a.footer-next { text-align: right; }
+    .footer-smiley { width: 32px; height: 32px; flex-shrink: 0; line-height: 0; }
+    .footer-smiley svg { width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <span id="lightbox-close">close</span>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <!-- NAV -->
+    <nav id="site-nav">
+    <a href="../../index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../../projects/index.html">projects</a></li>
+      <li><a href="../../about/index.html">about</a></li>
+      <li><a href="../../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- FLIPBOOK (hero media, first) -->
+  <section id="flipbook-section" class="reveal">
+    <div id="flipbook-head">
+      <div id="flipbook-controls">
+        <button class="flip-btn" id="flipPlay" aria-label="Pause"></button>
+        <button class="flip-btn" id="flipPrev" aria-label="Previous page"><svg viewBox="0 0 24 24"><path d="M15.5 4.5l-9 7.5 9 7.5z"/></svg></button>
+        <span id="flipCounter">— / —</span>
+        <button class="flip-btn" id="flipNext" aria-label="Next page"><svg viewBox="0 0 24 24"><path d="M8.5 4.5l9 7.5-9 7.5z"/></svg></button>
+      </div>
+    </div>
+    <div id="flipbook-stage">
+      <div id="book3d">
+        <div id="book-floor"></div>
+        <div id="flipbook"></div>
+        <canvas id="book-snap"></canvas>
+        <div id="book-gutter"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TITLE + DESCRIPTION (below the flipbook) -->
+  <header id="hero" class="reveal">
+    <span id="hero-subtitle">Photography · Zine</span>
+    <span id="hero-title">It's Cold Here in Rogers Park</span>
+    <p id="intro-lead">This is a little photo-journal I put together over a long Chicago winter, when the cold in Rogers Park started feeling more emotional than physical.</p>
+    <p id="intro-body">Through photos and handwritten notes, I tried to hold onto the quiet, easy-to-miss, lonely moments — and the unexpected bits of beauty I kept finding in such a harsh season.</p>
+  </header>
+
+  <div class="spacer"></div>
+
+  <!-- SKEWED TRIO: 2.png, 3.png, 4.png — close to description -->
+  <div id="scatter-section" class="reveal">
+    <div class="skewed-img"><img src="images/2.png" alt="" /></div>
+    <div class="skewed-img"><img src="images/3.png" alt="" /></div>
+    <div class="skewed-img"><img src="images/4.png" alt="" /></div>
+  </div>
+
+  <div class="spacer-lg"></div>
+  <div style="height: 120px;"></div>
+
+  <!-- CAROUSEL — now before 5.png -->
+  <div id="carousel-section" class="reveal" style="margin-top:0; margin-bottom:80px;">
+    <div id="carousel-header">
+      <span id="carousel-label">Scroll to explore ←→</span>
+      <div id="carousel-arrows">
+        <button class="carousel-arrow" id="arrow-left">&#8592;</button>
+        <button class="carousel-arrow" id="arrow-right">&#8594;</button>
+      </div>
+    </div>
+    <div id="carousel-wrap">
+      <div id="carousel-track"></div>
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <!-- ROLE (bottom of page) -->
+  <section id="page-role">
+    <span class="role-label">Role</span>
+    <ul class="role-list">
+      <li>Photography</li>
+      <li>Zine Design</li>
+      <li>Layout</li>
+    </ul>
+  </section>
+
+
+  <footer id="footer">
+    <a href="../../projects/index.html" id="back-link" class="footer-back">← back to projects</a>
+    <a href="../Rooted in Resilience/index.html" class="footer-next">Rooted in Resilience →</a>
+  </footer>
+
+  <script src="vendor/page-flip.browser.js"></script>
+  <script>
+    // nav on scroll
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // lightbox
+    const lightbox    = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn    = document.getElementById('lightbox-close');
+
+    document.querySelectorAll('img').forEach(img => {
+      if (img.id === 'lightbox-img') return;
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      lightboxImg.src = '';
+      document.body.style.overflow = '';
+    }
+
+    closeBtn.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    // carousel
+    const photos = [
+      'images/photo slides/_MG_6574.jpg',
+      'images/photo slides/_MG_6593 copy.jpg',
+      'images/photo slides/_MG_6604 copy.jpg',
+      'images/photo slides/_MG_6617 copy.jpg',
+      'images/photo slides/_MG_6634 copy.jpg',
+      'images/photo slides/_MG_6663 copy.jpg',
+      'images/photo slides/_MG_6669 copy.jpg',
+      'images/photo slides/_MG_6710 copy.jpg',
+      'images/photo slides/_MG_6744 copy.jpg',
+      'images/photo slides/_MG_6755 copy.jpg',
+      'images/photo slides/_MG_6796-2 copy.jpg',
+      'images/photo slides/_MG_6836 copy.jpg',
+      'images/photo slides/_MG_7495 copy.jpg',
+      'images/photo slides/_MG_7502 copy.jpg',
+      'images/photo slides/_MG_7517 copy.jpg',
+      'images/photo slides/_MG_7578 copy.jpg',
+      'images/photo slides/_MG_7593 copy.jpg',
+      'images/photo slides/_MG_7661 copy.jpg',
+      'images/photo slides/_MG_7676 copy.jpg',
+    ];
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    const track = document.getElementById('carousel-track');
+    const wrap  = document.getElementById('carousel-wrap');
+
+    const shuffled = shuffle(photos);
+    // duplicate for seamless loop
+    [...shuffled, ...shuffled].forEach(src => {
+      const item = document.createElement('div');
+      item.className = 'carousel-item';
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      item.appendChild(img);
+      item.addEventListener('click', () => {
+        lightboxImg.src = src;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+      track.appendChild(item);
+    });
+
+    // infinite loop: jump to midpoint when reaching end or start
+    wrap.addEventListener('scroll', () => {
+      const half = wrap.scrollWidth / 2;
+      if (wrap.scrollLeft >= half) wrap.scrollLeft -= half;
+      else if (wrap.scrollLeft <= 0 && wrap.scrollLeft < 1) wrap.scrollLeft += half;
+    });
+
+    // arrow buttons
+    const scrollAmt = () => wrap.clientWidth * 0.75;
+    document.getElementById('arrow-left').addEventListener('click', () => {
+      wrap.scrollBy({ left: -scrollAmt(), behavior: 'smooth' });
+    });
+    document.getElementById('arrow-right').addEventListener('click', () => {
+      wrap.scrollBy({ left: scrollAmt(), behavior: 'smooth' });
+    });
+
+    // drag to scroll
+    let isDragging = false, startX = 0, scrollLeft = 0;
+    wrap.addEventListener('mousedown', e => {
+      isDragging = true; startX = e.pageX; scrollLeft = wrap.scrollLeft;
+      wrap.style.cursor = 'grabbing';
+    });
+    wrap.addEventListener('mouseleave', () => { isDragging = false; wrap.style.cursor = 'grab'; });
+    wrap.addEventListener('mouseup',    () => { isDragging = false; wrap.style.cursor = 'grab'; });
+    wrap.addEventListener('mousemove',  e => {
+      if (!isDragging) return;
+      e.preventDefault();
+      wrap.scrollLeft = scrollLeft - (e.pageX - startX) * 1.4;
+    });
+    wrap.addEventListener('touchstart', e => { startX = e.touches[0].pageX; scrollLeft = wrap.scrollLeft; });
+    wrap.addEventListener('touchmove',  e => { wrap.scrollLeft = scrollLeft - (e.touches[0].pageX - startX); });
+
+
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.02, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // ── flipbook: auto-FLASH through the pages + manual takeover ──
+    (function () {
+      const TOTAL = 48; // cover + split interior pages + back cover
+      const PAGES = Array.from({ length: TOTAL }, (_, i) => 'flipbook/' + String(i + 1).padStart(3, '0') + '.jpg');
+      const el      = document.getElementById('flipbook');
+      const snap    = document.getElementById('book-snap');
+      const snapCtx = snap.getContext('2d');
+      const counter = document.getElementById('flipCounter');
+      const prevBtn = document.getElementById('flipPrev');
+      const nextBtn = document.getElementById('flipNext');
+      const playBtn = document.getElementById('flipPlay');
+      const ICON_PLAY  = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+      const ICON_PAUSE = '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+
+      let pf = null, timer = null, wantPlay = true, inView = false, dir = 1;
+
+      function updateMeta() {
+        if (!pf) return;
+        const total = pf.getPageCount(), cur = pf.getCurrentPageIndex();
+        counter.textContent = (cur + 1) + ' / ' + total;
+        prevBtn.disabled = cur <= 0;
+        nextBtn.disabled = cur >= total - 1;
+      }
+      function updatePlayBtn() {
+        playBtn.classList.toggle('playing', wantPlay);
+        playBtn.innerHTML = wantPlay ? ICON_PAUSE : ICON_PLAY;
+        playBtn.setAttribute('aria-label', wantPlay ? 'Pause' : 'Play');
+      }
+      // soft cross-fade to the next page: snapshot the current page, switch underneath, fade the snapshot out
+      function show(next) {
+        if (!pf) return;
+        const src = el.querySelector('canvas');
+        if (src) {
+          snap.width = src.width; snap.height = src.height;
+          snapCtx.clearRect(0, 0, snap.width, snap.height);
+          try { snapCtx.drawImage(src, 0, 0); } catch (e) {}
+          snap.style.transition = 'none';
+          snap.style.opacity = '1';
+        }
+        (next ? pf.turnToNextPage() : pf.turnToPrevPage());
+        updateMeta();
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          snap.style.transition = 'opacity 240ms ease';
+          snap.style.opacity = '0';
+        }));
+      }
+      function step() {
+        if (!pf) return;
+        const total = pf.getPageCount(), cur = pf.getCurrentPageIndex();
+        if (cur >= total - 1) dir = -1; else if (cur <= 0) dir = 1;
+        show(dir > 0);
+      }
+      function sync() {
+        const should = wantPlay && inView && !!pf;
+        if (should && !timer) timer = setInterval(step, 520);   // fast
+        if (!should && timer) { clearInterval(timer); timer = null; }
+        updatePlayBtn();
+      }
+      function takeOver() { if (wantPlay) { wantPlay = false; sync(); } }
+
+      function init() {
+        if (pf || !window.St || !St.PageFlip) return;
+        pf = new St.PageFlip(el, {
+          width: 600, height: 429, size: 'stretch',
+          minWidth: 300, maxWidth: 1400, minHeight: 214, maxHeight: 1000,
+          drawShadow: false, showCover: true, usePortrait: true,
+          useMouseEvents: false, clickEventForward: false,
+          mobileScrollSupport: false, flippingTime: 1,
+        });
+        pf.loadFromImages(PAGES);
+        pf.on('flip', updateMeta);
+        updateMeta();
+        sync();
+      }
+
+      // controls — every change is a flash
+      playBtn.addEventListener('click', () => { wantPlay = !wantPlay; sync(); });
+      prevBtn.addEventListener('click', () => { takeOver(); show(false); });
+      nextBtn.addEventListener('click', () => { takeOver(); show(true); });
+      document.addEventListener('keydown', e => {
+        if (!pf) return;
+        if (e.key === 'ArrowLeft')  { takeOver(); show(false); }
+        if (e.key === 'ArrowRight') { takeOver(); show(true); }
+      });
+      // click the left / right half of the book to page through manually
+      el.addEventListener('click', e => {
+        takeOver();
+        const r = el.getBoundingClientRect();
+        show((e.clientX - r.left) > r.width / 2);
+      });
+
+      // lazy-init in view; pause auto-play when scrolled away
+      const fio = new IntersectionObserver(entries => {
+        entries.forEach(e => { inView = e.isIntersecting; if (inView) requestAnimationFrame(init); sync(); });
+      }, { threshold: 0.12 });
+      fio.observe(document.getElementById('flipbook-section'));
+    })();
+  </script>
+</body>
+</html>

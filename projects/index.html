@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;       /* match the about page */
+      --fg: #141414;       /* near-black text */
+      --pink: #f472b6;
+      --muted: #6e685f;    /* gray for the roles */
+      --line: #f472b6;     /* pink separators */
+      --maxw: 1640px;
+      --edge: clamp(28px, 4vw, 72px);   /* shared side inset */
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Hanken Grotesk', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── smiley cursor ── */
+    #cursor-smiley {
+      position: fixed; z-index: 9999; pointer-events: none;
+      width: 26px; height: 26px;
+      transform: translate(-50%, -50%);
+      visibility: hidden;
+    }
+    #cursor-smiley svg { width: 100%; height: 100%; }
+    body.cursor-active { cursor: none; }
+
+    /* ── nav (inner wrapper shares the page's max-width + edge) ── */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: var(--bg);
+    }
+    .nav-inner {
+      max-width: var(--maxw); margin: 0 auto;
+      padding: 1.6rem var(--edge);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    #nav-name {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: 1.2rem; letter-spacing: 0.35em; text-indent: 0.35em;
+      color: var(--fg); text-decoration: none;
+    }
+    #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    #nav-links a {
+      font-size: 0.86rem; font-weight: 300; letter-spacing: 0.16em;
+      text-transform: lowercase; color: var(--muted); text-decoration: none;
+      transition: color 0.3s;
+    }
+    #nav-links a:hover { color: var(--fg); }
+
+    /* ── page header ── */
+    #page-header {
+      max-width: var(--maxw); margin: 0 auto;
+      padding: 9.5rem var(--edge) 1.8rem;
+    }
+    /* "Selected" — same style as the "Tori Webb" header title */
+    #page-label {
+      font-size: 1.2rem; font-weight: 400;
+      letter-spacing: 0.35em; text-indent: 0.35em; text-transform: uppercase;
+      color: var(--pink); margin-bottom: 0.5rem; display: block;
+    }
+    #page-title {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      letter-spacing: 0.04em; text-indent: 0.42rem;
+      color: var(--fg); line-height: 1; display: block;
+    }
+
+    /* ── project list: stacked rows, text left + cover right ── */
+    #project-list {
+      max-width: var(--maxw); margin: 0 auto;
+      padding: 0 var(--edge) 4rem;
+    }
+
+    .proj {
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) minmax(0, 560px);
+      gap: clamp(1.5rem, 5vw, 5rem);
+      align-items: stretch;
+      padding: clamp(1.1rem, 2.1vw, 1.9rem) 0;
+      border-bottom: 1px solid var(--line);
+      text-decoration: none; color: inherit;
+      opacity: 0; transform: translateY(16px);
+      animation: cardIn 0.6s ease forwards;
+    }
+    .proj:first-child { border-top: 1px solid var(--line); }
+    @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
+
+    /* text column fills the row height; title at top, roles pinned to bottom */
+    .proj-text {
+      display: flex; flex-direction: column;
+      text-align: left;
+      transition: opacity 0.3s ease;
+    }
+    .proj-title {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: clamp(1.3rem, 2.4vw, 2rem);
+      font-weight: 400; letter-spacing: 0.04em; line-height: 1.0;
+      color: var(--fg);
+    }
+    /* project roles — same style as the header nav links */
+    .proj-roles {
+      margin-top: auto;
+      display: flex; flex-direction: column; gap: 0.7rem;
+      font-size: 0.86rem; font-weight: 300; line-height: 1.2;
+      letter-spacing: 0.16em; text-transform: lowercase; color: var(--muted);
+    }
+    .proj:hover .proj-text { opacity: 0.7; }
+
+    /* cover image — landscape, crossfades to cover-b on hover */
+    .proj-media {
+      position: relative;
+      width: 100%;
+      align-self: start;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #1a1a1a;
+    }
+    .proj-media img, .proj-media video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: opacity 0.45s ease;
+    }
+    .proj-media .cover-b { opacity: 0; }
+    .proj:hover .proj-media .cover-b { opacity: 1; }
+
+    @media (max-width: 760px) {
+      .proj { grid-template-columns: 1fr; gap: 1.2rem; }
+      .proj-media { order: 2; }
+      .proj-roles { margin-top: 0.8rem; }
+    }
+
+    /* ── footer ── */
+    #footer {
+      max-width: var(--maxw); margin: 2rem auto 0;
+      padding: 3.5rem var(--edge);
+      display: flex; align-items: center; justify-content: center;
+    }
+    #footer-left {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: 1.2rem; letter-spacing: 0.35em; color: var(--muted);
+    }
+    #footer a {
+      font-size: 0.86rem; font-weight: 300; letter-spacing: 0.32em;
+      text-transform: lowercase; color: var(--muted);
+      text-decoration: none; transition: color 0.3s;
+    }
+    #footer a:hover { color: var(--pink); }
+
+    /* Mindful Spending — animated brand cover (matches the project page outro) */
+    .ms-cover {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+      background:
+        radial-gradient(58% 50% at 82% 6%, rgba(62,158,126,0.34), transparent 60%),
+        radial-gradient(52% 46% at 6% 0%, rgba(224,83,60,0.30), transparent 60%),
+        radial-gradient(60% 65% at 55% 108%, rgba(61,127,194,0.32), transparent 60%),
+        #0d0e11;
+    }
+    .ms-cover__tag {
+      padding: 0 1.2rem; font-family: 'Hanken Grotesk', sans-serif; font-weight: 700;
+      line-height: 1.14; font-size: clamp(1.1rem, 2.6vw, 2rem); text-align: center; opacity: 0;
+      background: linear-gradient(100deg, #E0533C, #3E9E7E, #3D7FC2);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      animation: msTagIn 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+    }
+    @keyframes msTagIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to   { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor-smiley">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" fill="#f472b6" stroke="#000" stroke-width="5"/>
+      <ellipse cx="36" cy="40" rx="7" ry="10" fill="#000"/>
+      <ellipse cx="64" cy="40" rx="7" ry="10" fill="#000"/>
+      <path d="M18 58 Q50 99 82 58" stroke="#000" stroke-width="4" stroke-linecap="round" fill="none"/>
+    </svg>
+  </div>
+
+  <nav id="site-nav">
+    <div class="nav-inner">
+      <a href="../index.html" id="nav-name">Tori Webb</a>
+      <ul id="nav-links">
+        <li><a href="../projects/index.html">projects</a></li>
+        <li><a href="../about/index.html">about</a></li>
+        <li><a href="../contact/index.html">contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header id="page-header">
+    <span id="page-label">Selected</span>
+    <span id="page-title">Projects</span>
+  </header>
+
+  <!-- each row shows its cover, and crossfades to the second cover on hover -->
+  <div id="project-list">
+
+    <!-- 1 · Made with Love -->
+    <a class="proj" href="project_1_made_with_love/index.html" style="animation-delay:0.05s;">
+      <div class="proj-text">
+        <span class="proj-title">Made with Love</span>
+        <div class="proj-roles">
+          <span>exhibition design</span>
+          <span>type design</span>
+          <span>editorial producer</span>
+          <span>book binding</span>
+        </div>
+      </div>
+      <div class="proj-media" style="background:#1c1c1c;">
+        <video class="cover-a" autoplay muted loop playsinline>
+          <source src="project_1_made_with_love/capstone.mp4" type="video/mp4" />
+        </video>
+        <img class="cover-b" src="project_1_made_with_love/coverimage2.jpg" onerror="this.remove()" alt="" />
+      </div>
+    </a>
+
+    <!-- 2 · Reviewed -->
+    <a class="proj" href="Reviewed/index.html" style="animation-delay:0.09s;">
+      <div class="proj-text">
+        <span class="proj-title">Reviewed</span>
+        <div class="proj-roles">
+          <span>event design</span>
+          <span>branding</span>
+          <span>art direction</span>
+        </div>
+      </div>
+      <div class="proj-media">
+        <img class="cover-a" src="Reviewed/1-intro.GIF" alt="" />
+        <img class="cover-b" src="Reviewed/coverimage2.jpg" onerror="this.remove()" alt="" />
+      </div>
+    </a>
+
+    <!-- 3 · Midwestern Mundane -->
+    <a class="proj" href="Midwestern Mundane/index.html" style="animation-delay:0.13s;">
+      <div class="proj-text">
+        <span class="proj-title">Midwestern Mundane</span>
+        <div class="proj-roles">
+          <span>photography</span>
+          <span>editorial</span>
+          <span>storytelling</span>
+        </div>
+      </div>
+      <div class="proj-media">
+        <img class="cover-a" src="Midwestern Mundane/1.jpg" alt="" />
+        <img class="cover-b" src="Midwestern Mundane/coverimage2.jpg" onerror="this.remove()" alt="" />
+      </div>
+    </a>
+
+    <!-- 4 · Bold Marks -->
+    <a class="proj" href="Bold Marks/index.html" style="animation-delay:0.17s;">
+      <div class="proj-text">
+        <span class="proj-title">Bold Marks</span>
+        <div class="proj-roles">
+          <span>brand design</span>
+          <span>logo design</span>
+          <span>writer & editor</span>
+        </div>
+      </div>
+      <div class="proj-media" style="background:#060479;">
+        <img class="cover-a" src="Bold Marks/coverimage.png" style="object-fit:contain; padding:14%;" alt="" />
+        <video class="cover-b" autoplay muted loop playsinline>
+          <source src="Bold Marks/coverimage2.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </a>
+
+    <!-- 5 · monodot + monodule -->
+    <a class="proj" href="monodot/index.html" style="animation-delay:0.21s;">
+      <div class="proj-text">
+        <span class="proj-title">monodot + monodule</span>
+        <div class="proj-roles">
+          <span>type design</span>
+          <span>animation</span>
+        </div>
+      </div>
+      <div class="proj-media" style="background:#000;">
+        <video class="cover-a" autoplay muted loop playsinline>
+          <source src="monodot/1-video.mp4" type="video/mp4" />
+        </video>
+        <video class="cover-b" autoplay muted loop playsinline>
+          <source src="monodot/coverimage2.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </a>
+
+    <!-- 6 · Mindful Spending -->
+    <a class="proj" href="Mindful Spending/index.html" style="animation-delay:0.25s;">
+      <div class="proj-text">
+        <span class="proj-title">Mindful Spending</span>
+        <div class="proj-roles">
+          <span>product design</span>
+          <span>ui design</span>
+          <span>ux design</span>
+        </div>
+      </div>
+      <div class="proj-media">
+        <div class="cover-a ms-cover">
+          <span class="ms-cover__tag">A budgeting app,<br>made for your needs</span>
+        </div>
+        <img class="cover-b" src="Mindful Spending/newcoverphoto2.png" style="object-fit:contain;" alt="" />
+      </div>
+    </a>
+
+    <!-- 7 · It's Cold Here in Rogers Park -->
+    <a class="proj" href="Rogers Park/index.html" style="animation-delay:0.29s;">
+      <div class="proj-text">
+        <span class="proj-title">It's Cold Here in Rogers Park</span>
+        <div class="proj-roles">
+          <span>photography</span>
+          <span>zine design</span>
+          <span>layout</span>
+        </div>
+      </div>
+      <div class="proj-media" style="background:linear-gradient(160deg, #7ba2c6 0%, #bcd3e6 100%);">
+        <img class="cover-a" src="Rogers Park/images/3.png" style="object-fit:contain; padding:2.5%;" alt="" />
+        <img class="cover-b" src="Rogers Park/coverimage2.jpg" onerror="this.remove()" alt="" />
+      </div>
+    </a>
+
+    <!-- 8 · Rooted in Resilience -->
+    <a class="proj" href="Rooted in Resilience/index.html" style="animation-delay:0.33s;">
+      <div class="proj-text">
+        <span class="proj-title">Rooted in Resilience</span>
+        <div class="proj-roles">
+          <span>writer</span>
+          <span>photography</span>
+          <span>zine design</span>
+          <span>storytelling</span>
+        </div>
+      </div>
+      <div class="proj-media">
+        <img class="cover-a" src="Rooted in Resilience/1.jpeg" alt="" />
+        <img class="cover-b" src="Rooted in Resilience/coverimage2.jpg" onerror="this.remove()" alt="" />
+      </div>
+    </a>
+
+    <!-- 9 · Sound Solutions -->
+    <a class="proj" href="sound solutions/index.html" style="animation-delay:0.37s;">
+      <div class="proj-text">
+        <span class="proj-title">Sound Solutions</span>
+        <div class="proj-roles">
+          <span>sculpture</span>
+          <span>mixed media</span>
+          <span>design</span>
+        </div>
+      </div>
+      <div class="proj-media">
+        <img class="cover-a" src="sound solutions/final/soundsolutions-1.jpg" alt="" />
+        <img class="cover-b" src="sound solutions/final/soundsolutions-2.jpg" alt="" />
+      </div>
+    </a>
+
+    <!-- 10 · Papa and Piper Play Pinball -->
+    <a class="proj" href="storybook/index.html" style="animation-delay:0.37s;">
+      <div class="proj-text">
+        <span class="proj-title">Papa and Piper Play Pinball</span>
+        <div class="proj-roles">
+          <span>illustration</span>
+          <span>writer</span>
+          <span>children's book</span>
+        </div>
+      </div>
+      <div class="proj-media" style="background:#f4f0e8;">
+        <img class="cover-a" src="storybook/4.png" style="object-fit:contain; padding:2%;" alt="" />
+        <img class="cover-b" src="storybook/coverimage2.jpg" onerror="this.remove()" alt="" />
+      </div>
+    </a>
+
+    <!-- 10 · Designer Brochure -->
+    <a class="proj" href="Designer Brochure/index.html" style="animation-delay:0.41s;">
+      <div class="proj-text">
+        <span class="proj-title">Designer Brochure</span>
+        <div class="proj-roles">
+          <span>print</span>
+          <span>layout</span>
+          <span>research</span>
+        </div>
+      </div>
+      <div class="proj-media">
+        <img class="cover-a" src="Designer Brochure/2.jpg" alt="" />
+        <img class="cover-b" src="Designer Brochure/coverimage2.jpg" onerror="this.remove()" alt="" />
+      </div>
+    </a>
+
+  </div>
+
+  <script>
+    const smiley = document.getElementById('cursor-smiley');
+    let moved = false;
+    document.body.classList.add('cursor-active');
+    document.addEventListener('mousemove', e => {
+      smiley.style.left = e.clientX + 'px';
+      smiley.style.top  = e.clientY + 'px';
+      if (!moved) { moved = true; smiley.style.visibility = 'visible'; }
+    });
+  </script>
+</body>
+</html>

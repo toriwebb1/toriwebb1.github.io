@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Designer Brochure — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000;
+      --fg: #f0ece4;
+      --accent: #f472b6;
+      --muted: #c8c3b8;
+      --dim: #6b6660;
+      --gutter: 4vw;
+      --photo-gutter: 13vw; /* wider inset so photos sit smaller with more side room */
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--fg); font-family: 'Hanken Grotesk', sans-serif; overflow-x: hidden; }
+    img { image-rendering: high-quality; display: block; }
+
+    /* ── nav ── */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem var(--gutter); background: transparent; transition: background 0.4s;
+    }
+    #site-nav.scrolled { background: rgba(0,0,0,0.94); }
+    #nav-name { font-family: 'Hanken Grotesk', sans-serif; font-size: 1rem; letter-spacing: 0.35em; text-indent: 0.35em; color: #fff; text-decoration: none; }
+    #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    #nav-links a { font-size: 0.7rem; font-weight: 300; letter-spacing: 0.16em; text-transform: lowercase; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    #nav-links a:hover { color: #fff; }
+
+    /* ── intro: title, subtitle, lead, body ── */
+    #hero { padding: 9rem var(--gutter) 9rem; }
+    #intro { padding: 3.2rem var(--gutter) 2rem; }
+
+    #hero-title {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: clamp(2.7rem, 5.6vw, 4.5rem);
+      letter-spacing: 0.04em; margin-left: -0.04em;
+      color: #fff; line-height: 1.0; display: block;
+    }
+
+    #hero-subtitle {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(0.78rem, 1.35vw, 0.95rem);
+      font-weight: 300; letter-spacing: 0.34em; text-transform: uppercase;
+      color: #3b5bdb; margin-bottom: 0.7rem; display: block;
+    }
+
+    #intro-lead {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 400;
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      line-height: 1.4; letter-spacing: 0.01em;
+      color: rgba(240, 236, 228, 0.8); text-wrap: balance;
+      max-width: min(1100px, 94vw); margin-top: 1.9rem;
+    }
+
+    #intro-body {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 300; font-size: clamp(1.02rem, 1.5vw, 1.28rem);
+      line-height: 1.7; color: rgba(240, 236, 228, 0.42); letter-spacing: 0.02em;
+      max-width: min(900px, 92vw); text-wrap: balance; margin-top: 1.2rem;
+    }
+
+    /* ── photo sections ── */
+    .spacer { height: 30px; }
+    .spacer-lg { height: 120px; }
+
+    #intro-photo { padding: 10rem var(--gutter) 0; }
+    #intro-photo img { width: 100%; height: auto; cursor: zoom-in; margin: 0 auto; }
+
+    .col-full { padding: 0 var(--photo-gutter); }
+    .col-full img { width: 100%; height: auto; cursor: zoom-in; }
+
+    .col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0 var(--photo-gutter); align-items: stretch; }
+    .col-2 img { width: 100%; height: 46vh; object-fit: cover; object-position: center; cursor: zoom-in; }
+
+    .col-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; padding: 0 var(--photo-gutter); }
+    .col-3 img { width: 100%; height: auto; cursor: zoom-in; }
+
+    /* ── footer ── */
+    #footer { text-align: center; padding: 5rem 2rem; border-top: 1px solid #1a1a1a; }
+    #footer-mark { font-size: 1.3rem; margin-bottom: 1.4rem; opacity: 0.2; color: var(--accent); }
+    #footer a { font-size: 0.72rem; letter-spacing: 0.32em; text-transform: lowercase; color: var(--dim); text-decoration: none; transition: color 0.3s; }
+    #footer a:hover { color: var(--accent); }
+
+    /* ── scroll reveal ── */
+    .reveal {
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 1.6s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── lightbox ── */
+    #lightbox { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.97); align-items: center; justify-content: center; cursor: zoom-out; }
+    #lightbox.open { display: flex; }
+    #lightbox-img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+    #lightbox-close { position: absolute; top: 1.8rem; right: 2rem; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); cursor: pointer; transition: color 0.3s; }
+    #lightbox-close:hover { color: #fff; }
+    #lb-prev, #lb-next { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted); font-size: 1.6rem; cursor: pointer; padding: 1rem; transition: color 0.2s; }
+    #lb-prev:hover, #lb-next:hover { color: #fff; }
+    #lb-prev { left: 1rem; } #lb-next { right: 1rem; }
+    #lb-counter { position: absolute; bottom: 1.8rem; left: 50%; transform: translateX(-50%); font-size: 0.68rem; letter-spacing: 0.3em; color: var(--dim); }
+  
+    /* enlarged header + footer */
+    #nav-name { font-size: 1.2rem; }
+    #nav-links a { font-size: 0.86rem; }
+    #footer-left { font-size: 1.2rem; }
+    #footer a { font-size: 0.86rem; }
+  
+    /* all-caps titles (restored from Bebas) */
+    #nav-name, #hero-title { text-transform: uppercase; }
+      /* role credit (bottom of page) */
+    #page-role { padding: 4.5rem var(--gutter) 1rem; text-align: right; }
+    #page-role .role-list { display: flex; flex-direction: column; align-items: flex-end; gap: 0.18rem; margin-top: 0.9rem; list-style: none; }
+    .role-label { font-family: 'Hanken Grotesk', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.34em; text-transform: uppercase; color: #3b5bdb; display: block; margin-bottom: 1rem; }
+    .role-list li { font-family: 'Hanken Grotesk', sans-serif; font-weight: 300; font-size: 0.86rem; letter-spacing: 0.16em; text-transform: lowercase; color: rgba(240,236,228,0.5); line-height: 1.75; }
+  
+    /* footer redesign: back | smiley | next */
+    #footer { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 5rem var(--gutter); text-align: initial; }
+    #footer a { flex: 1; min-width: 0; font-size: 0.86rem; font-weight: 300; letter-spacing: 0.16em; text-transform: lowercase; }
+    #footer a.footer-back { text-align: left; }
+    #footer a.footer-next { text-align: right; }
+    .footer-smiley { width: 32px; height: 32px; flex-shrink: 0; line-height: 0; }
+    .footer-smiley svg { width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+
+  <div id="lightbox">
+    <span id="lightbox-close">close</span>
+    <button id="lb-prev">&#8592;</button>
+    <img id="lightbox-img" src="" alt="" />
+    <button id="lb-next">&#8594;</button>
+    <span id="lb-counter"></span>
+  </div>
+
+        <nav id="site-nav">
+    <a href="../../index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../../projects/index.html">projects</a></li>
+      <li><a href="../../about/index.html">about</a></li>
+      <li><a href="../../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- 2.jpg — first photo, above the text -->
+  <section id="intro-photo" class="reveal">
+    <img src="2.jpg" alt="" data-index="0" />
+  </section>
+
+  <!-- INTRO: title, eyebrow, lead, body -->
+  <header id="hero" class="reveal">
+    <span id="hero-subtitle">Print · Editorial</span>
+    <span id="hero-title">Designer Brochure</span>
+    <p id="intro-lead">An artistic informational brochure exploring some of Stefan Sagmeister's most well-known pieces.</p>
+    <p id="intro-body">This brochure merges my own aesthetic with Sagmeister's distinctive style, letting the two voices share the same spread.</p>
+  </header>
+
+  <!-- 2 + 3 pair — 1.jpg now replaces 2.jpg here -->
+  <section class="col-2 reveal">
+    <img src="1.jpg" alt="" data-index="1" />
+    <img src="3.jpg" alt="" data-index="2" />
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- 5.jpg solo -->
+  <section class="col-full reveal">
+    <img src="5.jpg" alt="" data-index="4" />
+  </section>
+
+  <!-- FOOTER -->
+  <!-- ROLE (bottom of page) -->
+  <section id="page-role">
+    <span class="role-label">Role</span>
+    <ul class="role-list">
+      <li>Print</li>
+      <li>Layout</li>
+      <li>Research</li>
+    </ul>
+  </section>
+
+
+  <footer id="footer">
+    <a href="../../projects/index.html" id="back-link" class="footer-back">← back to projects</a>
+    <a href="../project_1_made_with_love/index.html" class="footer-next">Made with Love →</a>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+    const titleEl = document.getElementById('hero-title');
+    const subEl   = document.getElementById('hero-subtitle');
+    function alignSub() { subEl.style.paddingLeft = (parseFloat(getComputedStyle(titleEl).fontSize) * 0.06) + 'px'; }
+    alignSub();
+    window.addEventListener('resize', alignSub);
+
+    // lightbox
+    const lightbox    = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lbCounter   = document.getElementById('lb-counter');
+    const allImgs     = Array.from(document.querySelectorAll('img[data-index]'));
+    let lbIdx = 0;
+
+    function openLb(i) {
+      lbIdx = i; lightboxImg.src = allImgs[i].src;
+      lbCounter.textContent = `${i + 1} / ${allImgs.length}`;
+      lightbox.classList.add('open'); document.body.style.overflow = 'hidden';
+    }
+    function closeLb() { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+
+    allImgs.forEach((img, i) => { img.style.cursor = 'zoom-in'; img.addEventListener('click', () => openLb(i)); });
+    document.getElementById('lightbox-close').addEventListener('click', closeLb);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLb(); });
+    document.getElementById('lb-prev').addEventListener('click', e => { e.stopPropagation(); openLb((lbIdx - 1 + allImgs.length) % allImgs.length); });
+    document.getElementById('lb-next').addEventListener('click', e => { e.stopPropagation(); openLb((lbIdx + 1) % allImgs.length); });
+    document.addEventListener('keydown', e => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLb();
+      if (e.key === 'ArrowRight') openLb((lbIdx + 1) % allImgs.length);
+      if (e.key === 'ArrowLeft')  openLb((lbIdx - 1 + allImgs.length) % allImgs.length);
+    });
+
+    // scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.06, rootMargin: '0px 0px -20% 0px' });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

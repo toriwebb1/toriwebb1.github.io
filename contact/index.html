@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f472b6;
+      --fg: #000;
+      --muted: rgba(0,0,0,0.45);
+      --border: rgba(0,0,0,0.2);
+      --gutter: 4vw;   /* match the nav inset so content aligns with "Tori Webb" */
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Hanken Grotesk', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── smiley cursor ── */
+    #cursor-smiley {
+      position: fixed; z-index: 9999; pointer-events: none;
+      width: 26px; height: 26px;
+      transform: translate(-50%, -50%);
+      visibility: hidden;
+    }
+    #cursor-smiley svg { width: 100%; height: 100%; }
+    body.cursor-active { cursor: none; }
+
+    /* ── nav ── */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem 4vw;
+      background: transparent;
+    }
+    #nav-name {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.9rem; letter-spacing: 0.35em; text-indent: 0.35em;
+      color: #000; text-decoration: none;
+    }
+    #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    #nav-links a {
+      font-size: 0.68rem; font-weight: 300; letter-spacing: 0.16em;
+      text-transform: lowercase; color: rgba(0,0,0,0.6); text-decoration: none;
+      transition: color 0.3s;
+    }
+    #nav-links a:hover { color: #000; }
+
+    /* ── page layout ── */
+    #page {
+      min-height: 100vh;
+      padding: 9rem var(--gutter) 6rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 8vw;
+      align-items: stretch;
+    }
+
+    /* ── left: contact info ── */
+    #contact-info {
+      padding-top: 0.4rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #social-icons {
+      display: flex; gap: 1.2rem;
+      margin-top: auto;
+      padding-top: 2rem;
+      align-items: center;
+    }
+
+    /* "Get in touch" — Tori Webb header style, white */
+    #page-label {
+      font-size: 1.2rem; font-weight: 400;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: #fff; margin-bottom: 0.6rem; display: block;
+    }
+
+    #page-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 5.5rem);
+      letter-spacing: 0.06em; margin-left: -0.04em;
+      color: #000; line-height: 1;
+      display: block; margin-bottom: 3rem;
+    }
+
+    .contact-block { margin-bottom: 2rem; }
+
+    /* Email / Phone / Based in / Available for — Tori Webb header style, white */
+    .contact-label {
+      font-size: 1.2rem; font-weight: 400;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: #000; display: block; margin-bottom: 0.5rem;
+    }
+
+    /* contact info — nav-link header style, black */
+    .contact-value {
+      font-size: 0.86rem;
+      font-weight: 300; letter-spacing: 0.16em; text-transform: lowercase;
+      color: rgba(0,0,0,0.7); text-decoration: none;
+      display: block; transition: opacity 0.3s;
+    }
+    a.contact-value:hover { opacity: 0.6; }
+
+    /* ── right: form ── */
+    #contact-form {
+      display: flex; flex-direction: column; gap: 1.4rem;
+      padding-top: 3rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .field label {
+      font-size: 0.74rem; font-weight: 700;
+      letter-spacing: 0.36em; text-transform: uppercase;
+      color: rgba(0,0,0,0.7);
+    }
+
+    .field input,
+    .field textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.6);
+      padding: 0.5rem 0;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(0.9rem, 1.2vw, 1rem);
+      font-weight: 400; letter-spacing: 0.02em;
+      color: #000;
+      outline: none;
+      transition: border-color 0.3s;
+      border-radius: 0;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder { color: transparent; }
+
+    .field input:focus,
+    .field textarea:focus { border-bottom-color: #fff; }
+
+    .field textarea {
+      resize: none; height: 120px;
+      line-height: 1.7;
+    }
+
+    #submit-btn {
+      align-self: flex-start;
+      margin-top: auto;
+      background: #000;
+      color: #fff;
+      border: none;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.7rem; font-weight: 300;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      padding: 0.9rem 2.4rem;
+      cursor: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    #submit-btn:hover { background: #fff; color: #000; }
+
+    /* ── footer ── */
+    #footer {
+      padding: 3rem var(--gutter);
+      display: flex; align-items: center; justify-content: center;
+      border-top: 1px solid rgba(0,0,0,0.15);
+    }
+    #footer-left {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: 0.9rem; letter-spacing: 0.35em; color: rgba(0,0,0,0.4);
+    }
+    #footer a {
+      font-size: 0.62rem; font-weight: 300; letter-spacing: 0.32em;
+      text-transform: lowercase; color: rgba(0,0,0,0.5);
+      text-decoration: none; transition: color 0.3s;
+    }
+    #footer a:hover { color: #000; }
+
+    /* ── social icons ── */
+    #social-icons {
+      display: flex; gap: 1.2rem;
+      align-items: flex-end;
+    }
+    .social-icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px;
+      text-decoration: none;
+      transition: transform 0.2s, opacity 0.3s;
+      flex-shrink: 0;
+    }
+    .social-icon:hover { transform: scale(1.08); opacity: 0.85; }
+    .social-icon svg { width: 100%; height: 100%; }
+    /* shrink inner icon paths by adjusting viewBox padding via wrapper */
+    .social-icon .icon-inner {
+      transform: scale(0.65);
+      transform-origin: center;
+    }
+    #form-bottom {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.4rem;
+      margin-top: 0.4rem;
+    }
+    .reveal { opacity: 0; transform: translateY(10px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  
+    /* enlarged header + footer */
+    #nav-name { font-size: 1.2rem; }
+    #nav-links a { font-size: 0.86rem; }
+    #footer-left { font-size: 1.2rem; }
+    #footer a { font-size: 0.86rem; }
+  
+    /* all-caps titles (restored from Bebas) */
+    #nav-name, #page-title, #footer-left { text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+  <div id="cursor-smiley">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" fill="#f472b6" stroke="#000" stroke-width="5"/>
+      <ellipse cx="36" cy="40" rx="7" ry="10" fill="#000"/>
+      <ellipse cx="64" cy="40" rx="7" ry="10" fill="#000"/>
+      <path d="M18 58 Q50 99 82 58" stroke="#000" stroke-width="4" stroke-linecap="round" fill="none"/>
+    </svg>
+  </div>
+
+  <nav id="site-nav">
+    <a href="../index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../projects/index.html">projects</a></li>
+      <li><a href="../about/index.html">about</a></li>
+      <li><a href="../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <div id="page">
+
+    <!-- LEFT: contact info -->
+    <div id="contact-info" class="reveal">
+      <span id="page-label">Get in touch</span>
+      <span id="page-title">Contact</span>
+
+      <div class="contact-block">
+        <span class="contact-label">Email</span>
+        <a class="contact-value" href="mailto:tori@toriwebb.com">tori@toriwebb.com</a>
+      </div>
+
+      <div class="contact-block">
+        <span class="contact-label">Phone</span>
+        <a class="contact-value" href="tel:3145509311">(314) 550 9311</a>
+      </div>
+
+      <div class="contact-block">
+        <span class="contact-label">Based in</span>
+        <span class="contact-value">Chicago, IL</span>
+      </div>
+
+      <div class="contact-block">
+        <span class="contact-label">Available for</span>
+        <span class="contact-value">Freelance · Full-time · Collaboration</span>
+      </div>
+
+      <!-- social icons pinned to bottom of left column -->
+      <div id="social-icons">
+        <a class="social-icon" href="https://www.linkedin.com/in/tori-webb-aa98792a6/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="12" fill="#000"/>
+            <path fill="#f472b6" d="M8.44 7.5a1.06 1.06 0 1 1 0 2.12A1.06 1.06 0 0 1 8.44 7.5zM7.5 11.25h1.88V16.5H7.5V11.25zM10.94 11.25h1.75v.86h.03c.25-.48.9-1 1.84-1 1.96 0 2.32 1.29 2.32 2.97V16.5h-1.94v-2.7c0-.72-.01-1.65-1.01-1.65-1.01 0-1.16.79-1.16 1.6V16.5h-1.83v-5.25z"/>
+          </svg>
+        </a>
+        <a class="social-icon" href="mailto:tori@toriwebb.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="12" fill="#000"/>
+            <rect x="5.5" y="8.5" width="13" height="8" rx="1" stroke="#f472b6" stroke-width="1.2" fill="none"/>
+            <polyline points="5.5,8.5 12,13.5 18.5,8.5" stroke="#f472b6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- RIGHT: form -->
+    <form id="contact-form" class="reveal" style="transition-delay:0.1s;" action="https://formspree.io/f/mnjywokv" method="POST">
+      <input type="hidden" name="_subject" value="New message from portfolio" />
+      
+
+      <div class="form-row">
+        <div class="field">
+          <label for="first-name">First Name</label>
+          <input type="text" id="first-name" name="first-name" required />
+        </div>
+        <div class="field">
+          <label for="last-name">Last Name</label>
+          <input type="text" id="last-name" name="last-name" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" />
+      </div>
+
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+
+      <button type="submit" id="submit-btn">Send Message</button>
+
+    </form>
+
+  </div>
+
+  <script>
+    // cursor
+    const smiley = document.getElementById('cursor-smiley');
+    let moved = false;
+    document.body.classList.add('cursor-active');
+    document.addEventListener('mousemove', e => {
+      smiley.style.left = e.clientX + 'px';
+      smiley.style.top  = e.clientY + 'px';
+      if (!moved) { moved = true; smiley.style.visibility = 'visible'; }
+    });
+
+    // scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.04 });
+    reveals.forEach(el => observer.observe(el));
+
+    // form submit — sends to your inbox via Formspree without leaving the page
+    const form = document.getElementById('contact-form');
+    const btn = document.getElementById('submit-btn');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          btn.textContent = 'Sent!';
+          btn.style.background = '#fff';
+          btn.style.color = '#000';
+          form.reset();
+        } else {
+          btn.textContent = 'Error — try again';
+        }
+      } catch {
+        btn.textContent = 'Error — try again';
+      }
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+        btn.style.background = '#000';
+        btn.style.color = '#fff';
+      }, 3500);
+    });
+  </script>
+</body>
+</html>

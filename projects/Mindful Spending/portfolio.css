@@ -1,0 +1,314 @@
+/* ============================================================
+   Portfolio shell — "TORI WEBB" projects index
+   Black editorial container that launches the experiences.
+   ============================================================ */
+:root {
+  --pf-bg: #050505;
+  --pf-cream: #ECE6D8;
+  --pf-pink: #FF4FA0;
+  --pf-muted: #7c7c7c;
+  --pf-line: #1d1d1d;
+}
+
+body.is-projects { background: var(--pf-bg); }
+
+/* ---- header (reuses .topbar, mix-blend keeps it legible everywhere) ---- */
+.topbar__brand {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+.pf-nav { display: flex; gap: 30px; align-items: center; }
+.pf-nav a {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+.pf-nav a:hover { opacity: 1; }
+
+/* ---- projects view ---- */
+.view--projects { display: none; min-height: 100vh; background: var(--pf-bg); color: var(--pf-cream); }
+.view--projects.is-active { display: block; }
+.view--projects { padding: 132px 0 80px; }
+
+.pf { max-width: 1320px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 64px); }
+
+.pf-eyebrow {
+  font-family: "Hanken Grotesk", sans-serif;
+  color: var(--pf-pink);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.pf-head {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: clamp(68px, 13vw, 168px);
+  line-height: 0.9;
+  letter-spacing: 0.005em;
+  color: var(--pf-cream);
+  margin-bottom: 54px;
+}
+
+/* ---- masonry grid ---- */
+.proj-masonry {
+  column-count: 3;
+  column-gap: 26px;
+}
+.pcard {
+  position: relative;
+  break-inside: avoid;
+  width: 100%;
+  margin: 0 0 26px;
+  display: inline-block;        /* helps break-inside in some engines */
+  text-decoration: none;
+  color: inherit;
+}
+.pcard__media {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #161616;
+  border-radius: 3px;
+  aspect-ratio: 4 / 5;          /* per-card override inline for staggered heights */
+}
+.pcard__media img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  filter: grayscale(0.25);
+  transition: transform 0.6s cubic-bezier(0.22,1,0.36,1), filter 0.4s;
+}
+/* css media for the app case study */
+.pcard__media--ms {
+  display: flex; flex-direction: column; justify-content: center; gap: 11px;
+  padding: 0 26px; background: #161616;
+}
+.pcard__media--ms span { height: 18px; border-radius: 5px; }
+.pcard__media--ms span:nth-child(1) { width: 70%; background: #E0533C; }
+.pcard__media--ms span:nth-child(2) { width: 92%; background: #E78A9C; }
+.pcard__media--ms span:nth-child(3) { width: 54%; background: #3D7FC2; }
+/* gradient placeholder media */
+.pcard__media--ph { background: linear-gradient(150deg, #2a2a2e, #101013); }
+
+.pcard__meta { padding: 14px 2px 0; }
+.pcard__cat {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 10.5px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--pf-muted); margin-bottom: 8px;
+}
+.pcard__title {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 600; text-transform: uppercase;
+  font-size: clamp(22px, 2.2vw, 30px); line-height: 1;
+  color: var(--pf-cream);
+  transition: color 0.3s;
+}
+.pcard__year {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 11px; letter-spacing: 0.28em; color: var(--pf-muted); margin-top: 9px;
+}
+.pcard__tag {
+  display: inline-block; margin-left: 10px;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 9px; letter-spacing: 0.18em; color: var(--pf-muted);
+  border: 1px solid #333; border-radius: 20px; padding: 3px 8px;
+  vertical-align: middle;
+}
+
+/* hover reveal on live cards */
+.proj--live { cursor: pointer; }
+.proj--live:hover .pcard__media img { transform: scale(1.05); filter: none; }
+.proj--live:hover .pcard__title { color: #fff; }
+.pcard__view {
+  position: absolute; left: 14px; bottom: 14px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 13px; border-radius: 999px;
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  color: #fff; font-family: "Hanken Grotesk", sans-serif;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  opacity: 0; transform: translateY(8px); transition: opacity 0.3s, transform 0.3s;
+}
+.proj--live:hover .pcard__view { opacity: 1; transform: none; }
+
+/* not-yet-built cards */
+.proj--soon { opacity: 0.5; }
+
+/* footer */
+.pf-foot {
+  margin-top: 70px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase;
+  color: var(--pf-muted);
+}
+
+/* ---- floating back-to-projects control ---- */
+.pf-back {
+  position: fixed; left: 22px; bottom: 22px; z-index: 130;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(20,20,20,0.55);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  color: #fff; cursor: pointer;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  transition: background 0.2s, transform 0.15s;
+}
+.pf-back:hover { background: rgba(40,40,40,0.7); }
+.pf-back:active { transform: scale(0.96); }
+.pf-back[hidden] { display: none; }
+
+@media (max-width: 1024px) { .proj-masonry { column-count: 2; } }
+@media (max-width: 520px) { .proj-masonry { column-count: 1; } }
+
+/* ============================================================
+   HOME — typewriter intro + sizzle reel + marquee
+   ============================================================ */
+body.is-home, body.is-about { background: var(--pf-bg); }
+
+.view--home { display: none; position: relative; overflow: hidden; min-height: 100vh; background: var(--pf-bg); color: var(--pf-cream); }
+.view--home.is-active { display: block; }
+/* readability scrim over the reel: darker on the left where the type sits */
+.view--home::after {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(5,5,5,0.9) 0%, rgba(5,5,5,0.58) 48%, rgba(5,5,5,0.28) 100%),
+    linear-gradient(0deg, rgba(5,5,5,0.7), transparent 55%);
+}
+.home {
+  position: relative; z-index: 2;
+  min-height: 100vh;
+  max-width: 1120px; margin: 0 auto; padding: 124px clamp(24px, 5vw, 64px) 90px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+
+/* reel as full-bleed background (.reel.reel--bg to beat the base .reel rule) */
+.reel.reel--bg {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  aspect-ratio: auto; margin: 0; border-radius: 0; box-shadow: none; cursor: default;
+  opacity: 0.7;
+}
+.reel.reel--bg::after { display: none; }
+.reel.reel--bg .reel__top,
+.reel.reel--bg .reel__cap,
+.reel.reel--bg .reel__bar { display: none; }
+
+/* typewriter */
+.home-intro { min-height: 210px; }
+.ht-line { display: block; color: var(--pf-cream); }
+.ht-line--1 {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 600; font-size: clamp(40px, 7vw, 88px); line-height: 1.02; letter-spacing: -0.01em;
+}
+.ht-line--2 {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 500; font-size: clamp(26px, 4.4vw, 50px); line-height: 1.05; color: #c9c3b5; margin-top: 4px;
+}
+.ht-line--3 {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: clamp(15px, 1.6vw, 19px); letter-spacing: 0.015em; color: #9a958b; margin-top: 22px; line-height: 1.6;
+}
+.ht-link { color: var(--pf-cream); text-decoration: none; border-bottom: 1px solid var(--pf-pink); cursor: pointer; transition: color 0.2s; }
+.ht-link:hover { color: var(--pf-pink); }
+.ht-caret {
+  display: inline-block; width: 0.5ch; height: 1em; transform: translateY(0.12em);
+  background: var(--pf-pink); margin-left: 3px; animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* sizzle reel */
+.reel {
+  position: relative; width: 100%; aspect-ratio: 16 / 9;
+  margin: 42px 0 0; border-radius: 8px; overflow: hidden; background: #000; cursor: pointer;
+  box-shadow: 0 50px 90px -40px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.07);
+}
+.reel__slide {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  opacity: 0; transform: scale(1.06); transition: opacity 0.9s ease;
+}
+.reel__slide.on { opacity: 1; animation: ken 2.8s ease forwards; }
+@keyframes ken { from { transform: scale(1.04); } to { transform: scale(1.15); } }
+.reel::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0,0,0,0.35), transparent 28%, transparent 50%, rgba(0,0,0,0.8));
+}
+.reel__top {
+  position: absolute; top: 16px; left: 18px; right: 18px; z-index: 2;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: "Hanken Grotesk", sans-serif; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: #fff;
+}
+.reel__rec { display: flex; align-items: center; gap: 8px; }
+.reel__rec::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--pf-pink); animation: blink 1.2s infinite; }
+.reel__cap { position: absolute; left: 24px; bottom: 28px; z-index: 2; }
+.reel__cat { font-family: "Hanken Grotesk", sans-serif; font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--pf-pink); margin-bottom: 7px; }
+.reel__title { font-family: "Hanken Grotesk", sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(24px, 3.6vw, 44px); line-height: 0.98; color: #fff; }
+.reel__cap .reel__cat, .reel__cap .reel__title { opacity: 0; transform: translateY(14px); }
+.reel__cap.in .reel__cat { animation: capin 0.55s ease forwards; }
+.reel__cap.in .reel__title { animation: capin 0.55s 0.07s ease forwards; }
+@keyframes capin { to { opacity: 1; transform: none; } }
+.reel__bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: rgba(255,255,255,0.14); z-index: 2; }
+.reel__bar i { display: block; height: 100%; width: 0; background: var(--pf-pink); animation: barfill 2.4s linear infinite; }
+@keyframes barfill { from { width: 0; } to { width: 100%; } }
+
+/* marquee */
+.home-marquee {
+  margin-top: 46px; overflow: hidden; width: 100%;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.home-marquee__track { display: flex; gap: 16px; width: max-content; animation: marq 34s linear infinite; }
+.home-marquee img { height: 88px; width: auto; border-radius: 3px; opacity: 0.5; filter: grayscale(0.35); }
+@keyframes marq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.view--about { display: none; min-height: 100vh; background: var(--pf-bg); color: var(--pf-cream); }
+.view--about.is-active { display: block; }
+.view--about { padding: 124px 0 80px; }
+.ab { max-width: 1120px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 64px); }
+.ab-grid { display: grid; grid-template-columns: 0.82fr 1.18fr; gap: 56px; align-items: start; margin-top: 16px; }
+.ab-portrait {
+  position: sticky; top: 116px; aspect-ratio: 4 / 5; border-radius: 5px; overflow: hidden;
+  background: linear-gradient(160deg, #1d1d1d, #0b0b0b); border: 1px solid #1e1e1e;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+}
+.ab-portrait__mono { font-family: "Hanken Grotesk", sans-serif; font-weight: 700; font-size: clamp(60px, 9vw, 104px); color: #2c2c2c; line-height: 1; }
+.ab-portrait__cap { font-family: "Hanken Grotesk", sans-serif; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #6a6a6a; padding: 0 26px; text-align: center; line-height: 1.6; }
+.ab-bio p { font-size: clamp(16px, 1.45vw, 19px); line-height: 1.78; color: #cbc5b7; margin-bottom: 22px; }
+.ab-bio p em { color: var(--pf-cream); font-style: italic; }
+.ab-skills { margin-top: 38px; border-top: 1px solid var(--pf-line); padding-top: 30px; }
+.ab-skills h3 { font-family: "Hanken Grotesk", sans-serif; font-weight: 600; text-transform: uppercase; font-size: 22px; letter-spacing: 0.04em; margin-bottom: 18px; color: var(--pf-cream); }
+.ab-skill-list { display: flex; flex-wrap: wrap; gap: 10px; }
+.ab-skill { font-family: "Hanken Grotesk", sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #bdb8ac; border: 1px solid #2a2a2a; border-radius: 30px; padding: 9px 15px; transition: border-color 0.2s, color 0.2s; }
+.ab-skill:hover { border-color: var(--pf-pink); color: #fff; }
+.ab-cta {
+  display: inline-block; margin-top: 36px;
+  font-family: "Hanken Grotesk", sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 17px;
+  color: #0a0a0a; background: var(--pf-cream); padding: 14px 28px; border-radius: 30px; text-decoration: none;
+  transition: transform 0.18s, background 0.2s;
+}
+.ab-cta:hover { transform: translateX(5px); background: #fff; }
+
+@media (max-width: 820px) {
+  .ab-grid { grid-template-columns: 1fr; gap: 30px; }
+  .ab-portrait { position: relative; top: 0; max-width: 320px; }
+}
+
+/* enlarged header + footer */
+.topbar__brand { font-size: 20px; }
+.pf-nav a { font-size: 15px; }
+.pf-back { font-size: 14px; }

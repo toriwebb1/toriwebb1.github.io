@@ -1,0 +1,579 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mindful Spending — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@200;300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000000;
+      --fg: #f0ece4;
+      --coral: #E0533C;
+      --green: #3E9E7E;
+      --blue: #3D7FC2;
+      --yellow: #E9D15B;
+      --pink-cat: #E78A9C;
+      --peri: #A6AEDB;
+      --dark: #2C2C2C;
+      --muted: #c8c3b8;
+      --dim: #6b6660;
+      --pink: #f472b6;
+      --gutter: 4vw;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Barlow Condensed', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    img { image-rendering: high-quality; }
+
+    /* ── smiley cursor ── */
+    #cursor-smiley {
+      position: fixed; z-index: 9999; pointer-events: none;
+      width: 26px; height: 26px;
+      transform: translate(-50%, -50%);
+      visibility: hidden;
+    }
+    #cursor-smiley svg { width: 100%; height: 100%; }
+    body.cursor-active { cursor: none; }
+    @media (hover: none) { body { cursor: auto; } #cursor-smiley { display: none; } }
+
+    /* ── nav ── */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem var(--gutter);
+      background: transparent; transition: background 0.4s ease;
+    }
+    #site-nav.scrolled { background: rgba(0,0,0,0.94); }
+    #nav-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem; letter-spacing: 0.35em; text-indent: 0.35em;
+      color: #fff; text-decoration: none;
+    }
+    #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    #nav-links a {
+      font-size: 0.7rem; font-weight: 300; letter-spacing: 0.32em;
+      text-transform: lowercase; color: var(--muted); text-decoration: none;
+      transition: color 0.3s;
+    }
+    #nav-links a:hover { color: #fff; }
+
+    /* ── hero ── */
+    #hero {
+      display: flex; flex-direction: column;
+      align-items: center;
+      padding: 9rem var(--gutter) 0;
+    }
+    #hero-art {
+      width: min(78vw, 980px); height: auto;
+      margin: 0 auto;
+      filter: drop-shadow(0 30px 80px rgba(0,0,0,0.55));
+    }
+
+    /* ── hero page title text (below art) ── */
+    #hero-text {
+      padding: 4rem var(--gutter) 0;
+      width: 100%;
+    }
+    #hero-mark { width: 44px; height: auto; display: block; margin-bottom: 1.3rem; }
+    #hero-page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.6rem, 7vw, 6rem);
+      letter-spacing: 0.05em; text-indent: 0.05em;
+      color: #fff; line-height: 1; display: block;
+    }
+    #hero-subtitle {
+      font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+      font-weight: 300; letter-spacing: 0.34em;
+      text-transform: uppercase; color: var(--coral);
+      margin-top: 0.9rem; display: block;
+    }
+    #hero-lead {
+      font-size: clamp(0.95rem, 1.5vw, 1.25rem);
+      font-weight: 300; line-height: 1.7; color: var(--muted);
+      max-width: 54ch; margin-top: 1.6rem;
+    }
+    #hero-lead strong { color: #fff; font-weight: 400; }
+
+    /* ── meta row ── */
+    #meta-row {
+      display: grid; grid-template-columns: repeat(4, auto);
+      gap: 3.4rem; justify-content: start;
+      padding: 2.6rem var(--gutter) 0;
+    }
+    .meta-cell { display: flex; flex-direction: column; gap: 0.35rem; }
+    .meta-cell small {
+      font-size: 0.55rem; letter-spacing: 0.34em; text-transform: uppercase;
+      color: var(--dim); font-weight: 400;
+    }
+    .meta-cell span {
+      font-size: 0.95rem; font-weight: 300; letter-spacing: 0.04em; color: var(--fg);
+    }
+
+    /* ── generic section ── */
+    .section { padding: 7rem var(--gutter); }
+    .section-label {
+      font-size: 0.55rem; font-weight: 400;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--coral); margin-bottom: 0.7rem; display: block;
+    }
+    .section-head {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 3.4rem);
+      letter-spacing: 0.05em; color: #fff; line-height: 1;
+      display: block; margin-bottom: 1.2rem;
+    }
+    .section-sub {
+      font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+      font-weight: 300; line-height: 1.8; color: var(--muted);
+      max-width: 60ch;
+    }
+
+    /* ── two-up challenge / approach ── */
+    #overview {
+      display: grid; grid-template-columns: 0.9fr 1.1fr;
+      gap: 5vw; align-items: center;
+      border-top: 1px solid #1a1a1a;
+    }
+    #overview-art { width: 100%; height: auto; display: block; cursor: zoom-in; }
+    .overview-copy { display: flex; flex-direction: column; gap: 2.2rem; }
+    .overview-copy h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem; letter-spacing: 0.06em; color: var(--coral);
+      margin-bottom: 0.6rem; font-weight: 400;
+    }
+    .overview-copy p {
+      font-size: clamp(0.9rem, 1.2vw, 1.02rem);
+      font-weight: 300; line-height: 1.9; color: var(--muted);
+    }
+    .overview-copy em { color: var(--fg); font-style: italic; }
+
+    /* ── features ── */
+    #features { border-top: 1px solid #1a1a1a; }
+    .feature-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2.6rem 3vw; margin-top: 3rem;
+    }
+    .feature {
+      display: flex; flex-direction: column; gap: 0.8rem;
+      padding-top: 1.6rem; border-top: 1px solid #1a1a1a;
+    }
+    .feature-dot {
+      width: 38px; height: 38px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: #fff;
+    }
+    .feature h4 {
+      font-size: 1.15rem; font-weight: 400; letter-spacing: 0.02em; color: var(--fg);
+    }
+    .feature p {
+      font-size: 0.92rem; font-weight: 300; line-height: 1.7; color: var(--muted);
+    }
+
+    /* ── demo video ── */
+    #demo { border-top: 1px solid #1a1a1a; text-align: left; }
+    #demo-video-wrap {
+      width: min(90vw, 1100px); margin: 3rem auto 0;
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.6);
+    }
+    #demo-video-wrap video { width: 100%; height: auto; display: block; }
+
+    /* ── screen gallery ── */
+    #gallery-section { border-top: 1px solid #1a1a1a; }
+    .screen-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1.4rem; margin-top: 3rem;
+    }
+    .screen-grid img {
+      width: 100%; height: auto; display: block; cursor: zoom-in;
+      border-radius: 22px;
+      border: 1px solid #1c1c1c;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.55);
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+    }
+    .screen-grid img:hover { transform: translateY(-8px); }
+
+    /* ── full-length data flows ── */
+    #flows { border-top: 1px solid #1a1a1a; }
+    .flow-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1.6rem; margin-top: 3rem; align-items: start;
+    }
+    .flow-strip img {
+      width: 100%; height: auto; display: block; cursor: zoom-in;
+      border-radius: 16px; border: 1px solid #1c1c1c;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.5);
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+    }
+    .flow-strip img:hover { transform: translateY(-6px); }
+
+    /* ── wireframes / process ── */
+    #process { border-top: 1px solid #1a1a1a; }
+    .process-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2.4rem; margin-top: 3rem; align-items: start;
+    }
+    .process-card { display: flex; flex-direction: column; gap: 1rem; }
+    .process-card img {
+      width: 100%; height: auto; display: block; cursor: zoom-in;
+      border-radius: 8px; box-shadow: 0 12px 50px rgba(0,0,0,0.5);
+    }
+    .process-card span {
+      font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--dim); font-weight: 400;
+    }
+
+    /* ── design system ── */
+    #system { border-top: 1px solid #1a1a1a; }
+    #system-inner {
+      display: grid; grid-template-columns: 1.05fr 0.95fr;
+      gap: 5vw; align-items: center;
+    }
+    #system-copy p {
+      font-size: clamp(0.9rem, 1.2vw, 1.02rem);
+      font-weight: 300; line-height: 1.9; color: var(--muted); margin-top: 1.2rem;
+    }
+    #system-copy strong { color: #fff; font-weight: 400; }
+    .palette {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem; margin-top: 2.4rem;
+    }
+    .swatch { display: flex; flex-direction: column; gap: 0.5rem; }
+    .swatch .chip {
+      width: 100%; aspect-ratio: 1.6 / 1; border-radius: 8px;
+    }
+    .swatch small {
+      font-size: 0.7rem; font-weight: 300; letter-spacing: 0.04em; color: var(--muted);
+      display: flex; flex-direction: column;
+    }
+    .swatch small b { color: var(--fg); font-weight: 400; letter-spacing: 0.06em; }
+    #system-clip {
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+    }
+    #system-clip video { width: 100%; height: auto; display: block; }
+
+    /* ── outcome ── */
+    #outcome {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5vw; border-top: 1px solid #1a1a1a;
+    }
+    #outcome h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem; letter-spacing: 0.06em; color: var(--coral);
+      margin-bottom: 0.8rem; font-weight: 400;
+    }
+    #outcome p {
+      font-size: clamp(0.9rem, 1.2vw, 1.02rem);
+      font-weight: 300; line-height: 1.9; color: var(--muted);
+    }
+
+    /* ── footer ── */
+    #footer {
+      text-align: center; padding: 5rem 2rem;
+      border-top: 1px solid #1a1a1a;
+    }
+    #footer-mark { font-size: 1.3rem; margin-bottom: 1.4rem; opacity: 0.3; color: var(--pink); }
+    #footer a {
+      font-size: 0.72rem; letter-spacing: 0.32em; text-transform: lowercase;
+      color: var(--dim); text-decoration: none; transition: color 0.3s;
+    }
+    #footer a:hover { color: var(--pink); }
+
+    /* ── scroll reveal ── */
+    .reveal {
+      opacity: 0; transform: translateY(14px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── lightbox ── */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.96);
+      align-items: center; justify-content: center; cursor: zoom-out;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; display: block; }
+    #lightbox-close {
+      position: absolute; top: 1.8rem; right: 2rem;
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--muted); cursor: pointer; transition: color 0.3s;
+    }
+    #lightbox-close:hover { color: #fff; }
+
+    /* ── responsive ── */
+    @media (max-width: 860px) {
+      :root { --gutter: 6vw; }
+      #overview, #system-inner, #outcome { grid-template-columns: 1fr; gap: 2.6rem; }
+      .feature-grid { grid-template-columns: 1fr 1fr; }
+      .screen-grid { grid-template-columns: repeat(2, 1fr); }
+      .flow-strip { grid-template-columns: repeat(2, 1fr); }
+      .process-grid { grid-template-columns: 1fr; }
+      .palette { grid-template-columns: repeat(3, 1fr); }
+      #meta-row { grid-template-columns: repeat(2, auto); gap: 1.8rem 3rem; }
+    }
+    @media (max-width: 520px) {
+      .feature-grid { grid-template-columns: 1fr; }
+      #nav-links { gap: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor-smiley">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" fill="#f472b6" stroke="#000" stroke-width="5"/>
+      <ellipse cx="36" cy="40" rx="7" ry="10" fill="#000"/>
+      <ellipse cx="64" cy="40" rx="7" ry="10" fill="#000"/>
+      <path d="M18 58 Q50 99 82 58" stroke="#000" stroke-width="4" stroke-linecap="round" fill="none"/>
+    </svg>
+  </div>
+
+  <div id="lightbox">
+    <span id="lightbox-close">close</span>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <!-- NAV -->
+  <nav id="site-nav">
+    <a href="../../index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../../projects/index.html">projects</a></li>
+      <li><a href="../../about/index.html">about</a></li>
+      <li><a href="../../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <img id="hero-art" src="2.png" alt="Mindful Spending — app screens" />
+  </section>
+
+  <!-- PAGE TITLE TEXT -->
+  <div id="hero-text">
+    <img id="hero-mark" src="screens/logo.png" alt="Mindful Spending mark" />
+    <span id="hero-page-title">Mindful Spending</span>
+    <span id="hero-subtitle">iOS budgeting app · spend like you mean it</span>
+    <p id="hero-lead">A budgeting app that turns every purchase into a quick gut-check: was this a <strong>want</strong> or a <strong>need</strong>? Mindful Spending makes budgeting feel less like punishment and more like a habit.</p>
+  </div>
+
+  <!-- META -->
+  <div id="meta-row">
+    <div class="meta-cell"><small>Designer</small><span>Tori Webb</span></div>
+    <div class="meta-cell"><small>Role</small><span>Product &amp; UI Design</span></div>
+    <div class="meta-cell"><small>Platform</small><span>iOS</span></div>
+    <div class="meta-cell"><small>Tools</small><span>Figma</span></div>
+  </div>
+
+  <!-- OVERVIEW: challenge / approach -->
+  <section id="overview" class="section reveal">
+    <img id="overview-art" src="3.png" alt="Mindful Spending home menu" />
+    <div class="overview-copy">
+      <div>
+        <h3>The Challenge</h3>
+        <p>Most budgeting apps tell you what you <em>spent</em> — after it's already gone. They're great at accounting and terrible at intervention. The moment that actually matters, the one right before you tap "buy," gets no attention at all.</p>
+      </div>
+      <div>
+        <h3>The Approach</h3>
+        <p>Move the reflection to the point of purchase. Log a buy in seconds, label it <em>want</em> vs. <em>need</em>, and capture how it felt. Over time those tiny moments roll up into spending patterns, category breakdowns, and a budget that adjusts to real behavior.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="section reveal">
+    <span class="section-label">What it does</span>
+    <span class="section-head">Six paths, one habit loop.</span>
+    <p class="section-sub">Every screen feeds the same loop — capture, reflect, review — so good habits compound instead of nagging.</p>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature-dot" style="background:var(--coral)">✎</div>
+        <h4>Capture in seconds</h4>
+        <p>Amount, product, store, count — a friction-light form so logging never feels like a chore.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-dot" style="background:var(--green)">⇄</div>
+        <h4>Want or need?</h4>
+        <p>A single forced choice plus an optional mood reflection turns spending into a self-aware moment.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-dot" style="background:var(--blue)">◷</div>
+        <h4>See the patterns</h4>
+        <p>Spending history, weekly and monthly statements, and category breakdowns surface where money really goes.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-dot" style="background:var(--yellow);color:#222">◎</div>
+        <h4>Plan &amp; price-match</h4>
+        <p>Set category budgets, save wants for later, and check for a better price before committing.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-dot" style="background:var(--pink-cat)">♡</div>
+        <h4>Save-for-later list</h4>
+        <p>Park impulse buys on a list and revisit them — most "wants" quietly disappear after a week.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-dot" style="background:var(--peri);color:#222">▤</div>
+        <h4>Budget tracker</h4>
+        <p>A live over/under card keeps the monthly target visible without burying it in menus.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO VIDEO -->
+  <section id="demo" class="section reveal">
+    <span class="section-label">Try it</span>
+    <span class="section-head">The core loop, live.</span>
+    <p class="section-sub">Log a purchase, call it a want or a need, reflect on how it felt — and watch it land at the top of your spending.</p>
+    <div id="demo-video-wrap">
+      <video autoplay muted loop playsinline>
+        <source src="1.mp4" type="video/mp4" />
+      </video>
+    </div>
+  </section>
+
+  <!-- SCREEN GALLERY -->
+  <section id="gallery-section" class="section reveal">
+    <span class="section-label">The redesign</span>
+    <span class="section-head">Key screens.</span>
+    <p class="section-sub">The final high-fidelity flows — same friendly language as the original, with tightened spacing, type, and hierarchy.</p>
+    <div class="screen-grid">
+      <img src="screens/01-home.png"             alt="Home menu" />
+      <img src="screens/02-add-purchase.png"      alt="Log a purchase" />
+      <img src="screens/03-want-or-need.png"      alt="Want or need?" />
+      <img src="screens/04-reflection.png"        alt="Reflect before you buy" />
+      <img src="screens/05-spending-history.png"  alt="Check spending" />
+      <img src="screens/06-store-dropdown.png"    alt="Navigation menu" />
+      <img src="screens/07-spending-diary.png"    alt="Purchase detail with emotional rating" />
+      <img src="screens/08-my-list.png"           alt="Save-for-later list" />
+      <img src="screens/09-price-match.png"       alt="Price match" />
+      <img src="screens/10-budget.png"            alt="Budget plan" />
+      <img src="screens/11-budget-categories.png" alt="Budget overview" />
+      <img src="screens/12-account.png"           alt="Account" />
+    </div>
+  </section>
+
+  <!-- FULL-LENGTH DATA FLOWS -->
+  <section id="flows" class="section reveal">
+    <span class="section-label">The data screens</span>
+    <span class="section-head">Where the money went, full-length.</span>
+    <p class="section-sub">The review side scrolls — full spending history, weekly statements, category breakdowns, and budget allocation, each readable at a glance.</p>
+    <div class="flow-strip">
+      <img src="screens/tall/weekly-statement.png" alt="Full spending history" />
+      <img src="screens/tall/spending-history.png" alt="Weekly statement" />
+      <img src="screens/tall/categories.png"       alt="Category breakdown" />
+      <img src="screens/tall/budget-breakdown.png" alt="Budget allocation" />
+    </div>
+  </section>
+
+  <!-- PROCESS / WIREFRAMES -->
+  <section id="process" class="section reveal">
+    <span class="section-label">From the ground up</span>
+    <span class="section-head">Wireframe to working flow.</span>
+    <p class="section-sub">The redesign started as greyscale wireframes and mid-fidelity flows, then earned its color and hierarchy screen by screen.</p>
+    <div class="process-grid">
+      <div class="process-card">
+        <img src="5.jpeg" alt="Early greyscale wireframes" />
+        <span>Early wireframes</span>
+      </div>
+      <div class="process-card">
+        <img src="6.png" alt="Mid-fidelity flows" />
+        <span>Mid-fidelity flows</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESIGN SYSTEM -->
+  <section id="system" class="section reveal">
+    <div id="system-inner">
+      <div id="system-copy">
+        <span class="section-label">Design system</span>
+        <span class="section-head">A calm, confident palette.</span>
+        <p>Coral anchors the brand and flags <strong>wants</strong> and overspend; green signals <strong>needs</strong> and healthy habits. Blue, yellow, pink and periwinkle code the home paths and every chart category, while a near-black <strong>dark surface</strong> carries the menu and budget cards. The stacked-bowl mark keeps the whole thing friendly.</p>
+        <div class="palette">
+          <div class="swatch"><div class="chip" style="background:#E0533C"></div><small><b>Coral</b>#E0533C</small></div>
+          <div class="swatch"><div class="chip" style="background:#3E9E7E"></div><small><b>Green</b>#3E9E7E</small></div>
+          <div class="swatch"><div class="chip" style="background:#3D7FC2"></div><small><b>Blue</b>#3D7FC2</small></div>
+          <div class="swatch"><div class="chip" style="background:#E9D15B"></div><small><b>Yellow</b>#E9D15B</small></div>
+          <div class="swatch"><div class="chip" style="background:#E78A9C"></div><small><b>Pink</b>#E78A9C</small></div>
+          <div class="swatch"><div class="chip" style="background:#A6AEDB"></div><small><b>Periwinkle</b>#A6AEDB</small></div>
+          <div class="swatch"><div class="chip" style="background:#2C2C2C;border:1px solid #333"></div><small><b>Dark</b>#2C2C2C</small></div>
+        </div>
+      </div>
+      <div id="system-clip">
+        <video autoplay muted loop playsinline>
+          <source src="7.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUTCOME -->
+  <section id="outcome" class="section reveal">
+    <div>
+      <h3>Outcome</h3>
+      <p>The redesign keeps the original's friendly character while sharpening the moments that drive the habit loop: a faster capture form, a clearer want/need decision, and a spending dashboard you can read at a glance.</p>
+    </div>
+    <div>
+      <h3>What's next</h3>
+      <p>Barcode-scan price matching, shared household budgets, and a weekly "wants you skipped" recap that turns restraint into a visible, satisfying number.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div id="footer-mark">:)</div>
+    <a href="../../projects/index.html" id="back-link">← back to projects</a>
+  </footer>
+
+  <script>
+    // nav background on scroll
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+    // smiley cursor
+    const smiley = document.getElementById('cursor-smiley');
+    let moved = false;
+    document.body.classList.add('cursor-active');
+    document.addEventListener('mousemove', e => {
+      smiley.style.left = e.clientX + 'px';
+      smiley.style.top  = e.clientY + 'px';
+      if (!moved) { moved = true; smiley.style.visibility = 'visible'; }
+    });
+
+    // lightbox
+    const lightbox    = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    function closeLb() { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+    document.getElementById('lightbox-close').addEventListener('click', closeLb);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLb(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+    document.querySelectorAll('#overview-art, .screen-grid img, .flow-strip img, .process-card img').forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.04 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

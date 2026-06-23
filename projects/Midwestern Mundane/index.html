@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Midwestern Mundane — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #000;
+      --fg: #f0ece4;
+      --accent: #c79a4e;
+      --muted: #c8c3b8;
+      --dim: #6b6660;
+      --gutter: 4vw;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--fg); font-family: 'Hanken Grotesk', sans-serif; overflow-x: hidden; }
+    img { image-rendering: high-quality; display: block; }
+
+    /* ── nav ── */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem var(--gutter);
+      background: transparent; transition: background 0.4s ease;
+    }
+    #site-nav.scrolled { background: rgba(0,0,0,0.94); }
+    #nav-name {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 1rem; letter-spacing: 0.35em; text-indent: 0.35em;
+      color: #fff; text-decoration: none;
+    }
+    #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    #nav-links a {
+      font-size: 0.7rem; font-weight: 300; letter-spacing: 0.16em;
+      text-transform: lowercase; color: var(--muted); text-decoration: none; transition: color 0.3s;
+    }
+    #nav-links a:hover { color: #fff; }
+
+    /* ── HERO / INTRO ── */
+    #hero { padding: 7rem var(--gutter) 2rem; }
+    #hero-title {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: clamp(2.7rem, 5.6vw, 4.5rem);
+      letter-spacing: 0.04em; margin-left: -0.04em;
+      color: #fff; line-height: 1.0; display: block;
+    }
+    #hero-subtitle {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(0.78rem, 1.35vw, 0.95rem);
+      font-weight: 300; letter-spacing: 0.34em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.7rem; display: block;
+    }
+    #hero-lead {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 400;
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      line-height: 1.4; letter-spacing: 0.01em;
+      color: rgba(240, 236, 228, 0.8); text-wrap: balance;
+      max-width: min(1220px, 94vw); margin-top: 1.9rem;
+    }
+    #hero-desc {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 300; font-size: clamp(1.02rem, 1.5vw, 1.28rem);
+      line-height: 1.7; color: rgba(240, 236, 228, 0.42); letter-spacing: 0.02em;
+      max-width: min(900px, 92vw); text-wrap: balance; margin-top: 1.2rem;
+    }
+    .spacer-lg { height: 120px; background: #000; }
+
+    /* ── SLIDESHOW ── */
+    #slideshow {
+      position: relative;
+      width: 100%; height: 61.3vw; display: grid;
+      margin-top: 7rem;
+      overflow: hidden; background: #000;
+    }
+
+    .slide {
+      grid-area: 1 / 1;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity 1.4s ease;
+      pointer-events: none;
+    }
+    .slide.active { opacity: 1; pointer-events: auto; }
+    .slide img {
+      height: 61.3vw;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* dots */
+    #slide-dots {
+      position: absolute; bottom: 2rem;
+      left: 50%; transform: translateX(-50%);
+      display: flex; gap: 8px; z-index: 10;
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      transition: background 0.3s; cursor: default;
+    }
+    .dot.active { background: rgba(255,255,255,0.85); }
+
+    /* ── GRID SECTION ── */
+    #grid-section {
+      padding: 5rem var(--gutter) 8rem;
+    }
+    #grid-label {
+      font-size: 0.68rem; font-weight: 300;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 3rem;
+    }
+    /* masonry via explicit columns — full control of each column's order */
+    #photo-grid {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .masonry-col {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column;
+      gap: 1rem;
+    }
+    .grid-item {
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    .grid-item:hover { opacity: 0.75; }
+    .grid-item img {
+      width: 100%; height: auto; display: block;
+    }
+    @media (max-width: 640px) { #photo-grid { flex-direction: column; } }
+
+    /* reveal */
+    .reveal { opacity: 0; transform: translateY(10px); transition: opacity 1s ease, transform 1s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── footer ── */
+    #footer {
+      text-align: center; padding: 5rem 2rem;
+      border-top: 1px solid #1a1a1a;
+    }
+    #footer-mark { font-size: 1.3rem; margin-bottom: 1.4rem; opacity: 0.2; color: var(--accent); }
+    #footer a {
+      font-size: 0.72rem; letter-spacing: 0.32em; text-transform: lowercase;
+      color: var(--dim); text-decoration: none; transition: color 0.3s;
+    }
+    #footer a:hover { color: var(--accent); }
+
+    /* ── lightbox ── */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.97);
+      align-items: center; justify-content: center; cursor: zoom-out;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox-img { width: 92vw; object-fit: contain; }
+    #lightbox-close {
+      position: absolute; top: 1.8rem; right: 2rem;
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--muted); cursor: pointer; transition: color 0.3s;
+    }
+    #lightbox-close:hover { color: #fff; }
+  
+    /* enlarged header + footer */
+    #nav-name { font-size: 1.2rem; }
+    #nav-links a { font-size: 0.86rem; }
+    #footer-left { font-size: 1.2rem; }
+    #footer a { font-size: 0.86rem; }
+  
+    /* all-caps titles (restored from Bebas) */
+    #nav-name, #hero-title { text-transform: uppercase; }
+      /* role credit (bottom of page) */
+    #page-role { padding: 4.5rem var(--gutter) 1rem; text-align: right; }
+    #page-role .role-list { display: flex; flex-direction: column; align-items: flex-end; gap: 0.18rem; margin-top: 0.9rem; list-style: none; }
+    .role-label { font-family: 'Hanken Grotesk', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.34em; text-transform: uppercase; color: #c79a4e; display: block; margin-bottom: 1rem; }
+    .role-list li { font-family: 'Hanken Grotesk', sans-serif; font-weight: 300; font-size: 0.86rem; letter-spacing: 0.16em; text-transform: lowercase; color: rgba(240,236,228,0.5); line-height: 1.75; }
+  
+    /* footer redesign: back | smiley | next */
+    #footer { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 5rem var(--gutter); text-align: initial; }
+    #footer a { flex: 1; min-width: 0; font-size: 0.86rem; font-weight: 300; letter-spacing: 0.16em; text-transform: lowercase; }
+    #footer a.footer-back { text-align: left; }
+    #footer a.footer-next { text-align: right; }
+    .footer-smiley { width: 32px; height: 32px; flex-shrink: 0; line-height: 0; }
+    .footer-smiley svg { width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+
+  <div id="lightbox">
+    <span id="lightbox-close">close</span>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+        <nav id="site-nav">
+    <a href="../../index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../../projects/index.html">projects</a></li>
+      <li><a href="../../about/index.html">about</a></li>
+      <li><a href="../../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- SLIDESHOW (hero media, first) -->
+  <div id="slideshow">
+    <div class="slide active"><img src="1.jpg"   alt="" /></div>
+    <div class="slide"><img src="2.jpg"   alt="" /></div>
+    <div class="slide"><img src="3.jpg"   alt="" /></div>
+    <div class="slide"><img src="3.5.jpg" alt="" /></div>
+    <div class="slide"><img src="4.jpg"   alt="" /></div>
+    <div class="slide"><img src="5.jpg"   alt="" /></div>
+    <div class="slide"><img src="6.jpg"   alt="" /></div>
+    <div class="slide"><img src="6.5.jpg" alt="" /></div>
+    <div class="slide"><img src="7.jpg"   alt="" /></div>
+    <div class="slide"><img src="8.jpg"   alt="" /></div>
+    <div class="slide"><img src="9.jpg"   alt="" /></div>
+    <div class="slide"><img src="10.jpg"  alt="" /></div>
+    <div id="slide-dots"></div>
+  </div>
+
+  <!-- TITLE + DESCRIPTION (below the slideshow) -->
+  <section id="hero" class="reveal">
+    <span id="hero-subtitle">Photography · Series</span>
+    <span id="hero-title">Midwestern Mundane</span>
+    <p id="hero-lead">A photographic series bringing light to the quirky nostalgia and unassuming beauty of the true Midwest — the landscapes, roadside attractions, and small charms that shape my memories of home.</p>
+    <p id="hero-desc">Inspired by the countless road trips of my childhood, I went looking for the unassuming beauty hiding in ordinary scenes. This series is my way of honoring the small, imperfect, and quietly meaningful moments that make the Midwest feel like home.</p>
+  </section>
+
+  <!-- PHOTO GRID — two column natural height -->
+  <div id="grid-section" class="reveal">
+    <p id="grid-label">All photographs</p>
+    <div id="photo-grid">
+      <div class="masonry-col">
+        <div class="grid-item" data-src="4.jpg"><img src="4.jpg" alt="" /></div>
+        <div class="grid-item" data-src="1.jpg"><img src="1.jpg" alt="" /></div>
+        <div class="grid-item" data-src="3.jpg"><img src="3.jpg" alt="" /></div>
+        <div class="grid-item" data-src="5.jpg"><img src="5.jpg" alt="" /></div>
+        <div class="grid-item" data-src="6.jpg"><img src="6.jpg" alt="" /></div>
+        <div class="grid-item" data-src="10.jpg"><img src="10.jpg" alt="" /></div>
+      </div>
+      <div class="masonry-col">
+        <div class="grid-item" data-src="7.jpg"><img src="7.jpg" alt="" /></div>
+        <div class="grid-item" data-src="2.jpg"><img src="2.jpg" alt="" /></div>
+        <div class="grid-item" data-src="8.jpg"><img src="8.jpg" alt="" /></div>
+        <div class="grid-item" data-src="3.5.jpg"><img src="3.5.jpg" alt="" /></div>
+        <div class="grid-item" data-src="9.jpg"><img src="9.jpg" alt="" /></div>
+        <div class="grid-item" data-src="6.5.jpg"><img src="6.5.jpg" alt="" /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <!-- ROLE (bottom of page) -->
+  <section id="page-role">
+    <span class="role-label">Role</span>
+    <ul class="role-list">
+      <li>Photography</li>
+      <li>Editorial</li>
+      <li>Storytelling</li>
+    </ul>
+  </section>
+
+
+  <footer id="footer">
+    <a href="../../projects/index.html" id="back-link" class="footer-back">← back to projects</a>
+    <a href="../Bold Marks/index.html" class="footer-next">Bold Marks →</a>
+  </footer>
+
+  <script>
+    // nav
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+    // ── SLIDESHOW ──
+    const slides    = Array.from(document.querySelectorAll('.slide'));
+    const dotsWrap  = document.getElementById('slide-dots');
+    let current     = 0;
+
+    slides.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      dotsWrap.appendChild(d);
+    });
+
+    function goTo(n) {
+      slides[current].classList.remove('active');
+      dotsWrap.children[current].classList.remove('active');
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dotsWrap.children[current].classList.add('active');
+    }
+
+    setInterval(() => goTo(current + 1), 2500);
+
+    // grid lightbox
+    document.querySelectorAll('.grid-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.getElementById('lightbox-img').src = item.dataset.src;
+        document.getElementById('lightbox').classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.04 });
+    reveals.forEach(el => observer.observe(el));
+
+    // lightbox
+    const lightbox = document.getElementById('lightbox');
+    document.getElementById('lightbox-close').addEventListener('click', () => {
+      lightbox.classList.remove('open'); document.body.style.overflow = '';
+    });
+    lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+    });
+  </script>
+</body>
+</html>

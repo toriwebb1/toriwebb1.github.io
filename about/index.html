@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --fg: #000;
+      --pink: #f472b6;
+      --muted: #666;
+      --gutter: 4vw;   /* match the nav inset so content aligns with "Tori Webb" */
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Hanken Grotesk', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── smiley cursor ── */
+    #cursor-smiley {
+      position: fixed; z-index: 9999; pointer-events: none;
+      width: 26px; height: 26px;
+      transform: translate(-50%, -50%);
+      visibility: hidden;
+    }
+    #cursor-smiley svg { width: 100%; height: 100%; }
+    body.cursor-active { cursor: none; }
+
+    /* ── nav ── */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem 4vw;
+      background: rgba(255,255,255,0.95);
+      
+    }
+    #nav-name {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.9rem; letter-spacing: 0.35em; text-indent: 0.35em;
+      color: #000; text-decoration: none;
+    }
+    #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    #nav-links a {
+      font-size: 0.68rem; font-weight: 300; letter-spacing: 0.16em;
+      text-transform: lowercase; color: var(--muted); text-decoration: none;
+      transition: color 0.3s;
+    }
+    #nav-links a:hover { color: #000; }
+
+    /* ── hero ── */
+    #hero {
+      padding: 8rem var(--gutter) 2rem;
+      
+    }
+    #page-label {
+      font-size: 1.2rem; font-weight: 400;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--pink); margin-bottom: 0.5rem; display: block;
+      text-indent: 0;
+    }
+    #page-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 5.5rem);
+      letter-spacing: 0.06em; margin-left: -0.04em;
+      color: #000; line-height: 1; display: block;
+    }
+
+    /* ── main content ── */
+    #about-body {
+      padding: 2rem var(--gutter) 6rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6vw;
+      align-items: stretch;
+    }
+
+    /* skills + button live below, aligned under the text column */
+    #about-extra {
+      padding: 0 var(--gutter) 6rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6vw;
+    }
+    #about-extra-inner {
+      grid-column: 2;
+      display: flex; flex-direction: column;
+      align-items: flex-start; gap: 2rem;
+    }
+
+    /* left: photo fills the height of the text column */
+    #about-photo {
+      display: flex;
+      align-items: stretch;
+      width: 100%;
+    }
+    #about-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* right: bio + skills */
+    #about-text { display: flex; flex-direction: column; gap: 2.5rem; }
+
+    /* body paragraphs — smaller + muted (matches site hierarchy) */
+    .bio-paragraph {
+      font-size: clamp(1.2rem, 1.9vw, 1.65rem);
+      font-weight: 300; line-height: 1.5;
+      color: #6a6a6a; letter-spacing: 0.01em;
+    }
+
+    /* lead paragraph — larger + darker intro, like the lead text used across the site */
+    .bio-lead {
+      font-size: clamp(1.2rem, 1.9vw, 1.65rem);
+      font-weight: 400; line-height: 1.5;
+      color: #141414; text-wrap: balance;
+    }
+
+    /* second paragraph — same size, black */
+    .bio-dark { color: #141414; }
+
+    /* last paragraph — smaller */
+    .bio-small {
+      font-size: clamp(0.92rem, 1.25vw, 1.08rem);
+      line-height: 1.75;
+    }
+
+    .bio-paragraph + .bio-paragraph { margin-top: -1rem; }
+
+    /* "Hello!" in pink */
+    .bio-hello { color: var(--pink); font-weight: 400; }
+
+    /* skills section */
+    #skills { margin-top: 1rem; }
+    #skills-label {
+      font-size: 0.72rem; font-weight: 800;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--pink); margin-bottom: 1.2rem; display: block;
+    }
+    #skills-list {
+      display: flex; flex-wrap: wrap; gap: 0.5rem 1rem;
+    }
+    .skill-tag {
+      font-size: 0.65rem; font-weight: 400;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: #000;
+      border: 1px solid #000;
+      padding: 0.35rem 0.8rem;
+    }
+
+    /* ── footer ── */
+    #footer {
+      padding: 3rem var(--gutter);
+      display: flex; align-items: center; justify-content: center;
+      border-top: 1px solid #eee;
+    }
+    #footer-left {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: 0.9rem; letter-spacing: 0.35em; color: #aaa;
+    }
+    #footer a {
+      font-size: 0.62rem; font-weight: 300; letter-spacing: 0.32em;
+      text-transform: lowercase; color: #aaa;
+      text-decoration: none; transition: color 0.3s;
+    }
+    #footer a:hover { color: var(--pink); }
+
+    #contact-btn {
+      display: inline-block;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.7rem; font-weight: 400;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: #fff; background: #000;
+      text-decoration: none;
+      padding: 0.9rem 2.2rem;
+      transition: background 0.3s, color 0.3s;
+      align-self: flex-start;
+    }
+    #contact-btn:hover { background: var(--pink); color: #fff; }
+    .reveal { opacity: 0; transform: translateY(12px); transition: opacity 0.9s ease, transform 0.9s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  
+    /* enlarged header + footer */
+    #nav-name { font-size: 1.2rem; }
+    #nav-links a { font-size: 0.86rem; }
+    #footer-left { font-size: 1.2rem; }
+    #footer a { font-size: 0.86rem; }
+  
+    /* all-caps titles (restored from Bebas) */
+    #nav-name, #page-title, #footer-left { text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+  <div id="cursor-smiley">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" fill="#f472b6" stroke="#000" stroke-width="5"/>
+      <ellipse cx="36" cy="40" rx="7" ry="10" fill="#000"/>
+      <ellipse cx="64" cy="40" rx="7" ry="10" fill="#000"/>
+      <path d="M18 58 Q50 99 82 58" stroke="#000" stroke-width="4" stroke-linecap="round" fill="none"/>
+    </svg>
+  </div>
+
+  <nav id="site-nav">
+    <a href="../index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../projects/index.html">projects</a></li>
+      <li><a href="../about/index.html">about</a></li>
+      <li><a href="../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <header id="hero" class="reveal">
+    <span id="page-label">Who I am</span>
+    <span id="page-title">About</span>
+  </header>
+
+  <div id="about-body">
+
+    <!-- LEFT: photo -->
+    <div id="about-photo" class="reveal">
+      <img src="tori.jpeg" alt="Tori Webb at the 2026 Fine Arts Senior Exhibition" />
+    </div>
+
+    <!-- RIGHT: bio + skills -->
+    <div id="about-text" class="reveal" style="transition-delay:0.1s;">
+
+      <div>
+        <p class="bio-paragraph bio-lead"><span class="bio-hello">Hello!</span> I'm Tori, a graduate of Loyola University Chicago with a bachelor's in Visual Communications and Psychology. As a narrative-driven designer, I believe the most powerful work happens at the intersection of emotion and craft — where a viewer doesn't just see a design, but feels it.</p>
+      </div>
+
+      <div>
+        <p class="bio-paragraph bio-small">My background in both disciplines shapes how I approach every project: with curiosity about the human experience and a genuine care for how design can reflect it. I love making work that's vulnerable, purposeful, and honest — using design as a way to tell stories and build real connections.</p>
+      </div>
+
+      <div>
+        <p class="bio-paragraph bio-small">Outside of design, I love spending time with friends, going for long walks and bike rides, exploring the city, or working on a fun craft while watching a movie. I also love to travel — meeting new people, trying new foods, and immersing myself in different cultures.</p>
+      </div>
+
+      <div id="skills">
+        <span id="skills-label">Skills</span>
+        <div id="skills-list">
+          <span class="skill-tag">Photography</span>
+          <span class="skill-tag">Type Design</span>
+          <span class="skill-tag">Book Making</span>
+          <span class="skill-tag">Branding</span>
+          <span class="skill-tag">Illustration</span>
+          <span class="skill-tag">UX/UI</span>
+          <span class="skill-tag">Graphic Design</span>
+          <span class="skill-tag">Editorial</span>
+          <span class="skill-tag">Writing</span>
+          <span class="skill-tag">Storytelling</span>
+        </div>
+      </div>
+
+      <a href="../contact/index.html" id="contact-btn">Get in Touch →</a>
+
+    </div>
+  </div>
+
+  <script>
+    const smiley = document.getElementById('cursor-smiley');
+    let moved = false;
+    document.body.classList.add('cursor-active');
+    document.addEventListener('mousemove', e => {
+      smiley.style.left = e.clientX + 'px';
+      smiley.style.top  = e.clientY + 'px';
+      if (!moved) { moved = true; smiley.style.visibility = 'visible'; }
+    });
+
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.04 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

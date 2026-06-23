@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@200;300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000;
+      --fg: #f0ece4;
+      --pink: #f472b6;
+      --muted: #888078;
+      --gutter: 7vw;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Barlow Condensed', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── smiley cursor ── */
+    #cursor-smiley {
+      position: fixed; z-index: 9999; pointer-events: none;
+      width: 26px; height: 26px;
+      transform: translate(-50%, -50%);
+      visibility: hidden;
+    }
+    #cursor-smiley svg { width: 100%; height: 100%; }
+    body.cursor-active { cursor: none; }
+
+    /* ── nav ── */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem var(--gutter);
+    }
+    #nav-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem; letter-spacing: 0.35em; text-indent: 0.35em;
+      color: var(--fg); text-decoration: none;
+    }
+    #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    #nav-links a {
+      font-size: 0.68rem; font-weight: 300; letter-spacing: 0.32em;
+      text-transform: lowercase; color: var(--muted); text-decoration: none;
+      transition: color 0.3s;
+    }
+    #nav-links a:hover { color: var(--fg); }
+
+    /* ── page header ── */
+    #page-header {
+      padding: 6.5rem var(--gutter) 1.8rem;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    #page-label {
+      font-size: 0.55rem; font-weight: 400;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--pink); margin-bottom: 0.4rem; display: block;
+    }
+    #page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 4.5vw, 4.2rem);
+      letter-spacing: 0.06em;
+      color: var(--fg); line-height: 1; display: block;
+    }
+
+    /* ── masonry project grid ── */
+    #project-grid {
+      display: flex;
+      gap: 2.4vw;
+      align-items: flex-start;
+      padding: 2.5rem 4vw 6rem;
+    }
+    .masonry-col {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column;
+      gap: 2.6rem;
+    }
+
+    .project-card {
+      display: block;
+      text-decoration: none; color: inherit;
+      opacity: 0; transform: translateY(14px);
+      animation: cardIn 0.6s ease forwards;
+    }
+    @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
+
+    .card-media {
+      border-radius: 18px; overflow: hidden;
+      background: #0d0d0d;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.5);
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s ease;
+    }
+    .card-media img, .card-media video {
+      width: 100%; height: auto; display: block;
+    }
+    .project-card:hover .card-media {
+      transform: translateY(-6px) scale(1.015);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+    }
+
+    .card-caption {
+      padding: 0.95rem 0.25rem 0;
+      display: flex; flex-direction: column; gap: 0.32rem;
+    }
+    .card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.45rem, 2.3vw, 2.4rem);
+      letter-spacing: 0.05em; line-height: 1.1;
+      color: var(--fg); transition: color 0.3s;
+    }
+    .project-card:hover .card-title { color: var(--pink); }
+    .card-meta {
+      font-size: 0.66rem; font-weight: 400;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── footer ── */
+    #footer {
+      padding: 3.5rem var(--gutter);
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid #1a1a1a;
+    }
+    #footer-left {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem; letter-spacing: 0.35em; color: var(--muted);
+    }
+    #footer a {
+      font-size: 0.62rem; font-weight: 300; letter-spacing: 0.32em;
+      text-transform: lowercase; color: var(--muted);
+      text-decoration: none; transition: color 0.3s;
+    }
+    #footer a:hover { color: var(--pink); }
+  </style>
+</head>
+<body>
+
+  <div id="cursor-smiley">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" fill="#f472b6" stroke="#000" stroke-width="5"/>
+      <ellipse cx="36" cy="40" rx="7" ry="10" fill="#000"/>
+      <ellipse cx="64" cy="40" rx="7" ry="10" fill="#000"/>
+      <path d="M18 58 Q50 99 82 58" stroke="#000" stroke-width="4" stroke-linecap="round" fill="none"/>
+    </svg>
+  </div>
+
+  <nav id="site-nav">
+    <a href="../landing page/index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../projects/index.html">projects</a></li>
+      <li><a href="../about/index.html">about</a></li>
+      <li><a href="../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <header id="page-header">
+    <span id="page-label">Selected</span>
+    <span id="page-title">Projects</span>
+  </header>
+
+  <!-- cards listed in reading order; JS distributes them across the masonry columns -->
+  <div id="project-grid">
+
+    <!-- Made with Love -->
+    <a class="project-card" href="project_1_made_with_love/index.html" style="animation-delay:0.05s;">
+      <div class="card-media"><img src="project_1_made_with_love/coverphoto.png" alt="" /></div>
+      <div class="card-caption">
+        <span class="card-title">Made with Love</span>
+        <span class="card-meta">Publication · Exhibition</span>
+      </div>
+    </a>
+
+    <!-- Reviewed -->
+    <a class="project-card" href="Reviewed/index.html" style="animation-delay:0.08s;">
+      <div class="card-media"><img src="Reviewed/1-intro.GIF" alt="" /></div>
+      <div class="card-caption">
+        <span class="card-title">Reviewed</span>
+        <span class="card-meta">Event Design · CGDC</span>
+      </div>
+    </a>
+
+    <!-- monodot -->
+    <a class="project-card" href="monodot/index.html" style="animation-delay:0.11s;">
+      <div class="card-media">
+        <video autoplay muted loop playsinline>
+          <source src="monodot/1-video.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="card-caption">
+        <span class="card-title">monodot + monodule</span>
+        <span class="card-meta">Type Design · Animation</span>
+      </div>
+    </a>
+
+    <!-- Midwestern Mundane -->
+    <a class="project-card" href="Midwestern Mundane/index.html" style="animation-delay:0.14s;">
+      <div class="card-media"><img src="Midwestern Mundane/1.jpg" alt="" /></div>
+      <div class="card-caption">
+        <span class="card-title">Midwestern Mundane</span>
+        <span class="card-meta">Photography · Series</span>
+      </div>
+    </a>
+
+    <!-- Rooted in Resilience -->
+    <a class="project-card" href="Rooted in Resilience/index.html" style="animation-delay:0.17s;">
+      <div class="card-media"><img src="Rooted in Resilience/1.jpeg" alt="" /></div>
+      <div class="card-caption">
+        <span class="card-title">Rooted in Resilience</span>
+        <span class="card-meta">Memoir · Photography</span>
+      </div>
+    </a>
+
+    <!-- Bold Marks -->
+    <a class="project-card" href="Bold Marks/index.html" style="animation-delay:0.2s;">
+      <div class="card-media" style="padding: 9% 11%;"><img src="Bold Marks/11.png" alt="" /></div>
+      <div class="card-caption">
+        <span class="card-title">Bold Marks</span>
+        <span class="card-meta">Branding · Editorial</span>
+      </div>
+    </a>
+
+    <!-- Rogers Park -->
+    <a class="project-card" href="Rogers Park/index.html" style="animation-delay:0.23s;">
+      <div class="card-media"><img src="Rogers Park/images/3.png" alt="" /></div>
+      <div class="card-caption">
+        <span class="card-title">It's Cold Here in Rogers Park</span>
+        <span class="card-meta">Photography · Zine Design</span>
+      </div>
+    </a>
+
+    <!-- Mindful Spending -->
+    <a class="project-card" href="Mindful Spending/index.html" style="animation-delay:0.26s;">
+      <div class="card-media"><img src="Mindful Spending/2.png" alt="" /></div>
+      <div class="card-caption">
+        <span class="card-title">Mindful Spending</span>
+        <span class="card-meta">App Design · UX/UI</span>
+      </div>
+    </a>
+
+    <!-- Designer Brochure -->
+    <a class="project-card" href="Designer Brochure/index.html" style="animation-delay:0.29s;">
+      <div class="card-media"><img src="Designer Brochure/2.jpg" alt="" /></div>
+      <div class="card-caption">
+        <span class="card-title">Designer Brochure</span>
+        <span class="card-meta">Print · Stefan Sagmeister</span>
+      </div>
+    </a>
+
+    <!-- Papa and Piper -->
+    <a class="project-card" href="storybook/index.html" style="animation-delay:0.32s;">
+      <div class="card-media"><img src="storybook/4.png" alt="" /></div>
+      <div class="card-caption">
+        <span class="card-title">Papa and Piper Play Pinball</span>
+        <span class="card-meta">Children's Book · Illustration</span>
+      </div>
+    </a>
+
+  </div>
+
+  <footer id="footer">
+    <span id="footer-left">Tori Webb</span>
+    <a href="../landing page/index.html">← back home</a>
+  </footer>
+
+  <script>
+    const smiley = document.getElementById('cursor-smiley');
+    let moved = false;
+    document.body.classList.add('cursor-active');
+    document.addEventListener('mousemove', e => {
+      smiley.style.left = e.clientX + 'px';
+      smiley.style.top  = e.clientY + 'px';
+      if (!moved) { moved = true; smiley.style.visibility = 'visible'; }
+    });
+
+    // ── masonry: distribute cards into columns in reading order (paired left/right) ──
+    const grid  = document.getElementById('project-grid');
+    const cards = Array.from(grid.querySelectorAll('.project-card'));
+    let curCols = 0;
+    function layout() {
+      const cols = window.innerWidth <= 620 ? 1 : 2;
+      if (cols === curCols) return;
+      curCols = cols;
+      grid.innerHTML = '';
+      const colEls = [];
+      for (let i = 0; i < cols; i++) {
+        const c = document.createElement('div');
+        c.className = 'masonry-col';
+        grid.appendChild(c);
+        colEls.push(c);
+      }
+      cards.forEach((card, i) => colEls[i % cols].appendChild(card));
+    }
+    layout();
+    let rt;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(layout, 150); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,582 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Made with Love — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink: #f472b6;
+      --bg: #000000;
+      --fg: #f0ece4;
+      --muted: #6b6660;
+      --gutter: 4vw;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Hanken Grotesk', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── nav ── */
+    #site-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.6rem var(--gutter);
+      background: transparent;
+      transition: background 0.4s ease;
+    }
+
+    #site-nav.scrolled { background: rgba(0,0,0,0.94); }
+
+    #nav-name {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.35em;
+      text-indent: 0.35em;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    #nav-links {
+      display: flex;
+      gap: 2.4rem;
+      list-style: none;
+    }
+
+    #nav-links a {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.16em;
+      text-transform: lowercase;
+      color: #c8c3b8;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    #nav-links a:hover { color: #ffffff; }
+
+    /* ── hero media (first, shown as big as possible, never cropped) ── */
+    #hero-media {
+      width: 100%;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 3.25rem 0 0;
+      background: #000;
+    }
+    #hero-media video,
+    #hero-media img {
+      width: 100%; height: calc(100vh - 3.25rem); object-fit: cover;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* ── intro: title, subtitle, lead, detail, role ── */
+    #intro { padding: 3.2rem var(--gutter) 2rem; }
+
+    #intro-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(2.7rem, 5.6vw, 4.5rem);
+      letter-spacing: 0.04em; margin-left: -0.04em;
+      color: #fff; line-height: 1.0; display: block;
+    }
+
+    #intro-subtitle {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(0.78rem, 1.35vw, 0.95rem);
+      font-weight: 300; letter-spacing: 0.34em; text-transform: uppercase;
+      color: var(--pink); margin-bottom: 0.7rem; display: block;
+    }
+
+    #intro-lead {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 400;
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      line-height: 1.4; letter-spacing: 0.01em;
+      color: rgba(240, 236, 228, 0.8); text-wrap: balance;
+      max-width: min(900px, 92vw); margin-top: 1.9rem;
+    }
+
+    #intro-body {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 300; font-size: clamp(1.02rem, 1.5vw, 1.28rem);
+      line-height: 1.7; color: rgba(240, 236, 228, 0.42); letter-spacing: 0.02em;
+      max-width: min(900px, 92vw); text-wrap: balance; margin-top: 1.2rem;
+    }
+
+    /* role credit at the very bottom of the page */
+    #page-role {
+      padding: 4.5rem var(--gutter) 1rem;
+      text-align: right;
+    }
+    #page-role .role-list {
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 0.18rem; margin-top: 0.9rem;
+    }
+
+    .role-label {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.78rem; font-weight: 400; letter-spacing: 0.34em;
+      text-transform: uppercase; color: var(--pink);
+      display: block; margin-bottom: 1rem;
+    }
+    .role-list { list-style: none; }
+    .role-list li {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 300; font-size: 0.86rem;
+      letter-spacing: 0.16em; text-transform: lowercase; color: rgba(240, 236, 228, 0.5); line-height: 1.75;
+    }
+
+    @media (max-width: 760px) {
+      #intro-detail { grid-template-columns: 1fr; gap: 28px; }
+      #intro-lead { max-width: none; }
+    }
+
+    /* ── spacer ── */
+    .spacer { height: 40px; background: #000; }
+    .spacer-lg { height: 120px; background: #000; }
+
+    /* ── full bleed — same inset as everything else ── */
+    .full-bleed {
+      padding: 0 var(--gutter);
+      overflow: hidden;
+    }
+
+    .full-bleed img {
+      width: 100%;
+      height: 92vh;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      cursor: zoom-in;
+      transition: transform 0.8s ease;
+    }
+
+    .full-bleed:hover img { transform: scale(1.012); }
+
+    /* ── two column ── */
+    .collage-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 0 var(--gutter);
+    }
+
+    .collage-two .img-wrap { overflow: hidden; height: 60vh; }
+
+    .collage-two .img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      display: block; cursor: zoom-in;
+      transition: transform 0.6s ease;
+    }
+
+    .collage-two .img-wrap:hover img { transform: scale(1.02); }
+
+    /* ── three column ── */
+    .collage-three {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      padding: 0 var(--gutter);
+    }
+
+    .collage-three .img-wrap { overflow: hidden; height: 52vh; }
+
+    .collage-three .img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      display: block; cursor: zoom-in;
+      transition: transform 0.6s ease;
+    }
+
+    .collage-three .img-wrap:hover img { transform: scale(1.02); }
+
+    /* ── exhibition section — left edge = var(--gutter) ── */
+    #exhibition-intro {
+      padding: 3rem var(--gutter) 2rem var(--gutter);
+    }
+
+    #exhibition-title {
+      font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase;
+      font-size: clamp(2.7rem, 5.6vw, 4.5rem);
+      letter-spacing: 0.04em;
+      color: #fff; line-height: 1.0; display: block;
+    }
+
+    #exhibition-subtitle {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(0.78rem, 1.35vw, 0.95rem);
+      font-weight: 300; letter-spacing: 0.34em; text-transform: uppercase;
+      color: var(--pink); margin-top: 0.7rem; display: block;
+    }
+
+    #exhibition-desc {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 300; font-size: clamp(1.18rem, 1.7vw, 1.45rem);
+      line-height: 1.7; color: #c8c3b8; letter-spacing: 0.02em;
+      max-width: min(900px, 92vw); text-wrap: balance; margin-top: 1.5rem;
+    }
+
+    /* ── 14.jpg + final three all in same gutter container ── */
+    #exhibition-photos {
+      padding: 0 var(--gutter);
+    }
+
+    #photo-14 {
+      width: 100%; height: auto; display: block;
+      cursor: zoom-in; margin-bottom: 40px;
+    }
+
+    /* ── final three — 15 and 17 natural height, 16 centered between them ── */
+    #final-photos {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    #final-photos .img-wrap { overflow: hidden; }
+
+    #final-photos .img-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      cursor: zoom-in;
+    }
+
+    /* ── footer ── */
+    #footer {
+      text-align: center; padding: 7rem 2rem; margin-top: 5rem;
+      border-top: 1px solid #1a1a1a;
+    }
+
+    #footer-mark { font-size: 1.4rem; margin-bottom: 1.5rem; opacity: 0.3; color: var(--pink); }
+
+    #footer a {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.32em; text-transform: lowercase;
+      color: var(--muted); text-decoration: none; transition: color 0.3s;
+    }
+
+    #footer a:hover { color: var(--pink); }
+
+    /* ── lightbox ── */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.96);
+      align-items: center; justify-content: center; cursor: zoom-out;
+    }
+
+    #lightbox.open { display: flex; }
+
+    #lightbox img {
+      max-width: 90vw; max-height: 90vh;
+      object-fit: contain; display: block;
+    }
+
+    #lightbox-close {
+      position: absolute; top: 2rem; right: 2.4rem;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: #c8c3b8; cursor: pointer; transition: color 0.3s;
+    }
+
+    #lightbox-close:hover { color: #fff; }
+
+    /* ── scroll reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 1.6s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  
+    /* enlarged header + footer */
+    #nav-name { font-size: 1.2rem; }
+    #nav-links a { font-size: 0.86rem; }
+    #footer-left { font-size: 1.2rem; }
+    #footer a { font-size: 0.86rem; }
+  
+    /* all-caps titles (restored from Bebas) */
+    #nav-name, #intro-title, #exhibition-title { text-transform: uppercase; }
+
+    /* ── handwriting (custom McSpadden typeface) ── */
+    @font-face {
+      font-family: 'McSpadden';
+      src: url('McSpadden.otf') format('opentype');
+      font-display: swap;
+    }
+    #handwriting { min-height: 94vh; padding: 5rem var(--gutter) 6rem; display: flex; align-items: center; justify-content: center; }
+    #handwriting-text {
+      font-family: 'McSpadden', 'Segoe Script', cursive;
+      font-size: clamp(1.4rem, 2.8vw, 2.5rem);
+      line-height: 2; letter-spacing: 0.01em;
+      color: #efe7d7; width: min(1500px, 96vw); text-align: center;
+      transform: rotate(-1.4deg); min-height: 2em;
+    }
+    /* each letter is traced/inked in left-to-right */
+    @keyframes hwInk {
+      from { opacity: 0; clip-path: inset(0 100% 0 0); }
+      to   { opacity: 1; clip-path: inset(0 0 0 0); }
+    }
+  
+    /* footer redesign: back | smiley | next */
+    #footer { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 5rem var(--gutter); text-align: initial; }
+    #footer a { flex: 1; min-width: 0; font-size: 0.86rem; font-weight: 300; letter-spacing: 0.16em; text-transform: lowercase; }
+    #footer a.footer-back { text-align: left; }
+    #footer a.footer-next { text-align: right; }
+    .footer-smiley { width: 32px; height: 32px; flex-shrink: 0; line-height: 0; }
+    .footer-smiley svg { width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <span id="lightbox-close">close</span>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <!-- NAV -->
+    <nav id="site-nav">
+    <a href="../../index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../../projects/index.html">projects</a></li>
+      <li><a href="../../about/index.html">about</a></li>
+      <li><a href="../../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO MEDIA (first, uncropped) -->
+  <section id="hero-media" class="reveal">
+    <video autoplay muted loop playsinline>
+      <source src="images/1.mp4" type="video/mp4" />
+    </video>
+  </section>
+
+  <!-- INTRO: title, lead, in-depth -->
+  <header id="intro" class="reveal">
+    <span id="intro-subtitle">Publication · Exhibition</span>
+    <span id="intro-title">Made with Love</span>
+    <p id="intro-lead">A collection of 50 recipes honoring the Southern cooking traditions carried through my family — a tribute to the women who taught me that love is something you cook.</p>
+    <p id="intro-body">I come from a long line of Southern women who expressed love through food — and this book is my way of carrying that tradition forward. Each recipe carries a memory tied to it, the book reads as much like a family album as it does a cookbook.</p>
+  </header>
+
+  <div class="spacer-lg"></div>
+
+  <!-- 2.jpg -->
+  <section class="reveal" style="padding:0 var(--gutter); background:#000;">
+    <img src="images/2.jpg" alt="" style="width:100%; height:auto; display:block; cursor:zoom-in;" />
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- 3.jpg + 4.jpg -->
+  <section class="collage-two reveal">
+    <div class="img-wrap"><img src="images/3.jpg" alt="" /></div>
+    <div class="img-wrap"><img src="images/4.jpg" alt="" /></div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- 5.png natural size, same gutter as all other photos -->
+  <section class="reveal" style="padding:0 var(--gutter); background:#000;">
+    <img src="images/5.jpg" alt="" style="width:100%; height:auto; display:block; cursor:zoom-in;" />
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- 6.jpg + 7.jpg -->
+  <section class="collage-two reveal">
+    <div class="img-wrap"><img src="images/6.jpg" alt="" /></div>
+    <div class="img-wrap"><img src="images/7.jpg" alt="" /></div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- 8.jpg natural size, same gutter as all other photos -->
+  <section class="reveal" style="padding:0 var(--gutter); background:#000;">
+    <img src="images/8.jpg" alt="" style="width:100%; height:auto; display:block; cursor:zoom-in;" />
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- 9 + 10 + 11 three column -->
+  <section class="collage-three reveal">
+    <div class="img-wrap"><img src="images/9.jpg" alt="" /></div>
+    <div class="img-wrap"><img src="images/10.jpg" alt="" /></div>
+    <div class="img-wrap"><img src="images/11.jpg" alt="" /></div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- 12.jpg + 13.jpg side by side equal columns -->
+  <section class="collage-two reveal">
+    <div class="img-wrap"><img src="images/12.jpg" alt="" /></div>
+    <div class="img-wrap"><img src="images/13.jpg" alt="" /></div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- HANDWRITING (custom McSpadden typeface) -->
+  <section id="handwriting">
+    <div id="handwriting-text"></div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- EXHIBITION INTRO -->
+  <div id="exhibition-intro" class="reveal">
+    <h2 id="exhibition-title">Results May Vary — LUMA Chicago</h2>
+    <span id="exhibition-subtitle">Exhibition</span>
+    <p id="exhibition-desc">Made with Love was displayed at the Loyola University Museum of Art senior capstone showcase. The exhibition space included the capstone book, recipe cards made with ragcloth paper and featuring the custom typeface I created based from my grandmother's handwriting, quotes brought from my family, and other original recipe artifacts.</p>
+  </div>
+
+  <!-- 14.jpg + final three all share same gutter container -->
+  <div id="exhibition-photos" class="reveal">
+    <img id="photo-14" src="images/14.jpg" alt="" />
+    <div id="final-photos">
+      <div class="img-wrap"><img src="images/15.jpeg" alt="" style="width:100%;height:auto;display:block;cursor:zoom-in;" /></div>
+      <div class="img-wrap"><img src="images/16,.jpeg" alt="" /></div>
+      <div class="img-wrap"><img src="images/17.jpeg" alt="" style="width:100%;height:auto;display:block;cursor:zoom-in;" /></div>
+    </div>
+  </div>
+
+  <!-- ROLE (bottom of page) -->
+  <section id="page-role" class="reveal">
+    <span class="role-label">Role</span>
+    <ul class="role-list">
+      <li>Exhibition Designer</li>
+      <li>Type Designer</li>
+      <li>Producer</li>
+      <li>Book Production</li>
+    </ul>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <a href="../../projects/index.html" id="back-link" class="footer-back">← back to projects</a>
+    <a href="../Reviewed/index.html" class="footer-next">Reviewed →</a>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // lightbox
+    const lightbox    = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn    = document.getElementById('lightbox-close');
+
+    document.querySelectorAll('img[cursor="zoom-in"], img').forEach(img => {
+      if (img.id === 'lightbox-img') return;
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      lightboxImg.src = '';
+      document.body.style.overflow = '';
+    }
+
+    closeBtn.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -20% 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // handwriting — writes the note out line by line, each line at its own angle/indent
+    (function () {
+      const el = document.getElementById('handwriting-text');
+      if (!el) return;
+      const LINES = [
+        "Hello, this is a custom typeface I made for this",
+        "project. This font is based on my grandmother's",
+        "handwriting, from the many many recipe cards she",
+        "wrote that inspired this cookbook. I miss her very",
+        "much, and this handwriting will carry on her legacy."
+      ];
+      let started = false;
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting || started) return;
+          started = true;
+          io.disconnect();
+          let li = 0;
+          (function nextLine() {
+            if (li >= LINES.length) return;
+            const text = LINES[li++];
+            const line = document.createElement('div');
+            // centered lines, each with a slight wobble + tilt so it isn't perfectly straight
+            line.style.marginTop = (Math.random() * 0.45).toFixed(2) + 'rem';
+            line.style.transform = 'translateX(' + (Math.random() * 1.6 - 0.8).toFixed(2) + 'rem) rotate(' + (Math.random() * 3 - 1.5).toFixed(2) + 'deg)';
+            line.style.transformOrigin = 'center center';
+            el.appendChild(line);
+            // lay the whole line out first (keeps it centered, no per-letter shift),
+            // then reveal each letter left-to-right via staggered ink animations
+            let wordWrap = null, delay = 0;
+            for (let ci = 0; ci < text.length; ci++) {
+              const ch = text.charAt(ci);
+              if (ch === ' ') { line.appendChild(document.createTextNode(' ')); wordWrap = null; delay += 90; continue; }
+              if (!wordWrap) {                          // keep each word together
+                wordWrap = document.createElement('span');
+                wordWrap.style.display = 'inline-block';
+                wordWrap.style.whiteSpace = 'nowrap';
+                line.appendChild(wordWrap);
+              }
+              const s = document.createElement('span');       // inked in, drawn left-to-right
+              s.textContent = ch;
+              s.style.display = 'inline-block';
+              s.style.animation = 'hwInk 0.34s ease both';
+              s.style.animationDelay = (delay / 1000).toFixed(3) + 's';
+              if (ch === "'" || ch === '’') s.style.transform = 'translateY(-0.55em)';  // lift the apostrophe
+              wordWrap.appendChild(s);
+              delay += 64 + Math.random() * 66;         // uneven human pace
+              if (ch === '.' || ch === ',') delay += 360;
+            }
+            setTimeout(nextLine, delay + 360);
+          })();
+        });
+      }, { threshold: 0.3 });
+      io.observe(el);
+    })();
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,594 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bold Marks — Tori Webb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000000;
+      --fg: #f0ece4;
+      --yellow: #f5c800;
+      --muted: #c8c3b8;
+      --dim: #6b6660;
+      --pink: #f472b6;
+      --gutter: 4vw;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Hanken Grotesk', sans-serif;
+      overflow-x: hidden;
+    }
+
+    img { image-rendering: high-quality; }
+
+    /* ── nav ── */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem var(--gutter);
+      background: transparent; transition: background 0.4s ease;
+    }
+    #site-nav.scrolled { background: rgba(0,0,0,0.94); }
+    #nav-name {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 1rem; letter-spacing: 0.35em; text-indent: 0.35em;
+      color: #fff; text-decoration: none;
+    }
+    #nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    #nav-links a {
+      font-size: 0.7rem; font-weight: 300; letter-spacing: 0.16em;
+      text-transform: lowercase; color: var(--muted); text-decoration: none;
+      transition: color 0.3s;
+    }
+    #nav-links a:hover { color: #fff; }
+
+    /* ── hero ── */
+    
+    #hero {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-start;
+      padding: 1.5rem var(--gutter) 2rem;
+      gap: 0.2rem;
+    }
+    #hero-title-img {
+      width: min(55vw, 680px); height: auto;
+      margin: 0 auto;
+    }
+    #hero-video-wrap {
+      width: 100%;
+      margin: 0 auto;
+    }
+    #hero-video-wrap video {
+      width: 100%; height: auto; display: block;
+    }
+
+    /* ── hero page title text (below video) — intro/header ── */
+    #hero-text {
+      padding: 3.2rem var(--gutter) 2rem;
+      width: 100%;
+    }
+    #hero-page-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(2.7rem, 5.6vw, 4.5rem);
+      letter-spacing: 0.04em; margin-left: -0.04em;
+      color: #fff; line-height: 1.0; display: block;
+    }
+    #hero-subtitle {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: clamp(0.78rem, 1.35vw, 0.95rem);
+      font-weight: 300; letter-spacing: 0.34em;
+      text-transform: uppercase; color: var(--yellow);
+      margin-bottom: 0.7rem; display: block;
+    }
+    #hero-lead {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 400;
+      font-size: clamp(1.45rem, 2.7vw, 2.25rem);
+      line-height: 1.4; letter-spacing: 0.01em;
+      color: rgba(240, 236, 228, 0.72); text-wrap: balance;
+      max-width: min(1000px, 92vw); margin-top: 1.9rem;
+    }
+    #hero-body {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 300; font-size: clamp(1.18rem, 1.7vw, 1.45rem);
+      line-height: 1.7; color: rgba(240, 236, 228, 0.42); letter-spacing: 0.02em;
+      max-width: min(1000px, 92vw); text-wrap: balance; margin-top: 1.2rem;
+    }
+    #hero-lead a, #hero-body a {
+      color: var(--yellow); text-decoration: underline; text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+    #hero-lead a:hover, #hero-body a:hover { color: #fff; }
+    .spacer-lg { height: 120px; background: #000; }
+
+    /* ── three column: cover | cover | description ── */
+    #intro-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      padding: 2rem var(--gutter) 5rem;
+      align-items: start;
+      max-width: 1160px; margin: 0 auto;
+    }
+    .cover-card { width: 100%; height: auto; display: block; cursor: zoom-in; }
+    #intro-desc {
+      display: flex; flex-direction: column; gap: 1.4rem;
+      padding-top: 1rem;
+    }
+    #intro-desc p {
+      font-size: clamp(0.82rem, 1.1vw, 0.96rem);
+      font-weight: 300; line-height: 1.95;
+      color: var(--muted); letter-spacing: 0.02em;
+    }
+    #intro-desc a {
+      color: var(--yellow); font-weight: 400;
+      text-decoration: underline; text-underline-offset: 3px;
+    }
+
+    /* ── polaroids + articles ── */
+    #spotlight-section {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr 1.3fr;
+      gap: 40px;
+      padding: 0 var(--gutter) 2rem;
+      align-items: start;
+    }
+    #polaroids {
+      position: relative;
+      height: 500px;
+    }
+    .polaroid-wrap {
+      position: absolute;
+    }
+    #pol-1 img { width: 260px; height: auto; display: block; }
+    #pol-2 img { width: 340px; height: auto; display: block; }
+    #pol-1 { top: 0; left: 0; transform: rotate(-6deg); z-index: 1; }
+    #pol-2 { top: 130px; left: 50px; transform: rotate(4deg); z-index: 2; }
+
+    /* article column wrapper — photo + caption stacked */
+    .article-col {
+      display: flex; flex-direction: column; gap: 0.8rem;
+    }
+
+    /* both articles same fixed height */
+    #barry-img, #doug-img {
+      width: 100%;
+      height: 560px;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      cursor: zoom-in;
+    }
+
+    .article-caption {
+      font-size: clamp(0.82rem, 1.1vw, 0.96rem);
+      font-weight: 300; color: var(--fg); text-align: center;
+      letter-spacing: 0.01em;
+    }
+    .article-caption a {
+      color: var(--fg); font-weight: 400;
+      text-decoration: underline; text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+    .article-caption a:hover { color: var(--yellow); }
+
+    /* ── closing: 3 col with CGDC truly centered ── */
+    #closing {
+      display: flex; justify-content: center; align-items: center;
+      gap: 7vw;
+      padding: 9rem var(--gutter) 6rem;
+    }
+    #closing-logo { height: min(21vw, 210px); width: auto; display: block; }
+    #closing-cgdc { height: min(21vw, 210px); width: auto; display: block; }
+    #closing-text {
+      font-size: clamp(0.85rem, 1.2vw, 1rem);
+      font-weight: 300; line-height: 1.9;
+      color: var(--fg); max-width: 46ch;
+      letter-spacing: 0.01em;
+    }
+    #closing-text strong { font-weight: 400; color: #fff; }
+
+    /* ── zoom section: skewed polaroid-style ── */
+    #zoom-section {
+      padding: 7rem var(--gutter) 4rem;
+      display: flex; flex-direction: column; gap: 1.8rem;
+    }
+    #zoom-grid {
+      position: relative;
+      height: 480px;
+      display: flex;
+      justify-content: center;
+    }
+    #zoom-img-1 {
+      position: absolute;
+      width: 46vw; max-width: 580px;
+      height: auto;
+      display: block;
+      cursor: zoom-in;
+      left: 5%;
+      top: 0;
+      transform: rotate(-4deg);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      z-index: 1;
+    }
+    #zoom-img-2 {
+      position: absolute;
+      width: 52vw; max-width: 640px;
+      height: auto;
+      display: block;
+      cursor: zoom-in;
+      right: 5%;
+      top: 40px;
+      transform: rotate(3.5deg);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      z-index: 2;
+    }
+    #zoom-caption {
+      font-size: clamp(0.7rem, 1vw, 0.82rem);
+      font-weight: 300; letter-spacing: 0.02em;
+      color: var(--muted); text-align: center;
+      font-style: italic;
+      margin-top: 0;
+    }
+
+    /* ── social carousel label ── */
+    #carousel-label {
+      padding: 2rem var(--gutter) 1.2rem;
+      font-size: 0.75rem; font-weight: 300;
+      letter-spacing: 0.02em; color: var(--muted);
+    }
+
+    /* ── social grid 6x2 ── */
+    #social-grid { padding: 0 var(--gutter) 0; }
+    .social-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+    }
+    .social-row + .social-row { margin-top: 50px; }
+    .social-item img {
+      width: 100%; height: auto; display: block;
+      cursor: zoom-in; transition: opacity 0.2s;
+    }
+    .social-item img:hover { opacity: 0.82; }
+
+    /* ── footer ── */
+    #footer {
+      text-align: center; padding: 5rem 2rem;
+      border-top: 1px solid #1a1a1a;
+    }
+    #footer-mark { font-size: 1.3rem; margin-bottom: 1.4rem; opacity: 0.2; color: var(--pink); }
+    #footer a {
+      font-size: 0.72rem; letter-spacing: 0.32em; text-transform: lowercase;
+      color: var(--dim); text-decoration: none; transition: color 0.3s;
+    }
+    #footer a:hover { color: var(--pink); }
+
+    /* ── scroll reveal ── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 1.1s ease, transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── lightbox ── */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.96);
+      align-items: center; justify-content: center; cursor: zoom-out;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; display: block; }
+    #lightbox-close {
+      position: absolute; top: 1.8rem; right: 2rem;
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--muted); cursor: pointer; transition: color 0.3s;
+    }
+    #lightbox-close:hover { color: #fff; }
+
+    /* ── Instagram carousel: filmstrip behind a phone viewfinder ── */
+    #ig-feature {
+      position: relative; overflow: hidden;
+      --sw: clamp(250px, 26vw, 320px);
+      --sh: calc(var(--sw) * 1.25);
+      --gap: 16px; --bz: 11px; --topH: 78px;
+      height: calc(var(--sh) + 340px);
+    }
+    .ig-strip {
+      position: absolute; top: 50%; left: 50%;
+      display: flex; gap: var(--gap); align-items: center;
+      transform: translate(var(--x, 0px), -50%);
+      transition: transform 0.65s cubic-bezier(.22,1,.36,1);
+      z-index: 1; will-change: transform;
+    }
+    .ig-slide {
+      flex: 0 0 var(--sw); width: var(--sw); height: var(--sh);
+      overflow: hidden; border-radius: 3px; background: #000;
+      opacity: 0.7; transition: opacity 0.55s ease; cursor: pointer;
+    }
+    .ig-slide.active { opacity: 1; cursor: default; }
+    .ig-slide img, .ig-slide video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ig-view {
+      position: absolute; top: 50%; left: 50%; z-index: 5; pointer-events: none;
+      width: calc(var(--sw) + 2 * var(--bz));
+      transform: translate(-50%, calc(-1 * (var(--bz) + var(--topH) + var(--sh) / 2)));
+    }
+    .vf-bezel {
+      position: relative;
+      border: var(--bz) solid #0b0b0b; border-radius: 42px; background: transparent;
+      box-shadow: 0 34px 80px rgba(0,0,0,0.62), inset 0 0 0 1px #262626, 0 0 0 1px #000;
+    }
+    .vf-island { position: absolute; top: 7px; left: 50%; transform: translateX(-50%); width: 30%; height: 15px; background: #000; border-radius: 12px; z-index: 9; }
+    .vf-screen { border-radius: 31px; overflow: hidden; background: transparent; aspect-ratio: 9 / 17; display: flex; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; }
+    .vf-top { background: #fff; height: var(--topH); display: flex; flex-direction: column; }
+    .vf-statusbar { display: flex; align-items: center; justify-content: space-between; padding: 11px 18px 0; font-size: 0.72rem; font-weight: 700; color: #111; }
+    .vf-statusbar .vf-sb { display: flex; align-items: center; gap: 5px; }
+    .vf-header { display: flex; align-items: center; gap: 9px; padding: 7px 11px 0; flex: 1; }
+    .vf-avatar { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; background: linear-gradient(135deg, #2c2c2c, #000); display: flex; align-items: center; justify-content: center; font-family: 'Hanken Grotesk', sans-serif; text-transform: uppercase; color: #f0ece4; font-size: 0.82rem; letter-spacing: 0.04em; }
+    .vf-user { flex: 1; min-width: 0; line-height: 1.12; }
+    .vf-user b { font-size: 0.78rem; font-weight: 600; color: #111; display: block; }
+    .vf-user small { font-size: 0.67rem; color: #737373; }
+    .vf-more { color: #111; font-size: 1rem; letter-spacing: 1px; }
+    .vf-window { height: var(--sh); background: transparent; flex-shrink: 0; }
+    .vf-bottom { background: #fff; flex: 1; display: flex; flex-direction: column; padding: 10px 12px 0; }
+    .vf-actions { display: flex; align-items: center; gap: 15px; }
+    .vf-bottom svg { width: 23px; height: 23px; stroke: #111; fill: none; stroke-width: 1.8; }
+    .vf-likes { font-size: 0.78rem; font-weight: 600; color: #111; margin-top: 9px; }
+    .vf-cap { font-size: 0.77rem; color: #222; line-height: 1.35; margin-top: 3px; }
+    .vf-cap b { font-weight: 600; }
+    .ig-dots { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 6; display: flex; gap: 6px; }
+    .ig-dots i { width: 7px; height: 7px; border-radius: 50%; background: #3a3a3a; transition: background 0.3s, transform 0.3s; cursor: pointer; }
+    .ig-dots i.on { background: #f5c800; transform: scale(1.2); }
+    @media (max-width: 600px) { #ig-feature { --sw: 62vw; } }
+  
+    /* enlarged header + footer */
+    #nav-name { font-size: 1.2rem; }
+    #nav-links a { font-size: 0.86rem; }
+    #footer-left { font-size: 1.2rem; }
+    #footer a { font-size: 0.86rem; }
+  
+    /* all-caps titles (restored from Bebas) */
+    #nav-name, #hero-page-title, .vf-avatar { text-transform: uppercase; }
+      /* role credit (bottom of page) */
+    #page-role { padding: 4.5rem var(--gutter) 1rem; text-align: right; }
+    #page-role .role-list { display: flex; flex-direction: column; align-items: flex-end; gap: 0.18rem; margin-top: 0.9rem; list-style: none; }
+    .role-label { font-family: 'Hanken Grotesk', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.34em; text-transform: uppercase; color: var(--yellow); display: block; margin-bottom: 1rem; }
+    .role-list li { font-family: 'Hanken Grotesk', sans-serif; font-weight: 300; font-size: 0.86rem; letter-spacing: 0.16em; text-transform: lowercase; color: rgba(240,236,228,0.5); line-height: 1.75; }
+  
+    /* footer redesign: back | smiley | next */
+    #footer { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 5rem var(--gutter); text-align: initial; }
+    #footer a { flex: 1; min-width: 0; font-size: 0.86rem; font-weight: 300; letter-spacing: 0.16em; text-transform: lowercase; }
+    #footer a.footer-back { text-align: left; }
+    #footer a.footer-next { text-align: right; }
+    .footer-smiley { width: 32px; height: 32px; flex-shrink: 0; line-height: 0; }
+    .footer-smiley svg { width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+
+  <div id="lightbox">
+    <span id="lightbox-close">close</span>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <!-- NAV -->
+        <nav id="site-nav">
+    <a href="../../index.html" id="nav-name">Tori Webb</a>
+    <ul id="nav-links">
+      <li><a href="../../projects/index.html">projects</a></li>
+      <li><a href="../../about/index.html">about</a></li>
+      <li><a href="../../contact/index.html">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO: 2.mp4 video -->
+  <section id="hero">
+    <div id="hero-video-wrap">
+      <video autoplay muted loop playsinline>
+        <source src="2.mp4" type="video/mp4" />
+      </video>
+    </div>
+  </section>
+
+  <!-- INTRO: title, eyebrow, lead, body -->
+  <header id="hero-text" class="reveal">
+    <span id="hero-subtitle">Branding · Editorial · Identity</span>
+    <span id="hero-page-title">Bold Marks</span>
+    <p id="hero-lead">Bold Marks is a spotlight series created for the <a href="https://chicagographicdesign.club/" target="_blank" rel="noopener">Chicago Graphic Design Club</a> that highlights artists and designers whose work reflects the values of craft, curiosity, and thoughtful engagement. The series uses interviews and editorial storytelling to celebrate creatives and their contributions to the design community.</p>
+    <p id="hero-body">Created during my apprenticeship with CGDC, the project brought together branding, editorial design, research, and community engagement. From developing the identity system to conducting interviews and writing articles, the work focused on creating a thoughtful and consistent experience across each feature.</p>
+  </header>
+
+  <div class="spacer-lg" style="height: 1rem;"></div>
+
+  <!-- THREE COLUMNS: 3.png | 4.png | description -->
+  <div id="intro-section" class="reveal">
+    <img class="cover-card" src="3.png" alt="Bold Marks Edition I" />
+    <img class="cover-card" src="4.png" alt="Bold Marks Edition II" />
+  </div>
+
+  <!-- POLAROIDS + ARTICLE PREVIEWS with captions -->
+  <div id="spotlight-section" class="reveal">
+    <div id="polaroids">
+      <div class="polaroid-wrap" id="pol-1">
+        <img src="5.png" alt="" />
+      </div>
+      <div class="polaroid-wrap" id="pol-2">
+        <img src="6.png" alt="" />
+      </div>
+    </div>
+    <div class="article-col">
+      <img id="barry-img" src="Barry article.png" alt="Barry Deck article" />
+      <p class="article-caption">Read the article about <strong>Barry Deck</strong> <a href="https://chicagographicdesign.club/blog/the-human-touch-in-a-digital-age/" target="_blank">here</a></p>
+    </div>
+    <div class="article-col">
+      <img id="doug-img" src="Doug article.png" alt="Doug Alberts article" />
+      <p class="article-caption">Read the article about <strong>Doug Alberts</strong> <a href="https://chicagographicdesign.club/articles/the-small-details-that-inspire/" target="_blank">here</a></p>
+    </div>
+  </div>
+
+  <!-- SOCIAL CAROUSEL LABEL -->
+
+  <!-- INSTAGRAM CAROUSEL — filmstrip behind a phone viewfinder (4.png + folder 10) -->
+  <div id="ig-feature" class="reveal">
+    <div class="ig-strip" id="igStrip"></div>
+    <div class="ig-view">
+      <div class="vf-bezel">
+        <div class="vf-island"></div>
+        <div class="vf-screen">
+          <div class="vf-top">
+            <div class="vf-statusbar">
+              <span>9:41</span>
+              <span class="vf-sb">
+                <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 3.8C6 3.8 3.7 4.8 2 6.4l1.4 1.5A6.8 6.8 0 0 1 8.5 6c1.9 0 3.7.8 5 2l1.4-1.5A9.1 9.1 0 0 0 8.5 3.8zM8.5 7.6c-1 0-2 .4-2.7 1.1L8.5 11.6 11.2 8.7A3.8 3.8 0 0 0 8.5 7.6z" fill="#111"/></svg>
+                <svg width="25" height="12" viewBox="0 0 25 12"><rect x="1" y="1.5" width="20" height="9" rx="2.6" fill="none" stroke="#111" stroke-opacity=".35"/><rect x="2.8" y="3.3" width="15.5" height="5.4" rx="1.3" fill="#111"/><rect x="22.3" y="4.3" width="1.5" height="3.4" rx=".7" fill="#111"/></svg>
+              </span>
+            </div>
+            <div class="vf-header">
+              <span class="vf-avatar">BM</span>
+              <div class="vf-user"><b>boldmarks</b><small>Chicago Graphic Design Club</small></div>
+              <span class="vf-more">&middot;&middot;&middot;</span>
+            </div>
+          </div>
+          <div class="vf-window"></div>
+          <div class="vf-bottom">
+            <div class="vf-actions">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 1 1 16.1-3.8z"/></svg>
+              <svg viewBox="0 0 24 24" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </div>
+            <div class="vf-likes">100 likes</div>
+            <div class="vf-cap"><b>boldmarks</b> Bold Marks — a spotlight on Chicago design &#10022;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ig-dots" id="igDots"></div>
+  </div>
+
+  <!-- ZOOM CALLS: 13.PNG + 14.PNG -->
+  <div id="zoom-section" class="reveal">
+    <div id="zoom-grid">
+      <img id="zoom-img-1" src="13.PNG" alt="Zoom call with Barry Deck" />
+      <img id="zoom-img-2" src="14.PNG" alt="Zoom call with Doug Alberts" />
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <!-- ROLE (bottom of page) -->
+  <section id="page-role">
+    <span class="role-label">Role</span>
+    <ul class="role-list">
+      <li>Brand Design</li>
+      <li>Logo Design</li>
+      <li>Writer & Editor</li>
+    </ul>
+  </section>
+
+
+  <footer id="footer">
+    <a href="../../projects/index.html" id="back-link" class="footer-back">← back to projects</a>
+    <a href="../monodot/index.html" class="footer-next">monodot + monodule →</a>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+    // lightbox
+    const lightbox    = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    document.getElementById('lightbox-close').addEventListener('click', () => {
+      lightbox.classList.remove('open'); document.body.style.overflow = '';
+    });
+    lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+    });
+    document.querySelectorAll('.cover-card, #barry-img, #doug-img, .social-item img, #zoom-img-1, #zoom-img-2').forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+    });
+
+    // ── instagram carousel: filmstrip + phone viewfinder ──
+    (function () {
+      const strip = document.getElementById('igStrip');
+      if (!strip) return;
+      const SLIDES = [
+        { src: '4.png', type: 'img' },
+        { src: '10/Spotlight-02-IG.png', type: 'img' },
+        { src: '10/Spotlight-03-IG.png', type: 'img' },
+        { src: '10/Spotlight-04-IG.mp4', type: 'video' },
+        { src: '10/Spotlight-05-IG.png', type: 'img' },
+        { src: '10/Spotlight-06-IG.mp4', type: 'video' },
+        { src: '10/Spotlight-07-IG.png', type: 'img' },
+        { src: '10/Spotlight-08-IG.png', type: 'img' }
+      ];
+      const n = SLIDES.length;
+      SLIDES.forEach(s => {
+        const d = document.createElement('div');
+        d.className = 'ig-slide';
+        if (s.type === 'video') {
+          const v = document.createElement('video');
+          v.src = s.src; v.muted = true; v.loop = true; v.autoplay = true;
+          v.playsInline = true; v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
+          d.appendChild(v);
+        } else {
+          const im = document.createElement('img'); im.src = s.src; im.alt = '';
+          d.appendChild(im);
+        }
+        strip.appendChild(d);
+      });
+      const slides = [...strip.children];
+      const dotsWrap = document.getElementById('igDots');
+      slides.forEach((_, k) => {
+        const dot = document.createElement('i');
+        dot.addEventListener('click', () => go(k));
+        dotsWrap.appendChild(dot);
+      });
+      const dots = [...dotsWrap.children];
+      let i = 0;
+      function render() {
+        const s = slides[i];
+        strip.style.setProperty('--x', (-(s.offsetLeft + s.offsetWidth / 2)) + 'px');
+        slides.forEach((el, k) => el.classList.toggle('active', k === i));
+        dots.forEach((d, k) => d.classList.toggle('on', k === i));
+      }
+      function go(k) { i = (k + n) % n; render(); }
+      slides.forEach((el, k) => el.addEventListener('click', () => { if (k !== i) go(k); }));
+      // scroll automatically — always running, never pauses
+      let auto = null;
+      function startAuto() { if (!auto) auto = setInterval(() => go(i + 1), 1600); }
+      window.addEventListener('resize', render);
+      requestAnimationFrame(() => { render(); startAuto(); });
+    })();
+
+    // scroll reveal
+    function onReveal(entries, obs) {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }
+    // text reveals reliably as it enters; the two covers reveal later (about half-scrolled); the rest reveal as they enter
+    const stdObs  = new IntersectionObserver(onReveal, { threshold: 0.06, rootMargin: '0px 0px -8% 0px' });
+    const textObs = new IntersectionObserver(onReveal, { threshold: 0.01, rootMargin: '0px 0px -12% 0px' });
+    const midObs  = new IntersectionObserver(onReveal, { threshold: 0.04, rootMargin: '0px 0px -50% 0px' });
+    document.querySelectorAll('.reveal').forEach(el => {
+      const obs = el.matches('#hero-text') ? textObs : el.matches('#intro-section') ? midObs : stdObs;
+      obs.observe(el);
+    });
+  </script>
+</body>
+</html>

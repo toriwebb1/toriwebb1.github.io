@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tori Gram — Portfolio Components</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="casestudy.css" />
+<link rel="stylesheet" href="portfolio.css" />
+</head>
+<body>
+
+  <!-- ===== Top bar / toggle ===== -->
+  <header class="topbar">
+    <span class="topbar__brand" data-view="home">Tori&nbsp;Webb</span>
+    <nav class="pf-nav">
+      <a data-view="projects">Work</a>
+      <a data-view="about">About</a>
+      <a href="mailto:hello@toriwebb.com">Contact</a>
+    </nav>
+  </header>
+
+  <main class="stage">
+
+    <!-- ===== Home (default) ===== -->
+    <section class="view view--home is-active" data-view="home">
+      <div class="reel reel--bg" id="reel" aria-hidden="true"></div>
+      <div class="home">
+        <div class="home-intro">
+          <span class="ht-line ht-line--1" id="htl1"></span>
+          <span class="ht-line ht-line--2" id="htl2"></span>
+          <span class="ht-line ht-line--3" id="htl3"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Projects index ===== -->
+    <section class="view view--projects" data-view="projects">
+      <div class="pf">
+        <div class="pf-eyebrow">Selected</div>
+        <h1 class="pf-head">Projects</h1>
+
+        <div class="proj-masonry">
+
+          <div class="pcard proj--live" data-view="case">
+            <div class="pcard__media pcard__media--ms" style="aspect-ratio:4/5">
+              <span></span><span></span><span></span>
+              <span class="pcard__view">View ↗</span>
+            </div>
+            <div class="pcard__meta">
+              <div class="pcard__cat">App Design · UX / UI</div>
+              <div class="pcard__title">Mindful Spending</div>
+              <div class="pcard__year">2026</div>
+            </div>
+          </div>
+
+          <div class="pcard proj--live" data-view="book">
+            <div class="pcard__media" style="aspect-ratio:3/4">
+              <img src="Assets/Spotlight-05-IG.png" alt="Made With Love" />
+              <span class="pcard__view">View ↗</span>
+            </div>
+            <div class="pcard__meta">
+              <div class="pcard__cat">Publication · Exhibition</div>
+              <div class="pcard__title">Made With Love</div>
+              <div class="pcard__year">2026</div>
+            </div>
+          </div>
+
+          <div class="pcard proj--live" data-view="carousel">
+            <div class="pcard__media" style="aspect-ratio:1/1">
+              <img src="Assets/Spotlight-02-IG.png" alt="Design Spotlight" />
+              <span class="pcard__view">View ↗</span>
+            </div>
+            <div class="pcard__meta">
+              <div class="pcard__cat">Social · Editorial</div>
+              <div class="pcard__title">Design Spotlight</div>
+              <div class="pcard__year">2026</div>
+            </div>
+          </div>
+
+          <div class="pcard proj--soon">
+            <div class="pcard__media" style="aspect-ratio:4/5">
+              <img src="Assets/Spotlight-03-IG.png" alt="Reviewed" />
+            </div>
+            <div class="pcard__meta">
+              <div class="pcard__cat">Event Design · CGDC</div>
+              <div class="pcard__title">Reviewed <span class="pcard__tag">Soon</span></div>
+              <div class="pcard__year">2026</div>
+            </div>
+          </div>
+
+          <div class="pcard proj--soon">
+            <div class="pcard__media" style="aspect-ratio:3/4">
+              <img src="Assets/Spotlight-06-IG.png" alt="It's Cold Here in Rogers Park" />
+            </div>
+            <div class="pcard__meta">
+              <div class="pcard__cat">Photography · Zine Design</div>
+              <div class="pcard__title">It's Cold Here in Rogers Park <span class="pcard__tag">Soon</span></div>
+              <div class="pcard__year">2026</div>
+            </div>
+          </div>
+
+          <div class="pcard proj--soon">
+            <div class="pcard__media" style="aspect-ratio:1/1">
+              <img src="Assets/Spotlight-07-IG.png" alt="Bold Marks" />
+            </div>
+            <div class="pcard__meta">
+              <div class="pcard__cat">Branding · Identity</div>
+              <div class="pcard__title">Bold Marks <span class="pcard__tag">Soon</span></div>
+              <div class="pcard__year">2026</div>
+            </div>
+          </div>
+
+          <div class="pcard proj--soon">
+            <div class="pcard__media pcard__media--ph" style="aspect-ratio:16/10"></div>
+            <div class="pcard__meta">
+              <div class="pcard__cat">Type Design · Animation</div>
+              <div class="pcard__title">monodot + monodule <span class="pcard__tag">Soon</span></div>
+              <div class="pcard__year">2025</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="pf-foot">
+          <span>© 2026 Tori Webb</span>
+          <span>Hello@toriwebb.com</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== View 1: Phone carousel ===== -->
+    <section class="view view--carousel" data-view="carousel">
+      <div class="phone">
+        <div class="phone__notch"></div>
+        <div class="phone__screen">
+
+          <div class="statusbar">
+            <span>9:41</span>
+            <div class="statusbar__icons"><span>📶</span><span>🔋</span></div>
+          </div>
+
+          <div class="igbar">
+            <span class="igbar__logo">Tori Gram</span>
+            <div class="igbar__actions">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+
+          <div class="post">
+            <div class="post__head">
+              <div class="post__avatar">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&q=80" alt="avatar" />
+              </div>
+              <div class="post__user" id="cUser"></div>
+              <div class="post__more">···</div>
+            </div>
+
+            <div class="carousel" id="carousel">
+              <div class="carousel__track" id="track"></div>
+              <div class="carousel__counter"><span id="counter">1</span>/<span id="counterTotal">0</span></div>
+              <button class="carousel__nav carousel__nav--prev" id="prev" aria-label="Previous">‹</button>
+              <button class="carousel__nav carousel__nav--next" id="next" aria-label="Next">›</button>
+            </div>
+
+            <div class="actions">
+              <svg id="likeBtn" viewBox="0 0 24 24" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 1 1 16.1-3.8z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linejoin="round"/></svg>
+              <span class="actions__spacer"></span>
+              <svg viewBox="0 0 24 24" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+
+            <div class="dots" id="dots"></div>
+
+            <div class="caption">
+              <span class="caption__likes" id="cLikes"></span>
+              <span id="cCaption"></span>
+              <span class="caption__time">2 hours ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== View 2: Book flip ===== -->
+    <section class="view view--book" data-view="book">
+      <div class="book-wrap">
+        <button class="book-nav book-nav--prev" id="bookPrev" aria-label="Previous page">‹</button>
+        <div class="book-stage">
+          <div class="book" id="book"></div>
+          <div class="book-meta">
+            <span id="bookCounter">— / —</span>
+          </div>
+        </div>
+        <button class="book-nav book-nav--next" id="bookNext" aria-label="Next page">›</button>
+      </div>
+    </section>
+
+    <!-- ===== View 3: Case Study ===== -->
+    <section class="view view--case" data-view="case">
+
+      <!-- Hero -->
+      <div class="cs-hero">
+        <div class="cs cs-hero__inner">
+          <div>
+            <span class="cs-hero__logo" data-logo></span>
+            <span class="cs-eyebrow">Case Study · iOS App</span>
+            <h1>Mindful Spending — spend like you <em>mean</em> it.</h1>
+            <p class="cs-lead">A budgeting app that turns every purchase into a quick gut-check: was this a <strong>want</strong> or a <strong>need</strong>? Mindful Spending makes budgeting feel less like punishment and more like a habit.</p>
+            <div class="cs-meta">
+              <div><small>Designer</small><span>Tori Webb</span></div>
+              <div><small>Role</small><span>Product &amp; UI Design</span></div>
+              <div><small>Platform</small><span>iOS</span></div>
+              <div><small>Tools</small><span>Figma</span></div>
+            </div>
+          </div>
+          <div class="cs-hero__art" id="heroPhones"></div>
+        </div>
+      </div>
+
+      <!-- Challenge / Approach -->
+      <div class="cs-section">
+        <div class="cs cs-two">
+          <div>
+            <h3>The Challenge</h3>
+            <p>Most budgeting apps tell you what you <em>spent</em> — after it's already gone. They're great at accounting and terrible at intervention. The moment that actually matters, the one right before you tap "buy," gets no attention at all.</p>
+          </div>
+          <div>
+            <h3>The Approach</h3>
+            <p>Move the reflection to the point of purchase. Log a buy in seconds, label it want vs. need, and capture how it felt. Over time those tiny moments roll up into spending patterns, category breakdowns, and a budget that adjusts to real behavior.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="cs-section cs-section--dark">
+        <div class="cs">
+          <span class="cs-eyebrow">What it does</span>
+          <h2>Six paths, one habit loop.</h2>
+          <div class="cs-features">
+            <div class="cs-card">
+              <div class="cs-card__dot" style="background:var(--coral)">✎</div>
+              <h4>Capture in seconds</h4>
+              <p>Amount, product, store, count — a friction-light form so logging never feels like a chore.</p>
+            </div>
+            <div class="cs-card">
+              <div class="cs-card__dot" style="background:var(--green)">⇄</div>
+              <h4>Want or need?</h4>
+              <p>A single forced choice plus an optional mood reflection turns spending into a self-aware moment.</p>
+            </div>
+            <div class="cs-card">
+              <div class="cs-card__dot" style="background:var(--blue)">◷</div>
+              <h4>See the patterns</h4>
+              <p>Spending history, weekly/monthly statements, and category breakdowns surface where money really goes.</p>
+            </div>
+            <div class="cs-card">
+              <div class="cs-card__dot" style="background:var(--yellow);color:#222">◎</div>
+              <h4>Plan &amp; price-match</h4>
+              <p>Set category budgets, save wants for later, and check for a better price before committing.</p>
+            </div>
+            <div class="cs-card">
+              <div class="cs-card__dot" style="background:var(--pink)">♡</div>
+              <h4>Save-for-later list</h4>
+              <p>Park impulse buys on a list and revisit them — most "wants" quietly disappear after a week.</p>
+            </div>
+            <div class="cs-card">
+              <div class="cs-card__dot" style="background:var(--teal)">▤</div>
+              <h4>Budget tracker</h4>
+              <p>A live over/under card keeps the monthly target visible without burying it in menus.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live prototype -->
+      <div class="cs-section">
+        <div class="cs">
+          <span class="cs-eyebrow">Try it</span>
+          <h2>The core loop, live.</h2>
+          <p class="cs-lead">Log a purchase, call it a want or a need, reflect on how it felt — and watch it land at the top of your spending. Go ahead, click through it.</p>
+        </div>
+        <div class="cs cs-proto-wrap">
+          <div id="proto"></div>
+          <div class="proto-dots" id="pdots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+          <p class="cs-proto-hint"><b>Tap "Log A Purchase"</b> → fill it in → choose <b>want</b> or <b>need</b> → reflect → see it land in your history. The <b>want</b> path asks more.</p>
+        </div>
+      </div>
+
+      <!-- Screen gallery -->
+      <div class="cs-section cs-section--tint">
+        <div class="cs">
+          <span class="cs-eyebrow">The redesign</span>
+          <h2>Key screens.</h2>
+          <p class="cs-lead">Rebuilt from the original flows — same visual language, tightened spacing, type, and hierarchy.</p>
+        </div>
+        <div class="cs-gallery" id="screenGallery"></div>
+      </div>
+
+      <!-- Design system -->
+      <div class="cs-section cs-section--dark">
+        <div class="cs cs-two" style="align-items:center">
+          <div>
+            <span class="cs-eyebrow">Design system</span>
+            <h2 style="margin-bottom:14px">A calm, confident palette.</h2>
+            <p style="line-height:1.7;color:#444">Coral anchors the brand and flags <strong>wants</strong> and overspend; green signals <strong>needs</strong> and healthy habits. The pink, yellow, blue and periwinkle code the five home paths and every chart category. A near-black <strong>dark surface</strong> carries the home menu and budget cards, while the stacked bowl mark keeps it friendly.</p>
+            <div class="cs-palette">
+              <div class="swatch"><div class="swatch__chip" style="background:#E0533C"></div><small><b>Coral</b>#E0533C</small></div>
+              <div class="swatch"><div class="swatch__chip" style="background:#3E9E7E"></div><small><b>Green</b>#3E9E7E</small></div>
+              <div class="swatch"><div class="swatch__chip" style="background:#3D7FC2"></div><small><b>Blue</b>#3D7FC2</small></div>
+              <div class="swatch"><div class="swatch__chip" style="background:#E9D15B"></div><small><b>Yellow</b>#E9D15B</small></div>
+              <div class="swatch"><div class="swatch__chip" style="background:#E78A9C"></div><small><b>Pink</b>#E78A9C</small></div>
+              <div class="swatch"><div class="swatch__chip" style="background:#A6AEDB"></div><small><b>Periwinkle</b>#A6AEDB</small></div>
+              <div class="swatch"><div class="swatch__chip" style="background:#2C2C2C"></div><small><b>Dark</b>#2C2C2C</small></div>
+            </div>
+          </div>
+          <div id="systemPhone" style="display:flex;justify-content:center"></div>
+        </div>
+      </div>
+
+      <!-- Outcome -->
+      <div class="cs-section">
+        <div class="cs cs-two">
+          <div>
+            <h3>Outcome</h3>
+            <p>The redesign keeps the original's friendly character while sharpening the moments that drive the habit loop: a faster capture form, a clearer want/need decision, and a spending dashboard you can read at a glance.</p>
+          </div>
+          <div>
+            <h3>What's next</h3>
+            <p>Barcode-scan price matching, shared household budgets, and a weekly "wants you skipped" recap that turns restraint into a visible, satisfying number.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===== About ===== -->
+    <section class="view view--about" data-view="about">
+      <div class="ab">
+        <div class="pf-eyebrow">Who I am</div>
+        <h1 class="pf-head">About</h1>
+        <div class="ab-grid">
+          <div class="ab-portrait">
+            <div class="ab-portrait__mono">TW</div>
+            <div class="ab-portrait__cap">Tori Webb · 2026 Fine Arts Senior Exhibition</div>
+          </div>
+          <div class="ab-bio">
+            <p>Hello! I'm Tori, a recent graduate of Loyola University Chicago with a bachelor's in Visual Communications and Psychology. I'm a narrative-driven designer who believes the most powerful work happens at the intersection of emotion and craft — where a viewer doesn't just see a design, but <em>feels</em> it.</p>
+            <p>My background in both disciplines shapes how I approach every project: with curiosity about the human experience and a genuine care for how design can reflect it. I love making work that's vulnerable, purposeful, and honest — using design as a way to tell stories and build real connections.</p>
+            <p>My experience spans photography, type design, book-making, branding, illustration, and UX/UI. Whether I'm designing a zine, a typeface, or an app, I bring the same commitment: to make work that actually means something.</p>
+
+            <div class="ab-skills">
+              <h3>Skills</h3>
+              <div class="ab-skill-list">
+                <span class="ab-skill">Photography</span>
+                <span class="ab-skill">Type Design</span>
+                <span class="ab-skill">Book Making</span>
+                <span class="ab-skill">Branding</span>
+                <span class="ab-skill">Illustration</span>
+                <span class="ab-skill">UX / UI</span>
+                <span class="ab-skill">Graphic Design</span>
+                <span class="ab-skill">Editorial Writing</span>
+                <span class="ab-skill">Storytelling</span>
+              </div>
+            </div>
+
+            <a class="ab-cta" href="mailto:hello@toriwebb.com">Get in Touch →</a>
+          </div>
+        </div>
+        <div class="pf-foot">
+          <span>© 2026 Tori Webb</span>
+          <span data-view="projects" style="cursor:pointer">View the work →</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <button id="backToProjects" class="pf-back" data-view="projects" hidden>← Projects</button>
+
+  <script src="vendor/page-flip.browser.js"></script>
+  <script src="app.js"></script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>
