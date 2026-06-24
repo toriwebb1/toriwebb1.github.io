@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redirecting…</title>
+<script>
+  // GitHub Pages is case-sensitive. Old links/bookmarks/cached pages may use
+  // capitalized paths; this normalizes any request to lowercase so it resolves.
+  (function () {
+    var path = location.pathname;
+    var lower = path.toLowerCase();
+    if (lower !== path) {
+      location.replace(lower + location.search + location.hash);
+    }
+  })();
+</script>
+<style>
+  body{font-family:'Barlow Condensed',Arial,sans-serif;background:#000;color:#fff;
+       display:flex;min-height:100vh;margin:0;align-items:center;justify-content:center;text-align:center}
+  a{color:#f472b6}
+</style>
+</head>
+<body>
+  <div>
+    <h1 style="font-size:2rem;letter-spacing:.1em">PAGE NOT FOUND</h1>
+    <p>That page doesn't exist. <a href="/">Return home</a></p>
+  </div>
+</body>
+</html>
